@@ -1,0 +1,7 @@
+{ 
+    "name"     : "users",
+    "verstion" : "0.0.1",
+    "author"   : "Jeff Pezzone",
+    "description" : "a library accessing creators",
+    "main": "./main.js" 
+}
