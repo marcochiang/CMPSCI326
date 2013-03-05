@@ -3,14 +3,15 @@
  * GET users listing.
  */
 
-var users = require('../lib/users');
+var actions = require('../lib/users/actions.js');
+var renders = require('../lib/users/renders.js');
 
 exports.list = function(req, res){
   res.send("respond with a resource");
 };
 
 exports.connect = function(req, res){
-	res.render('connect', {title: 'Connect', name: users.getUser('jeff')});
+	res.render('connect', {title: 'Connect', name: actions.getUser('jeff')});
 };
 
 exports.discover = function(req, res){
