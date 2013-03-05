@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+  	<div id="pageContainer" style="margin:0px auto 0px auto; width:960px;">
+	  	<header id="pageHeader" style="margin:0px auto 0px auto; width:960px; height:82px; position:relative;">
+	  		<h2>Settings Page for <%= name %></h2>
+		  	<nav>
+		  		<!--getHeader function??-->
+				<a href="/">Home</a> | 
+				<a href="/users/i/connect">Connect</a> | 
+				<a href="/users/i/discover">Discover</a> | 
+				<a href="/users/i/profile">Me</a>
+				<input type="text">&nbsp; <input type="button" value="Search">
+				<input type="button" value="Settings/Sign out">
+				<input type="button" value="New Tweet">
+			</nav>
+		</header>
+	    <div id="main">
+		    <div id="main-left" style="width:150px; float:left; padding:10px 10px 10px 10px;">
+		    	<div>
+			    	<ul>
+			    		<li><a href="/users/i/discover">Tweets</a></li>
+			    		<li><a href="/activity">Activity</a></li>
+			    		<li><a href="/who_to_follow">Who To Follow</a></li>
+			    		<li><a href="/find_friends">Find Friends</a></li>
+			    		<li><a href="/browse_categories">Browse Categories</a></li>
+			    	</ul>
+			    </div>
+			    <div>
+		    	<h3>Who To Follow..</h3>
+		    	</div>
+		    	<div>
+		    	<h3>Trends..</h3>
+		    	</div>
+		    </div>
+
+		    <div id="main-right" style="width:750px; float:right; padding:10px;">
+		    	List of tweets goes here..
+		    </div>
+		</div>
+
+		<footer>
+		</footer>
+	</div>
+  </body>
+</html>
