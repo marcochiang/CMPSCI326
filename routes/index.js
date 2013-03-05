@@ -3,10 +3,10 @@
  * GET home page.
  */
 
- var users = require('./lib');
+ //var users = require('./lib');
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Twitter' });
 };
 
 exports.connect = function(req, res){

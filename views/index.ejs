@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<head>
+	<title><%= title %></title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+	<div id="pageContainer" style="margin:0px auto 0px auto; width:960px;">
+		<header id="pageHeader" style="margin:0px auto 0px auto; width:960px; height:82px; position:relative;">
+			<h1><%= title %></h1>
+			<p>Welcome to <%= title %></p>
+			<h2>Home Page</h2>
+			<topBar>
+				<!--getHeader function??-->
+				<a href="/"><img src="/images/twitter-icon.jpg"/></a> | 
+				<a href="/users/i/connect">Connect</a> | 
+				<a href="/users/i/discover">Discover</a> | 
+				<input type="text" name="search"> &nbsp; <input type="button" value="Search">
+				<input type="button" value="Settings/Sign out">
+				<input type="button" value="New Tweet">
+			</topBar>
+		</header>
+	</div>
+</body>
 </html>
