@@ -1,0 +1,51 @@
+@grey: #ccc;
+
+.wrapper {width: 960px;margin: 0 3%;}
+.reset {margin: 0;padding: 0;}
+.left {float: left;} .right {float: right;}
+.txtleft {text-align: left;} .txtcenter {text-align: center;} .txtright {text-align: right;}
+
+.transition(@property: color) {
+	transition: @property .25s ease-in;
+	-moz-transition: @property .25s ease-in;
+	-webkit-transition: @property .25s ease-in;
+	-o-transition: @property .25s ease-in;
+}
+
+.border_radius(@size: 3px) {
+	-webkit-border-radius: @size;
+	-moz-border-radius: @size;
+	border-radius: @size;
+}
+
+.box_shadow(@shadow: 0 0 3px 3px @grey) {
+	-moz-box-shadow: @shadow;
+	-webkit-box-shadow: @shadow;
+	box-shadow: @shadow;
+}
+
+.opacity(@decimal: 1, @percent: 100) {
+	opacity: @decimal;
+	filter: alpha(opacity='@percent');
+}
+
+.background_gradient(@color1: #fff, @color2: #eee) {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, @color1), color-stop(1, @color2));
+	background:-moz-linear-gradient( center top, @color1 5%, @color2 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@color1', endColorstr='@color2');
+	background-color: @color1;
+}
+
+
+/* ==========================================================================
+   Generic Setup
+   ========================================================================== */
+   
+*, html, body {.reset;}
+html, button, input, select, textarea {color: @grey;}
+body {color: #353535;font-size: 1em;line-height: 1.4;font: 15px/22px "Open Sans", Helvetica, Helvetica Neue, Arial, sans-serif;}
+hr {display: block;height: 1px;border: 0;border-top: 1px solid #fff;border-bottom: 1px solid @grey;margin: 1.5em 0;padding: 0;}
+img {vertical-align: middle;}
+fieldset {border: 0;.reset;}
+h1, h2, h3, h4, h5, h6 {font-family: 'Open Sans Condensed', sans-serif;}
+a {} a:hover {}
