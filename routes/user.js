@@ -12,12 +12,14 @@ exports.list = function(req, res){
 
 exports.connect = function(req, res){
 	var user = actions.getUser('jeff');
-	var path = req.path;
-	var display = '';
-	if (path == "/connect")
-		display = actions.getInteractions(user);
-	else if (path == "/mentions")
-		display = actions.getMentions(user);
+	var display = actions.getInteractions(user);
+
+	res.render('users/connect', {title: 'Connect', func: 'connect', data: display});
+};
+
+exports.mentions = function(req, res){
+	var user = actions.getUser('jeff');
+	var display = actions.getMentions(user);
 
 	res.render('users/connect', {title: 'Connect', func: 'connect', data: display});
 };

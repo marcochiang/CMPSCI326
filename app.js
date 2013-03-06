@@ -46,7 +46,7 @@ app.get('/faq', stat.faq);
 //User Routes
 app.get('/users', user.list);
 app.get('/connect', user.connect);
-app.get('/mentions', user.connect);
+app.get('/mentions', user.mentions);
 app.get('/discover', user.discover);
 
 http.createServer(app).listen(app.get('port'), function(){
