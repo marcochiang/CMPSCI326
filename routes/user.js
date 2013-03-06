@@ -11,9 +11,9 @@ exports.list = function(req, res){
 };
 
 exports.connect = function(req, res){
-	res.render('users/connect', {title: 'Connect', name: actions.getUser('jeff')});
+	res.render('users/connect', {title: 'Connect', func: 'connect', name: actions.getUser('jeff')});
 };
 
 exports.discover = function(req, res){
-	res.render('users/discover', {title: 'Discover', name: 'Jeff'});
+	res.render('users/discover', {title: 'Discover', func: 'discover', name: 'Jeff'});
 };

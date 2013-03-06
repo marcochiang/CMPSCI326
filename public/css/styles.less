@@ -1,9 +1,20 @@
 @grey: #ccc;
+@dark: #252525;
 
-.wrapper {width: 960px;margin: 0 3%;}
+.ir {background-color: transparent;border: 0;overflow: hidden;*text-indent: -9999px;}
+.ir:before {content: "";display: block;width: 0;height: 100%;}
+.hidden {display: none !important;visibility: hidden;}
+.visuallyhidden {border: 0;clip: rect(0 0 0 0);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus {clip: auto;height: auto;margin: 0;overflow: visible;position: static;width: auto;}
+.invisible {visibility: hidden;}
+.clearfix:before, .clearfix:after {content: " ";display: table;}
+.clearfix:after {clear: both;}
+.clearfix {*zoom: 1;}
+
+.wrapper {width: 960px;margin: 0 auto;}
 .reset {margin: 0;padding: 0;}
 .left {float: left;} .right {float: right;}
-.txtleft {text-align: left;} .txtcenter {text-align: center;} .txtright {text-align: right;}
+.txtLeft {text-align: left;} .txtCenter {text-align: center;} .txtRight {text-align: right;}
 
 .transition(@property: color) {
 	transition: @property .25s ease-in;
@@ -12,13 +23,13 @@
 	-o-transition: @property .25s ease-in;
 }
 
-.border_radius(@size: 3px) {
+.borderRadius(@size: 3px) {
 	-webkit-border-radius: @size;
 	-moz-border-radius: @size;
 	border-radius: @size;
 }
 
-.box_shadow(@shadow: 0 0 3px 3px @grey) {
+.boxShadow(@shadow: 0 0 3px 3px @grey) {
 	-moz-box-shadow: @shadow;
 	-webkit-box-shadow: @shadow;
 	box-shadow: @shadow;
@@ -29,7 +40,7 @@
 	filter: alpha(opacity='@percent');
 }
 
-.background_gradient(@color1: #fff, @color2: #eee) {
+.backgroundGradient(@color1: #fff, @color2: #eee) {
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, @color1), color-stop(1, @color2));
 	background:-moz-linear-gradient( center top, @color1 5%, @color2 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@color1', endColorstr='@color2');
@@ -43,9 +54,49 @@
    
 *, html, body {.reset;}
 html, button, input, select, textarea {color: @grey;}
-body {color: #353535;font-size: 1em;line-height: 1.4;font: 15px/22px "Open Sans", Helvetica, Helvetica Neue, Arial, sans-serif;}
+body {background: url("../img/body.jpg") repeat 0 0;color: @dark;font-size: 1em;line-height: 1.4;font: 15px/22px "Open Sans", Helvetica, Helvetica Neue, Arial, sans-serif;}
 hr {display: block;height: 1px;border: 0;border-top: 1px solid #fff;border-bottom: 1px solid @grey;margin: 1.5em 0;padding: 0;}
 img {vertical-align: middle;}
 fieldset {border: 0;.reset;}
 h1, h2, h3, h4, h5, h6 {font-family: 'Open Sans Condensed', sans-serif;}
 a {} a:hover {}
+
+
+/* ==========================================================================
+   Template Styles
+   ========================================================================== */
+
+#site {
+	header#header {
+		height: 50px;margin: 0 0 3em 0;background: url("../img/nav.jpg") repeat-x 0 0;border-bottom: 3px solid #fff;
+		hgroup {
+			.hidden;
+			h1#title {color: #fff;}
+			h2#slogan {.hidden;}
+		}
+		nav {
+			ul {
+				list-style-type: none;.reset;
+				li {
+					width: auto;.left;
+					a {display: block;height: 35px;color: #ccc;padding: 15px 1.2em 0 1.2em;text-decoration: none;font-size: 13px;text-shadow: 1px 1px #000;text-transform: uppercase;.transition;}
+					a:hover {color: #fff;}
+					&.active {
+						a {background: url("../img/navActive.jpg") repeat-x 0 0;border-left: 1px solid @dark;border-right: 1px solid @dark;color: #fff;}
+					}
+				}
+			}
+		}
+	}
+	#main {
+		padding: 1em;background: #fff;.boxShadow(0 0 3px 3px #b1c6ce);.borderRadius;
+		#content {
+			p, li {margin: 1em 0;}
+			ul, ol {margin: 0 0 0 40px;}
+		}
+	}
+	footer#footer {
+		margin-top: 1em;margin-bottom: 3em;
+		p {.txtCenter;}
+	}
+}

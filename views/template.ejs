@@ -7,23 +7,30 @@
 	<script src="/js/less-1.3.3.min.js" type="text/javascript"></script>
   </head>
   <body>
-  	<div id="pageContainer" style="margin:0px auto 0px auto; width:960px;">
-	  	<header id="pageHeader" style="margin:0px auto 0px auto; width:960px; height:82px; position:relative;">
-	  		<h2><%= title %></h2>
-		  	<nav>
-				<a href="/">Home</a> | 
-				<a href="/users/i/connect">Connect</a> | 
-				<a href="/users/i/discover">Discover</a> | 
-				<a href="/users/i/profile">Me</a>
-				<input type="text" name="search"> &nbsp; <input type="button" value="Search">
-				<input type="button" value="Settings/Sign out">
-				<input type="button" value="New Tweet">
-			</nav>
-		</header>
-	    <div id="main">
+  	<div id="site"> <!-- #site -->
+	  	<header id="header"> <!-- header#header -->
+	  		<hgroup> <!-- hgroup -->
+				<h1 id="title"><%= title %></h1>
+				<h2 id="slogan">A class project</h2>
+			</hgroup> <!-- hgroup -->
+		  	<nav class="wrapper"> <!-- nav -->
+				<ul>
+					<li<% if (func === "home") { %> class="active"<% } %>><a href="/">Home</a></li>
+					<li<% if (func === "connect") { %> class="active"<% } %>><a href="/connect">Connect</a></li>
+					<li<% if (func === "discover") { %> class="active"<% } %>><a href="/discover">Discover</a></li>
+					<li<% if (func === "me") { %> class="active"<% } %>><a href="/profile">Me</a></li>
+				</ul>
+			</nav> <!-- nav -->
+			<div class="clearfix"></div>
+		</header> <!-- header#header -->
+	    <div class="wrapper" id="main"> <!-- #main -->
 			<%- body -%>
-		</div>
-	</div>
+		</div> <!-- #main -->
+		<div class="clearfix"></div>
+		<footer class="wrapper" id="footer"> <!-- footer#footer -->
+			<p>&copy; Group Awesome 2013</p>
+		</footer> <!-- footer#footer -->
+	</div> <!-- #site -->
 	<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
 </body>
 </html>
