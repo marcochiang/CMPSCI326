@@ -11,7 +11,15 @@ exports.list = function(req, res){
 };
 
 exports.connect = function(req, res){
-	res.render('users/connect', {title: 'Connect', func: 'connect', name: actions.getUser('jeff')});
+	var user = actions.getUser('jeff');
+	var path = req.path;
+	var display = '';
+	if (path == "/connect")
+		display = actions.getInteractions(user);
+	else if (path == "/mentions")
+		display = actions.getMentions(user);
+
+	res.render('users/connect', {title: 'Connect', func: 'connect', data: display});
 };
 
 exports.discover = function(req, res){

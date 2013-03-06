@@ -1,13 +1,20 @@
 <% layout('../template') -%>
+<div id="content">
+	<div>
+		<ul>
+			<li><a href="/connect">Interactions</a></li>
+			<li><a href="/mentions">Mentions</a></li>
+		</ul>
+	</div>
+	<div>
+	<h3>Who To Follow..</h3>
+	</div>
+	<div>
+	<h3>Trends..</h3>
+	</div>
+</div>
 <div>
-			    	<ul>
-			    		<li><a href="/users/i/connect">Interactions</a></li>
-			    		<li><a href="/users/i/mentions">Mentions</a></li>
-			    	</ul>
-			    </div>
-			    <div>
-		    	<h3>Who To Follow..</h3>
-		    	</div>
-		    	<div>
-		    	<h3>Trends..</h3>
-		    	</div>
+	<div>
+		<%- data %>
+	</div>
+</div>
