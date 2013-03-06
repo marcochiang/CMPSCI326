@@ -36,11 +36,7 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-app.set('header', { layout:'header.ejs' });
-app.set('footer', { layout:'footer.ejs' });
-
 app.get('/', routes.index);
-app.get('/users', user.list);
 
 //Static Routes
 app.get('/about', stat.about);
@@ -48,6 +44,7 @@ app.get('/help', stat.help);
 app.get('/faq', stat.faq);
 
 //User Routes
+app.get('/users', user.list);
 app.get('/connect', user.connect);
 app.get('/discover', user.discover);
 
