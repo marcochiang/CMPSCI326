@@ -45,6 +45,12 @@ app.get('/faq', stat.faq);
 
 //User Routes
 app.get('/users', user.list);
+app.get('/profile', user.profile);
+app.get('/following', user.following);
+app.get('/followers', user.followers);
+app.get('/favorites', user.favorites);
+app.get('/follower_requests', user.follower_requests);
+app.get('/lists', user.lists); //needed??
 app.get('/connect', user.connect);
 app.get('/mentions', user.mentions);
 app.get('/discover', user.discover);
