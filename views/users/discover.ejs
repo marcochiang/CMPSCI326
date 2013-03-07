@@ -1,7 +1,8 @@
 <% layout('../template') -%>
-<div id="content"> <!-- Should be floated left-->
-	<div>
-		<ul>
+
+<div id="leftCol" class="left">
+	<div class="content noPadding">
+		<ul class="linkList">
 			<li><a href="/discover">Tweets</a></li>
 			<li><a href="/activity">Activity</a></li>
 			<li><a href="/who_to_follow">Who To Follow</a></li>
@@ -9,18 +10,19 @@
 			<li><a href="/browse_categories">Browse Categories</a></li>
 		</ul>
 	</div>
-	<div id="who_to_follow">
-	<h3>Who To Follow..</h3>
+	<div class="content">
+		<h4>Who To Follow...</h4>
 	</div>
-	<div id="trends">
-	<h3>Trends..</h3>
-	</div>
-	<div id="footer">
+	<div class="content">
+		<h4>Trends</h4>
 	</div>
 </div>
-</br></br>
-<div>  <!-- Should be floated right -->
-	<div id="data">
-		Tweets will go here..
+<div id="rightCol" class="right">
+	<div class="content">
+		<h3>Tweets</h3>
+		<div id="data">
+			<p>Tweets will go here...</p>
+		</div>
 	</div>
 </div>
+<div class="clearfix">&nbsp;</div>

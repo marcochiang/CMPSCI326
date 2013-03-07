@@ -15,23 +15,20 @@
 			</hgroup> <!-- hgroup -->
 		  	<nav class="wrapper"> <!-- nav -->
 				<ul>
-					<li<% if (func === "home") { %> class="active"<% } %>><a href="/">Home</a></li>
-					<li<% if (func === "connect") { %> class="active"<% } %>><a href="/connect">Connect</a></li>
-					<li<% if (func === "discover") { %> class="active"<% } %>><a href="/discover">Discover</a></li>
-					<li<% if (func === "me") { %> class="active"<% } %>><a href="/profile">Me</a></li>
+					<li class="home<% if (func === "home") { %> active<% } %>"><a href="/">Home</a></li>
+					<li class="connect<% if (func === "connect") { %> active<% } %>"><a href="/connect">Connect</a></li>
+					<li class="discover<% if (func === "discover") { %> active<% } %>"><a href="/discover">Discover</a></li>
+					<li class="me<% if (func === "me") { %> active<% } %>"><a href="/profile">Me</a></li>
 				</ul>
 			</nav> <!-- nav -->
 			<div class="clearfix"></div>
 		</header> <!-- header#header -->
-	    <div class="wrapper" id="main"> <!-- #main -->
+	    <div id="main"> <!-- #main -->
 			<%- body -%>
 		</div> <!-- #main -->
 		<div class="clearfix"></div>
-		<footer class="wrapper" id="footer"> <!-- footer#footer -->
-			<p>&copy; Group Awesome 2013</p>
-		</footer> <!-- footer#footer -->
 	</div> <!-- #site -->
 	<script src="/js/jquery-1.9.1.min.js" type="text/javascript"></script>
-	<script src="/js/style_scripts.js" type="text/javascript"></script>
+	<script src="/js/main.js" type="text/javascript"></script>
 </body>
 </html>

@@ -1,21 +1,28 @@
 <% layout('template') -%>
-<div id="home">
-	<a href="/profile"><img src="img/Marco_Chiang.jpeg"></br>Marco Chiang </br>View my profile page</br></br></a>
-	
-<li><a href="/tweets">TWEETS</a></li>
-<li><a href="/following">FOLLOWING</a></li>
-<li><a href="/followers">FOLLOWERS</a></li></br>
-
-<textarea class="expand" rows="2" cols="20">Compose new Tweet...</textarea>
-<button class="show_hide">Tweet</button>
-
+<div id="leftCol" class="left">
+	<div id="profile" class="content profileGlance">
+		<p><a href="/profile"><img src="img/Marco_Chiang.jpeg" width="32" height="32" class="left" />Marco Chiang<br /><span>View my profile page</span></a></p>
+		<ul id="stats">
+			<li><a href="/tweets">76<br /><span>TWEETS</span></a></li>
+			<li><a href="/following">103<br /><span>FOLLOWING</span></a></li>
+			<li><a href="/followers">171<br /><span>FOLLOWERS</span></a></li>
+		</ul>
+		<div class="clearfix">&nbsp;</div>
+		<form method="post" action="#">
+			<textarea id="newTweet" name="newTweet">Compose a new tweet...</textarea>
+			<input type="submit" id="submit" name="q" class="hidden" />
+		</form>
+	</div>
+	<div class="content">
+		<h4>Something here...</h4>
+	</div>
 </div>
-
-<div id="who_to_follow">
+<div id="rightCol" class="right">
+	<div class="content">
+		<h3>Tweets</h3>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+	</div>
 </div>
-
-<div id="trends">
-</div>
-
-<div id="footer">
-</div>
+<div class="clearfix">&nbsp;</div>
