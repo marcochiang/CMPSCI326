@@ -1,0 +1,37 @@
+<% layout('../template') -%>
+<div id="content"> <!-- Should be floated left-->
+	<div>
+		<ul>
+			<li><a href="/profile">Tweets</a></li>
+			<li><a href="/following">Following</a></li>
+			<li><a href="/followers">Followers</a></li>
+			<li><a href="/favorites">Favorites</a></li>
+			<li><a href="/follower_requests">Requests</a></li>
+			<li><a href="/lists">Lists</a></li>
+		</ul>
+	</div>
+	<div id="who_to_follow">
+	<h3>Who To Follow..</h3>
+	</div>
+	<div id="trends">
+	<h3>Trends..</h3>
+	</div>
+	<div id="footer">
+	</div>
+</div>
+</br></br>
+<div>  <!-- Should be floated right -->
+	<div id="home_profile">
+		<a href='/profile'><img src='/img/Marco_Chiang.jpeg'></a>
+
+		<ul>
+			<li><a href="/profile">TWEETS</a></li>
+			<li><a href="/following">FOLLOWING</a></li>
+			<li><a href="/followers">FOLLOWERS</a></li>
+			<li><a href="/profile">DIRECT MESSAGE</a></li></br> <!--come back here..-->
+		</ul>
+	</div>
+	<div id="data">
+		<%- data %>
+	</div>
+</div>
