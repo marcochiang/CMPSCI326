@@ -53,5 +53,26 @@ exports.mentions = function(req, res){
 };
 
 exports.discover = function(req, res){
-	res.render('users/discover', {title: 'Discover', func: 'discover', name: 'Jeff'});
+	var display = "<h3>Tweets</h3></br>Tweets will go here..";
+	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
+};
+
+exports.activity = function(req, res){
+	var display = "<h3>Activity</h3></br>Activity will go here..";
+	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
+};
+
+exports.who_to_follow = function(req, res){
+	var display = "<h3>Who To Follow</h3></br>Who to follow functionality will go here..";
+	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
+};
+
+exports.find_friends = function(req, res){
+	var display = "<h3>Find Friends</h3></br>Find friends functionality will go here..";
+	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
+};
+
+exports.browse_categories = function(req, res){
+	var display = "<h3>Browse Categories</h3></br>Browse categories functionality will go here..";
+	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
 };

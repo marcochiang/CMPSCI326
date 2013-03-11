@@ -54,6 +54,10 @@ app.get('/lists', user.lists); //needed??
 app.get('/connect', user.connect);
 app.get('/mentions', user.mentions);
 app.get('/discover', user.discover);
+app.get('/activity', user.activity);
+app.get('/who_to_follow', user.who_to_follow);
+app.get('/find_friends', user.find_friends);
+app.get('/browse_categories', user.browse_categories);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
