@@ -6,8 +6,6 @@
  * GET home page.
  */
 
- //var users = require('./lib');
-
 // Renders the index view:
 exports.index = function(req, res){
   res.render('index', { title: 'Twitter', func: 'home' });
