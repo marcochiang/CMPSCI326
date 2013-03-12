@@ -18,6 +18,9 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h1">
+        <a href="#renders.js">Renders.js</a>
+      </div>
       <div class="heading h3">
         <a href="#function--tolist">function: toList</a>
       </div>
@@ -32,9 +35,19 @@
   <tbody>
       <tr>
         <td class="docs">
-          <h1>renders.js</h1>
+<div class="pilwrap" id="renders.js">
+  <h1>
+    <a href="#renders.js" class="pilcrow">&#182;</a>
+    Renders.js
+  </h1>
+</div>
+
+
+<p>This is a collection of methods that format input
+into HTML.</p>
         </td>
-        <td class="code highlight"></td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
       </tr>
       <tr>
         <td class="docs">
@@ -53,7 +66,8 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">toList</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">toList</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3&gt;Users&lt;/h3&gt;&#39;</span><span class="p">;</span>
     <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;ul&gt;&#39;</span><span class="p">;</span>
   <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">users</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>

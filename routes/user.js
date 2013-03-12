@@ -1,3 +1,6 @@
+// # User.js
+// This is the routes module for accessing the dynamic views
+// and elements of the app.
 
 /*
  * GET users listing.

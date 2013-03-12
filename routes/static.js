@@ -1,9 +1,10 @@
+// # Static.js
+// This is the routes module for accessing the static
+// pages of the app.
 
 /*
  * GET home page.
  */
-
- //var users = require('./lib');
 
 // Renders the static About page:
 exports.about = function(req, res){
