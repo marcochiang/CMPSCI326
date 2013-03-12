@@ -18,6 +18,15 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h2">
+        <a href="#profile-view">Profile View</a>
+      </div>
+      <div class="heading h2">
+        <a href="#connect-view">Connect View</a>
+      </div>
+      <div class="heading h2">
+        <a href="#discover-view">Discover View</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -45,72 +54,300 @@
         <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">actions</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../lib/users/actions.js&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">renders</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../lib/users/renders.js&#39;</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="s1">&#39;marco&#39;</span><span class="p">);</span><span class="c1">//user object</span>
 
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>User object</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="s1">&#39;marco&#39;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>Renders the list (?):</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s2">&quot;respond with a resource&quot;</span><span class="p">);</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="profile-view">
+  <h2>
+    <a href="#profile-view" class="pilcrow">&#182;</a>
+    Profile View
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>Renders the profile view:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">profile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getTweets</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>Renders the following element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">following</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowing</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">}</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>Renders the followers element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">followers</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowers</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>Renders the favorites element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">favorites</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFavorites</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>Renders the follower_requests element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">follower_requests</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowerRequests</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>Renders the lists element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">lists</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getLists</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="connect-view">
+  <h2>
+    <a href="#connect-view" class="pilcrow">&#182;</a>
+    Connect View
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>Renders the connect view:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">connect</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getInteractions</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/connect&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Connect&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;connect&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+</div>
+<p>Renders the mentions element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">mentions</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getMentions</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/connect&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Connect&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;connect&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="discover-view">
+  <h2>
+    <a href="#discover-view" class="pilcrow">&#182;</a>
+    Discover View
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>Renders the discover view:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">discover</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3&gt;Tweets&lt;/h3&gt;&lt;/br&gt;Tweets will go here..&quot;</span><span class="p">;</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/discover&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Discover&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;discover&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>Renders the activity element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">activity</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3&gt;Activity&lt;/h3&gt;&lt;/br&gt;Activity will go here..&quot;</span><span class="p">;</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/discover&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Discover&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;discover&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>Renders the who_to_follow element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">who_to_follow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3&gt;Who To Follow&lt;/h3&gt;&lt;/br&gt;Who to follow functionality will go here..&quot;</span><span class="p">;</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/discover&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Discover&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;discover&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>Renders the find_friends element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">find_friends</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3&gt;Find Friends&lt;/h3&gt;&lt;/br&gt;Find friends functionality will go here..&quot;</span><span class="p">;</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/discover&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Discover&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;discover&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+</div>
+<p>Renders the discover element:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">browse_categories</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&lt;h3&gt;Browse Categories&lt;/h3&gt;&lt;/br&gt;Browse categories functionality will go here..&quot;</span><span class="p">;</span>
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/discover&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Discover&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;discover&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>

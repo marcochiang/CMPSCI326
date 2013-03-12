@@ -18,6 +18,12 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h3">
+        <a href="#function--tolist">function: toList</a>
+      </div>
+      <div class="heading h3">
+        <a href="#function--tolist">function: toList</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -32,10 +38,20 @@
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+<div class="pilwrap" id="function--tolist">
+  <h3>
+    <a href="#function--tolist" class="pilcrow">&#182;</a>
+    <em>function</em>: toList
+  </h3>
 </div>
 
+
+<div class="dox">
+  <div class="summary"><p>Returns the list of all users in HTML format</p>
+  </div>
+  <div class="body">
+  </div>
+</div>
         </td>
         <td class="code highlight"><div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">toList</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3&gt;Users&lt;/h3&gt;&#39;</span><span class="p">;</span>
@@ -48,6 +64,41 @@
     <span class="k">return</span> <span class="nx">content</span><span class="p">;</span>
 <span class="p">};</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="function--tolist">
+  <h3>
+    <a href="#function--tolist" class="pilcrow">&#182;</a>
+    <em>function</em>: toList
+  </h3>
+</div>
+
+
+<div class="dox">
+  <div class="summary"><p>Returns the arguments concatinated with HTML tags.</p>
+  </div>
+  <div class="body">
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">heading</span>
+      <span class="dox_type">object</span>
+      <span>The header of the page</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">data</span>
+      <span class="dox_type">array</span>
+      <span>An array of strings</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">toList</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">heading</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3&gt;&#39;</span><span class="o">+</span><span class="nx">heading</span><span class="o">+</span><span class="s1">&#39;&lt;/h3&gt;&lt;ul&gt;&#39;</span><span class="p">;</span>
   <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
