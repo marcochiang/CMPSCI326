@@ -31,7 +31,7 @@ exports.following = function(req, res){
 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 }
 
-// Renders the followers of the current:
+// Renders the followers of the current user:
 exports.followers = function(req, res){
 	var display = actions.getFollowers(user);
 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
