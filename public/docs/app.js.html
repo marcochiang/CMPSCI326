@@ -18,6 +18,9 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+      <div class="heading h1">
+        <a href="#app.js">App.js</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -26,14 +29,25 @@
   <tbody>
       <tr>
         <td class="docs">
-          <h1>app.js</h1>
+<div class="pilwrap" id="app.js">
+  <h1>
+    <a href="#app.js" class="pilcrow">&#182;</a>
+    App.js
+  </h1>
+</div>
+
+
+<p>This is a module for accessing the functionality
+of the app. Most of these methods are pertaining to 
+individual users and how they interact.</p>
         </td>
-        <td class="code highlight"></td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
 </div>
 <div class="dox">
   <div class="summary"><p>Module dependencies.</p>
@@ -42,7 +56,9 @@
   </div>
 </div>
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
   <span class="p">,</span> <span class="nx">engine</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;ejs-locals&#39;</span><span class="p">)</span>
   <span class="p">,</span> <span class="nx">routes</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes&#39;</span><span class="p">)</span>
   <span class="p">,</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./routes/user&#39;</span><span class="p">)</span>
@@ -59,7 +75,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
 </div>
 <p>use ejs-locals for all ejs templates:</p>
         </td>
@@ -95,7 +111,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 <p>Static Routes</p>
         </td>
@@ -111,7 +127,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
 <p>User Routes</p>
         </td>

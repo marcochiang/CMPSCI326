@@ -1,3 +1,6 @@
+// # User.js
+// This is the routes module for accessing the dynamic views
+// and elements of the app.
 
 /*
  * GET users listing.
@@ -22,31 +25,31 @@ exports.profile = function(req, res){
  	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 };
 
-// Renders the following element:
+// Renders the users that the current user is following:
 exports.following = function(req, res){
 	var display = actions.getFollowing(user);
 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 }
 
-// Renders the followers element:
+// Renders the followers of the current:
 exports.followers = function(req, res){
 	var display = actions.getFollowers(user);
 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 };
 
-// Renders the favorites element:
+// Renders the current user's favorited tweets:
 exports.favorites = function(req, res){
 	var display = actions.getFavorites(user);
 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 };
 
-// Renders the follower_requests element:
+// Renders the current user's follower requests:
 exports.follower_requests = function(req, res){
 	var display = actions.getFollowerRequests(user);
 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 };
 
-// Renders the lists element:
+// Renders the current user's lists:
 exports.lists = function(req, res){
 	var display = actions.getLists(user);
 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
@@ -60,7 +63,7 @@ exports.connect = function(req, res){
 	res.render('users/connect', {title: 'Connect', func: 'connect', data: display});
 };
 
-// Renders the mentions element:
+// Renders tweets that the current user has been mentioned in:
 exports.mentions = function(req, res){
 	var display = actions.getMentions(user);
 	res.render('users/connect', {title: 'Connect', func: 'connect', data: display});
@@ -74,25 +77,25 @@ exports.discover = function(req, res){
 	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
 };
 
-// Renders the activity element:
+// Renders the current user's activity:
 exports.activity = function(req, res){
 	var display = "<h3>Activity</h3></br>Activity will go here..";
 	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
 };
 
-// Renders the who_to_follow element:
+// Renders who to follow suggestions for the current user:
 exports.who_to_follow = function(req, res){
 	var display = "<h3>Who To Follow</h3></br>Who to follow functionality will go here..";
 	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
 };
 
-// Renders the find_friends element:
+// Renders the find friends functionality for the current user:
 exports.find_friends = function(req, res){
 	var display = "<h3>Find Friends</h3></br>Find friends functionality will go here..";
 	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
 };
 
-// Renders the discover element:
+// Renders the browse categories functionality for the current user:
 exports.browse_categories = function(req, res){
 	var display = "<h3>Browse Categories</h3></br>Browse categories functionality will go here..";
 	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
