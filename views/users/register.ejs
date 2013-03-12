@@ -1,0 +1,17 @@
+<% layout('../template') -%>
+
+
+<div class="content">
+	<h3>User Registration</h3>
+	<form action="/registerProcess" method="post">
+		<p><label for="email1">Email</label><br />
+		<input type="text" name="email1" id="email1" /></p>
+		<p><label for="email2">Verify Email</label><br />
+		<input type="text" name="email2" id="email2" /></p>
+		<p><label for="user">Username:</label><br />
+		<input type="text" name="user" id="user" /></p>
+		<p><label for="pass">Password:</label><br />
+		<input type="password" name="pass" id="pass" /></p>
+		<p><input type="submit" value="Register" name="q" /></p>
+	</form>
+</div>

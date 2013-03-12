@@ -44,6 +44,8 @@ app.get('/help', stat.help);
 app.get('/faq', stat.faq);
 
 //User Routes
+app.get('/login', user.login);
+app.get('/register', user.register);
 app.get('/users', user.list);
 app.get('/profile', user.profile);
 app.get('/following', user.following);

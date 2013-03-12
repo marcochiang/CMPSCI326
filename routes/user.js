@@ -17,6 +17,18 @@ exports.list = function(req, res){
   res.send("respond with a resource");
 };
 
+// Renders the login view
+exports.login = function(req, res){
+	var display = "test...";
+	res.render('users/login', {title: 'Login', func: 'login', data: display});
+};
+
+// Renders the register view
+exports.register = function(req, res){
+	var display = "test...";
+	res.render('users/register', {title: 'Register', func: 'register', data: display});
+};
+
 // ## Profile View
 
 // Renders the profile view:
