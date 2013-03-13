@@ -9,16 +9,18 @@
 		</ul>
 		<div class="clearfix">&nbsp;</div>
 		<form method="post" action="#">
-			<textarea id="newTweet" name="newTweet">Compose a new tweet...</textarea>
-			<input type="submit" id="submit" name="q" class="hidden" />
+			<textarea class="tweetExpand" id="newTweet" name="newTweet"
+			onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;">Compose a new tweet...</textarea>
+			<input class="tweetButton" id="tweetButton" type="image" src="img/Tweet_Focus_Out.jpg" name="submit" />
 		</form>
 	</div>
 	<div class="content">
-			<h5>&copy 2013 Twitter 
-				<a href="/about"><span>About</span></a>
-				<a href="/faq"><span>Faq</span></a>
-				<a href="/help"><span>Help</span></a>
-			</h5>
+		<h5>&copy 2013 Twitter 
+			<a href="/about"><span>About</span></a>
+			<a href="/faq"><span>Faq</span></a>
+			<a href="/help"><span>Help</span></a>
+			<a href="/docs/README.md.html"><span>Documentation</span></a>
+		</h5>
 
 	</div>
 </div>
