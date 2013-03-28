@@ -8,6 +8,7 @@
 
 var actions = require('../lib/users/actions.js');
 var renders = require('../lib/users/renders.js');
+var userlib = require('../lib/users/user.js');
 
 // User object
 var user = actions.getUser('marco');
@@ -51,8 +52,8 @@ exports.auth = function(req, res) {
 	}
 	else {
 		// Pull the values from the form.
-		var username = req.body.username;
-		var password = req.body.password;
+		var username = req.body.user;
+		var password = req.body.pass;
 		// Perform the user lookup.
 		userlib.lookup(username, password, function(error, user) {
 			if (error) {
@@ -64,12 +65,30 @@ exports.auth = function(req, res) {
 			else {
 				req.session.user = user;
 				// Store the user in our in memory database.
-				online[user.uid] = user;
+				//online[user.uid] = user;
 				// Redirect to main.
 				res.redirect('/profile');
 			}
 		});
 	}
+};
+
+// ## logout
+// Deletes user info & session - then redirects to login.
+exports.logout = function(req, res) {
+	var user = req.session.user;
+	if (user === undefined || online[user.uid] === undefined) {
+		req.flash('auth', 'Not logged in!');
+		res.redirect('/login');
+		return;
+	}
+	
+	if (online[user.uid] !== undefined) {
+		delete online[user.uid];
+	}
+	
+	delete req.session.user;
+	res.redirect('/login');
 };
 
 // Renders the register view

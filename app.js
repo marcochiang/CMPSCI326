@@ -60,6 +60,7 @@ app.get('/faq', stat.faq);
 
 //Logged Out User Routes
 app.get('/login', user.login);
+app.post('/login/auth', user.auth);
 app.get('/register', user.register);
 
 //Logged In User Routes
