@@ -19,6 +19,7 @@
 					<li class="connect<% if (func === "connect") { %> active<% } %>"><a href="/connect">Connect</a></li>
 					<li class="discover<% if (func === "discover") { %> active<% } %>"><a href="/discover">Discover</a></li>
 					<li class="me<% if (func === "me") { %> active<% } %>"><a href="/profile">Me</a></li>
+					<li class="session"><span><% if (session.user) { %> Logged in as <%- session.user.username %> <% } %></span></li>
 				</ul>
 			</nav> <!-- nav -->
 			<div class="clearfix"></div>
