@@ -4,36 +4,50 @@
  */
 
 var express = require('express')
-  , engine = require('ejs-locals')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , stat = require('./routes/static')
-  , http = require('http')
-  , path = require('path');
+	, engine = require('ejs-locals')
+	, routes = require('./routes')
+	, user = require('./routes/user')
+	, stat = require('./routes/static')
+	, http = require('http')
+	, path = require('path')
+	// TDR: Include flash middleware:
+	, flash = require('connect-flash');
 
 var app = express();
+
+function authmw(req, res, next) {
+	if (req.session.user === undefined && req.url === '/login/auth') {
+		user.auth(req, res, next);
+	}
+	else if (req.session.user === undefined) {
+		user.login(req, res, next);
+	}
+	else {
+		next();
+	}
+}
 
 // use ejs-locals for all ejs templates:
 app.engine('ejs', engine);
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
-  
+	app.set('port', process.env.PORT || 3000);
 	app.set('views',__dirname + '/views');
-	app.set('view engine', 'ejs'); // so you can render('index')
-	
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.cookieParser('your secret here'));
-  app.use(express.session());
-  app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
+	app.set('view engine', 'ejs');
+	app.use(express.favicon());
+	app.use(express.logger('dev'));
+	app.use(express.bodyParser());
+	app.use(express.methodOverride());
+	app.use(express.cookieParser('your secret here'));
+	app.use(express.session());
+	//app.use(authmw);
+	app.use(flash());
+	app.use(app.router);
+	app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 });
 
 //Splash Page
@@ -67,5 +81,5 @@ app.get('/profile', user.profile);
 app.get('/who_to_follow', user.who_to_follow);
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+	console.log("Express server listening on port " + app.get('port'));
 });
