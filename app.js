@@ -36,6 +36,7 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+//Splash Page
 app.get('/', routes.index);
 
 //Static Routes
@@ -43,11 +44,12 @@ app.get('/about', stat.about);
 app.get('/help', stat.help);
 app.get('/faq', stat.faq);
 
-//User Routes
+//Logged Out User Routes
 app.get('/login', user.login);
 app.get('/register', user.register);
+
+//Logged In User Routes
 app.get('/users', user.list);
-app.get('/profile', user.profile);
 app.get('/following', user.following);
 app.get('/followers', user.followers);
 app.get('/favorites', user.favorites);
@@ -57,9 +59,12 @@ app.get('/connect', user.connect);
 app.get('/mentions', user.mentions);
 app.get('/discover', user.discover);
 app.get('/activity', user.activity);
-app.get('/who_to_follow', user.who_to_follow);
 app.get('/find_friends', user.find_friends);
 app.get('/browse_categories', user.browse_categories);
+
+//Universal User Routes
+app.get('/profile', user.profile);
+app.get('/who_to_follow', user.who_to_follow);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
