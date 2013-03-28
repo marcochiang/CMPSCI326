@@ -62,6 +62,13 @@
    fieldset {border: 0;.reset;}
    h1, h2, h3, h4, h5, h6 {font-family: 'Open Sans Condensed', sans-serif;}
    a {color: @blue;} a:hover {color: @dark;}
+   form {
+	input[type="text"], input[type="password"], textarea {
+		padding: 5px;background: #f5f5f5;color: @greyer;border: 1px solid @grey;
+		&:focus {background: #fff;color: @dark;}
+	}
+	input[type="submit"], input[type="reset"], button {padding: 8px;color: @dark;}
+   }
 
 
 /* ==========================================================================
@@ -69,7 +76,7 @@
    ========================================================================== */
 
 
-   #site {
+#site {
    	header#header {
    		height: 50px;background: url("../img/nav.jpg") repeat-x 0 0;
    		hgroup {
@@ -82,86 +89,88 @@
    				list-style-type: none;.reset;
    				li {
    					width: auto;.left;padding: 0 1em;
-   					a {display: block;height: 35px;color: #fff;padding: 15px 0 0 32px;text-decoration: none;font-size: 13px;text-shadow: 1px 1px #000;text-transform: uppercase;background-image: url("../img/navIcons.png");background-repeat: no-repeat;.opacity(.6);.transition(opacity);
-   					&:hover {.opacity(1);}
+   					a {
+						display: block;height: 35px;color: #fff;padding: 15px 0 0 32px;text-decoration: none;font-size: 13px;text-shadow: 1px 1px #000;text-transform: uppercase;background-image: url("../img/navIcons.png");background-repeat: no-repeat;.opacity(.6);.transition(opacity);
+						&:hover {.opacity(1);}
+					}
+					&.home a {background-position: 0 0;}
+					&.connect a {background-position: 0 -50px;}
+					&.discover a {background-position: 0 -100px;}
+					&.me a {background-position: 0 -150px;}
+					&.active {
+						background: url("../img/navActive.jpg") repeat-x 0 0;border-left: 1px solid @dark;border-right: 1px solid @dark;
+						a {.opacity(1);}
+					}
    				}
-   				&.active {background: url("../img/navActive.jpg") repeat-x 0 0;border-left: 1px solid @dark;border-right: 1px solid @dark;
-   				a {.opacity(1);}
    			}
-   			&.home a {background-position: 0 0;}
-   			&.connect a {background-position: 0 -50px;}
-   			&.discover a {background-position: 0 -100px;}
-   			&.me a {background-position: 0 -150px;}
-   		}
-   	}
-   }
-}
-#main {
-	width: 920px;margin: 0 auto;padding: 20px;background: url("../img/opaque.png") repeat 0 0;
-	#leftCol {width: 280px;} #rightCol {width: 620px;}
-	.content {
-
-		margin: 0 0 1em 0;padding: 1em;background: #fff;.borderRadius;
-		&.noPadding {padding: 0;}
-		p, li {margin: 1em 0;}
-		ul, ol {margin: 0 0 0 40px;}
-		.linkList {
-			.reset;list-style-type: none;
-			li {
-				.reset;border-bottom: 1px solid @grey;
-				a {display: block;padding: 10px 20px;text-decoration: none;}
-			}
 		}
-
-		/* HOME PAGE */
-		&#profile {
-			&.profileGlance {
-				ul#stats li:first-child {padding: .5em 1em .5em 0;}
-			}
-			#carbon {
-				height: 80px;padding: 40px;background: url("../img/carbon.jpg") repeat-x 0 0;.txtCenter;color: #fff;text-shadow: 1px 1px #000;.borderRadius;
-			}
-			p {
-				line-height: 16px;font-size: 14px;margin: 0;padding: 0 0 .5em 0;border-bottom: 1px solid @grey;
-				a {
-					color: @dark;font-weight: bold;text-decoration: none;
-					img {margin: 0 .5em 0 0;.borderRadius;}
-					span {color: @greyer;font-size: 12px;font-weight: normal;}
-					&:hover {color: @blue;}
-				}
-			}
-			ul#stats {
+	}
+	#main {
+		width: 920px;margin: 0 auto;padding: 20px;background: url("../img/opaque.png") repeat 0 0;
+		#leftCol {width: 280px;} #rightCol {width: 620px;}
+		.content {
+	
+			margin: 0 0 1em 0;padding: 1em;background: #fff;.borderRadius;
+			&.noPadding {padding: 0;}
+			p, li {margin: 1em 0;}
+			ul, ol {margin: 0 0 0 40px;}
+			.linkList {
 				.reset;list-style-type: none;
 				li {
-					line-height: 16px;font-size: 12px;margin: 0;padding: .5em 1em .5em 1em;border-right: 1px solid @grey;.left;
-					a {
-						color: @dark;font-weight: bold;text-decoration: none;
-						span {color: @greyer;}
-						&:hover {color: @blue;}
-					}
-					&:last-child {padding: .5em 0 .5em 1em;border-right: none;}
+					.reset;border-bottom: 1px solid @grey;
+					a {display: block;padding: 10px 20px;text-decoration: none;}
 				}
 			}
-			form {
-				margin: 1em 0 0 0;
-				#newTweet {
-					width: 90%;height: 16px;padding: .5em;background: #fff;border: 1px solid @grey;color: @greyer;resize: none;
-					&:focus {color: @dark;}
+	
+			/* HOME PAGE */
+			&#profile {
+				&.profileGlance {
+					ul#stats li:first-child {padding: .5em 1em .5em 0;}
 				}
-				/* I don't know why I can't get this to work
-				input{
-					#tweetButton{
-						position: absolute;
-						float: right;
+				#carbon {
+					height: 80px;padding: 40px;background: url("../img/carbon.jpg") repeat-x 0 0;.txtCenter;color: #fff;text-shadow: 1px 1px #000;.borderRadius;
+				}
+				p {
+					line-height: 16px;font-size: 14px;margin: 0;padding: 0 0 .5em 0;border-bottom: 1px solid @grey;
+					a {
+						color: @dark;font-weight: bold;text-decoration: none;
+						img {margin: 0 .5em 0 0;.borderRadius;}
+						span {color: @greyer;font-size: 12px;font-weight: normal;}
+						&:hover {color: @blue;}
 					}
-				}*/
+				}
+				ul#stats {
+					.reset;list-style-type: none;
+					li {
+						line-height: 16px;font-size: 12px;margin: 0;padding: .5em 1em .5em 1em;border-right: 1px solid @grey;.left;
+						a {
+							color: @dark;font-weight: bold;text-decoration: none;
+							span {color: @greyer;}
+							&:hover {color: @blue;}
+						}
+						&:last-child {padding: .5em 0 .5em 1em;border-right: none;}
+					}
+				}
+				form {
+					margin: 1em 0 0 0;
+					#newTweet {
+						width: 90%;height: 16px;padding: .5em;background: #fff;border: 1px solid @grey;color: @greyer;resize: none;
+						&:focus {color: @dark;}
+					}
+					/* I don't know why I can't get this to work
+					input{
+						#tweetButton{
+							position: absolute;
+							float: right;
+						}
+					}*/
+				}
 			}
 		}
 	}
-}
-
-footer#footer {
-	margin-top: 1em;margin-bottom: 3em;
-	p {.txtCenter;color: #868889;}
-}
+	
+	footer#footer {
+		margin-top: 1em;margin-bottom: 3em;
+		p {.txtCenter;color: #868889;}
+	}
 }

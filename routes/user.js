@@ -19,8 +19,57 @@ exports.list = function(req, res){
 
 // Renders the login view
 exports.login = function(req, res){
-	var display = "test...";
-	res.render('users/login', {title: 'Login', func: 'login', data: display});
+	// Grab any messages being sent to use from redirect.
+	var authmessage = req.flash('auth') || '';
+	
+	// TDR: redirect if logged in:
+	var user  = req.session.user;
+	
+	// TDR: If the user is already logged in - we redirect to the
+	// main application view. We must check both that the `userid`
+	// and the `online[userid]` are undefined. The reason is that
+	// the cookie may still be stored on the client even if the
+	// server has been restarted.
+	if (user !== undefined && online[user.uid] !== undefined) {
+		res.redirect('/profile');
+	}
+	else {
+		// Render the login view if this is a new login.
+		res.render('users/login', {title: 'Login', func: 'login', message: authmessage});
+	}
+};
+
+// ## auth
+// Performs **basic** user authentication.
+exports.auth = function(req, res) {
+	// TDR: redirect if logged in:
+	var user = req.session.user;
+	
+	// TDR: do the check as described in the `exports.login` function.
+	if (user !== undefined && online[user.uid] !== undefined) {
+		res.redirect('/profile');
+	}
+	else {
+		// Pull the values from the form.
+		var username = req.body.username;
+		var password = req.body.password;
+		// Perform the user lookup.
+		userlib.lookup(username, password, function(error, user) {
+			if (error) {
+				// If there is an error we "flash" a message to the
+				// redirected route `/user/login`.
+				req.flash('auth', error);
+				res.redirect('/login');
+			}
+			else {
+				req.session.user = user;
+				// Store the user in our in memory database.
+				online[user.uid] = user;
+				// Redirect to main.
+				res.redirect('/profile');
+			}
+		});
+	}
 };
 
 // Renders the register view
