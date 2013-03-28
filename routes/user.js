@@ -22,6 +22,7 @@ exports.list = function(req, res){
 exports.login = function(req, res){
 	// Grab any messages being sent to use from redirect.
 	var authmessage = req.flash('auth') || '';
+	var redir = req.query.redir || '';
 	
 	// TDR: redirect if logged in:
 	var user  = req.session.user;
@@ -31,12 +32,14 @@ exports.login = function(req, res){
 	// and the `online[userid]` are undefined. The reason is that
 	// the cookie may still be stored on the client even if the
 	// server has been restarted.
-	if (user !== undefined && online[user.uid] !== undefined) {
-		res.redirect('/profile');
+	//if (user !== undefined && online[user.uid] !== undefined) {
+	if (user !== undefined){
+		res.redirect('/');
 	}
 	else {
 		// Render the login view if this is a new login.
 		res.render('users/login', {title: 'Login', func: 'login', message: authmessage});
+		//res.render('users/login', {title: 'Login', func: 'login', message: authmessage, redir: req.query.redir});
 	}
 };
 
@@ -46,46 +49,38 @@ exports.auth = function(req, res) {
 	// TDR: redirect if logged in:
 	var user = req.session.user;
 	
-	// TDR: do the check as described in the `exports.login` function.
-	if (user !== undefined && online[user.uid] !== undefined) {
-		res.redirect('/profile');
-	}
-	else {
-		// Pull the values from the form.
-		var username = req.body.user;
-		var password = req.body.pass;
-		// Perform the user lookup.
-		userlib.lookup(username, password, function(error, user) {
-			if (error) {
-				// If there is an error we "flash" a message to the
-				// redirected route `/user/login`.
-				req.flash('auth', error);
-				res.redirect('/login');
-			}
-			else {
-				req.session.user = user;
-				// Store the user in our in memory database.
-				//online[user.uid] = user;
-				// Redirect to main.
-				res.redirect('/profile');
-			}
-		});
-	}
+	// Pull the values from the form.
+	var username = req.body.user;
+	var password = req.body.pass;
+	// Perform the user lookup.
+	userlib.lookup(username, password, function(error, user) {
+		if (error) {
+			// If there is an error we "flash" a message to the
+			// redirected route `/user/login`.
+			req.flash('auth', error);
+			//res.redirect('/login?redir='+req.body.redir);
+			res.redirect('/login');
+		}
+		else {
+			req.session.user = user;
+			// Store the user in our in memory database.
+			//online[user.uid] = user;
+			// Redirect to main.
+			res.redirect('/');
+			//res.redirect(req.body.redir || '/');
+		}
+	});
+
 };
 
 // ## logout
 // Deletes user info & session - then redirects to login.
 exports.logout = function(req, res) {
 	var user = req.session.user;
-	if (user === undefined || online[user.uid] === undefined) {
-		req.flash('auth', 'Not logged in!');
-		res.redirect('/login');
-		return;
-	}
 	
-	if (online[user.uid] !== undefined) {
+	/*if (online[user.uid] !== undefined) {
 		delete online[user.uid];
-	}
+	}*/
 	
 	delete req.session.user;
 	res.redirect('/login');
@@ -93,8 +88,10 @@ exports.logout = function(req, res) {
 
 // Renders the register view
 exports.register = function(req, res){
-	var display = "test...";
-	res.render('users/register', {title: 'Register', func: 'register', data: display});
+	if (user !== undefined){
+		res.redirect('/');
+	}
+	res.render('users/register', {title: 'Register', func: 'register'});
 };
 
 // ## Profile View
