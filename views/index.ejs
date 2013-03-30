@@ -9,9 +9,9 @@
 		</ul>
 		<div class="clearfix">&nbsp;</div>
 		<form>
-			<textarea type="text" class="tweetExpand" id="newTweet" name="newTweet"
+			<textarea class="tweetExpand" id="newTweet" name="newTweet"
 			onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;">Compose a new tweet...</textarea>
-			<input class="tweetButton" id="tweetButton" type="image" src="img/Tweet_Focus_Out.jpg" name="tweetButton" />
+			<input class="tweetButton" id="tweetButton" type="image" src="img/Tweet_Focus_Out.jpg" name="tweetButton"/>
 		</form>
 		<div class="clearfix"></div>
 	</div>
@@ -24,7 +24,7 @@
 	<div class="content">
 		<h3>Tweets</h3>
 		<p>
-			<span id="tweetMSG"></span>
+			<ul id="tweet" style="list-style: none;"></ul>
 		</p>
 	</div>
 </div>

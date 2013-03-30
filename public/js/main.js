@@ -33,22 +33,11 @@ $('textarea.tweetExpand').focus(function () {
 	});
 });
 
-// On focus out, collapse the form and hide the tweet button
-$('textarea.tweetExpand').focusout(function () {
-	$(this).animate({ height: "16px" }, 0);
-	$('input.tweetButton').hide();
+// Prevents the form from posting
+$('form').click(function(event)
+{
+event.preventDefault();
 });
-
-
-/*// Get tweet button to display stuff
-var input = document.getElementById('newTweet'),
-    placeholder = document.getElementById('tweetMSG');
-
-input.onkeyup = function() {
-   placeholder.innerHTML = input.value
-}*/
-
-
 
 /*
 
@@ -155,10 +144,21 @@ $(function () {
 		var text = this.input.val();
 		chatc.post(text);
 		// clear input text:
-		this.input.val('');
+		this.input.val('Compose a new tweet...');
+		$('input.tweetButton').hide();
+		$('textarea.tweetExpand').animate({ height: "16px" }, 0);
+		alert('Tweet successfully posted');
 		return false;
 	});
 
 });
 
+
+/*// Get tweet button to display stuff
+var input = document.getElementById('newTweet'),
+    placeholder = document.getElementById('tweetMSG');
+
+input.onkeyup = function() {
+   placeholder.innerHTML = input.value
+}*/
 
