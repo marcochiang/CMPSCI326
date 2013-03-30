@@ -34,7 +34,7 @@ $('textarea.tweetExpand').focus(function () {
 });
 
 // Prevents the form from posting
-$('form').click(function(event)
+$('form#tweet').click(function(event)
 {
 event.preventDefault();
 });
