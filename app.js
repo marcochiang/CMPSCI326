@@ -8,6 +8,7 @@ var express = require('express')
 	, routes = require('./routes')
 	, user = require('./routes/user')
 	, stat = require('./routes/static')
+	, tweet = require('./routes/tweet')
 	, http = require('http')
 	, path = require('path')
 	// TDR: Include flash middleware:
@@ -62,6 +63,11 @@ app.get('/', requiresLogin, routes.index);
 app.get('/about', stat.about);
 app.get('/help', stat.help);
 app.get('/faq', stat.faq);
+
+//Tweet posting
+app.get('/', tweet.tweet);
+app.post('/post', tweet.post);
+app.post('/check', tweet.check);
 
 //Logged Out User Routes
 app.get('/login', user.login);
