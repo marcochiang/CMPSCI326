@@ -84,7 +84,13 @@ exports.logout = function(req, res) {
 };
 
 // Renders the register view
-exports.register = function(req, res){
+exports.register = function(req, res) {
+	var user  = req.session.user;
+	
+	if (user !== undefined){
+		res.redirect('/');
+	}
+	
 	var authmessage = req.flash('auth') || '';
 	res.render('users/register', {title: 'Register', func: 'register', message: authmessage});
 };
