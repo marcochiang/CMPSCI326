@@ -13,9 +13,10 @@ var userlib = require('../lib/users/user.js');
 // User object
 var user = actions.getUser('marco');
 
-// Renders the list (?):
+// Displays list of users:
 exports.list = function(req, res){
-  res.send("respond with a resource");
+	var display = userlib.list();
+	res.render('users/usersList', {title: 'User List', func: 'me', data: display});
 };
 
 // Renders the login view
@@ -47,7 +48,7 @@ exports.login = function(req, res){
 // Performs **basic** user authentication.
 exports.auth = function(req, res) {
 	// TDR: redirect if logged in:
-	var user = req.session.user;
+	//var user = req.session.user;
 	
 	// Pull the values from the form.
 	var username = req.body.user;
@@ -78,20 +79,37 @@ exports.auth = function(req, res) {
 exports.logout = function(req, res) {
 	var user = req.session.user;
 	
-	/*if (online[user.uid] !== undefined) {
-		delete online[user.uid];
-	}*/
-	
 	delete req.session.user;
 	res.redirect('/login');
 };
 
 // Renders the register view
 exports.register = function(req, res){
-	if (user !== undefined){
-		res.redirect('/');
-	}
-	res.render('users/register', {title: 'Register', func: 'register'});
+	var authmessage = req.flash('auth') || '';
+	res.render('users/register', {title: 'Register', func: 'register', message: authmessage});
+};
+
+exports.registerProcess = function(req, res){
+	// Pull the values from the form.
+	var email1 = req.body.email1;
+	var email2 = req.body.email2;
+	var username = req.body.user;
+	var password = req.body.pass;
+	userlib.createUser(email1, email2, username, password, function(error, user) {
+		if (error) {
+			// If there is an error we "flash" a message to the
+			// redirected route `/user/login`.
+			req.flash('auth', error);
+			res.redirect('/register');
+		}
+		else{
+			req.session.user = user;
+			// Store the user in our in memory database.
+			//online[user.uid] = user;
+			// Redirect to main.
+			res.redirect('/');
+		}
+	});
 };
 
 // ## Profile View
