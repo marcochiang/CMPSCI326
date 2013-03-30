@@ -67,6 +67,7 @@ app.get('/faq', stat.faq);
 app.get('/login', user.login);
 app.post('/login/auth', user.auth);
 app.get('/register', user.register);
+app.post('/register/process', user.registerProcess);
 
 //Logged In User Routes
 app.get('/users', requiresLogin, user.list);
