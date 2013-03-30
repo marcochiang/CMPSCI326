@@ -3,11 +3,13 @@
 
 <div class="content">
 	<h3>User Login</h3>
-	<form action="/loginProcess" method="post">
+	<p><em><%= message %></em></p>
+	<form action="/login/auth" method="post">
 		<p><label for="user">Username:</label><br />
 		<input type="text" name="user" id="user" /></p>
 		<p><label for="pass">Password:</label><br />
 		<input type="password" name="pass" id="pass" /></p>
 		<p><input type="submit" value="Login" name="q" /></p>
 	</form>
+	<p>New to Twitter? <a href="/register">Sign Up</a></p>
 </div>

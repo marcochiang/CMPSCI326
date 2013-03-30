@@ -15,18 +15,6 @@ var express = require('express')
 
 var app = express();
 
-function authmw(req, res, next) {
-	if (req.session.user === undefined && req.url === '/login/auth') {
-		user.auth(req, res, next);
-	}
-	else if (req.session.user === undefined) {
-		user.login(req, res, next);
-	}
-	else {
-		next();
-	}
-}
-
 // use ejs-locals for all ejs templates:
 app.engine('ejs', engine);
 
@@ -40,8 +28,12 @@ app.configure(function(){
 	app.use(express.methodOverride());
 	app.use(express.cookieParser('your secret here'));
 	app.use(express.session());
-	//app.use(authmw);
 	app.use(flash());
+	//use custom middleware to assign session variable that can be called in other pages (i.e. views)
+	app.use(function(req, res, next) {
+  		res.locals.session = req.session;
+  		next();
+	});
 	app.use(app.router);
 	app.use(express.static(path.join(__dirname, 'public')));
 });
@@ -50,8 +42,21 @@ app.configure('development', function(){
 	app.use(express.errorHandler());
 });
 
+//redirects user to login screen if session not defined
+//called from logged-in user route handlers
+function requiresLogin(req, res, next){
+	if (req.session.user){
+		next();
+	}
+	else{
+		//in case we want to redirect the client to their intended URL
+		//res.redirect('/login?redir='+req.url); 
+		res.redirect('/login')
+	}
+}
+
 //Splash Page
-app.get('/', routes.index);
+app.get('/', requiresLogin, routes.index);
 
 //Static Routes
 app.get('/about', stat.about);
@@ -60,21 +65,24 @@ app.get('/faq', stat.faq);
 
 //Logged Out User Routes
 app.get('/login', user.login);
+app.post('/login/auth', user.auth);
 app.get('/register', user.register);
+app.post('/register/process', user.registerProcess);
 
 //Logged In User Routes
-app.get('/users', user.list);
-app.get('/following', user.following);
-app.get('/followers', user.followers);
-app.get('/favorites', user.favorites);
-app.get('/follower_requests', user.follower_requests);
-app.get('/lists', user.lists); //needed??
-app.get('/connect', user.connect);
-app.get('/mentions', user.mentions);
-app.get('/discover', user.discover);
-app.get('/activity', user.activity);
-app.get('/find_friends', user.find_friends);
-app.get('/browse_categories', user.browse_categories);
+app.get('/users', requiresLogin, user.list);
+app.get('/following', requiresLogin, user.following);
+app.get('/followers', requiresLogin, user.followers);
+app.get('/favorites', requiresLogin, user.favorites);
+app.get('/follower_requests', requiresLogin, user.follower_requests);
+app.get('/lists', requiresLogin, user.lists); //needed??
+app.get('/connect', requiresLogin, user.connect);
+app.get('/mentions', requiresLogin, user.mentions);
+app.get('/discover', requiresLogin, user.discover);
+app.get('/activity', requiresLogin, user.activity);
+app.get('/find_friends', requiresLogin, user.find_friends);
+app.get('/browse_categories', requiresLogin, user.browse_categories);
+app.get('/logout', requiresLogin, user.logout);
 
 //Universal User Routes
 app.get('/profile', user.profile);

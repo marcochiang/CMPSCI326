@@ -8,25 +8,114 @@
 
 var actions = require('../lib/users/actions.js');
 var renders = require('../lib/users/renders.js');
+var userlib = require('../lib/users/user.js');
 
 // User object
 var user = actions.getUser('marco');
 
-// Renders the list (?):
+// Displays list of users:
 exports.list = function(req, res){
-  res.send("respond with a resource");
+	var display = userlib.list();
+	res.render('users/usersList', {title: 'User List', func: 'me', data: display});
 };
 
 // Renders the login view
 exports.login = function(req, res){
-	var display = "test...";
-	res.render('users/login', {title: 'Login', func: 'login', data: display});
+	// Grab any messages being sent to use from redirect.
+	var authmessage = req.flash('auth') || '';
+	var redir = req.query.redir || '';
+	
+	// TDR: redirect if logged in:
+	var user  = req.session.user;
+	
+	// TDR: If the user is already logged in - we redirect to the
+	// main application view. We must check both that the `userid`
+	// and the `online[userid]` are undefined. The reason is that
+	// the cookie may still be stored on the client even if the
+	// server has been restarted.
+	//if (user !== undefined && online[user.uid] !== undefined) {
+	if (user !== undefined){
+		res.redirect('/');
+	}
+	else {
+		// Render the login view if this is a new login.
+		res.render('users/login', {title: 'Login', func: 'login', message: authmessage});
+		//res.render('users/login', {title: 'Login', func: 'login', message: authmessage, redir: req.query.redir});
+	}
+};
+
+// ## auth
+// Performs **basic** user authentication.
+exports.auth = function(req, res) {
+	// TDR: redirect if logged in:
+	//var user = req.session.user;
+	
+	// Pull the values from the form.
+	var username = req.body.user;
+	var password = req.body.pass;
+	// Perform the user lookup.
+	userlib.lookup(username, password, function(error, user) {
+		if (error) {
+			// If there is an error we "flash" a message to the
+			// redirected route `/user/login`.
+			req.flash('auth', error);
+			//res.redirect('/login?redir='+req.body.redir);
+			res.redirect('/login');
+		}
+		else {
+			req.session.user = user;
+			// Store the user in our in memory database.
+			//online[user.uid] = user;
+			// Redirect to main.
+			res.redirect('/');
+			//res.redirect(req.body.redir || '/');
+		}
+	});
+
+};
+
+// ## logout
+// Deletes user info & session - then redirects to login.
+exports.logout = function(req, res) {
+	var user = req.session.user;
+	
+	delete req.session.user;
+	res.redirect('/login');
 };
 
 // Renders the register view
-exports.register = function(req, res){
-	var display = "test...";
-	res.render('users/register', {title: 'Register', func: 'register', data: display});
+exports.register = function(req, res) {
+	var user  = req.session.user;
+	
+	if (user !== undefined){
+		res.redirect('/');
+	}
+	
+	var authmessage = req.flash('auth') || '';
+	res.render('users/register', {title: 'Register', func: 'register', message: authmessage});
+};
+
+exports.registerProcess = function(req, res){
+	// Pull the values from the form.
+	var email1 = req.body.email1;
+	var email2 = req.body.email2;
+	var username = req.body.user;
+	var password = req.body.pass;
+	userlib.createUser(email1, email2, username, password, function(error, user) {
+		if (error) {
+			// If there is an error we "flash" a message to the
+			// redirected route `/user/login`.
+			req.flash('auth', error);
+			res.redirect('/register');
+		}
+		else{
+			req.session.user = user;
+			// Store the user in our in memory database.
+			//online[user.uid] = user;
+			// Redirect to main.
+			res.redirect('/');
+		}
+	});
 };
 
 // ## Profile View
