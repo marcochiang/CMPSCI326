@@ -24,10 +24,10 @@ exports.login = function(req, res){
 	// Grab any messages being sent to use from redirect.
 	var authmessage = req.flash('auth') || '';
 	var redir = req.query.redir || '';
-	
+
 	// TDR: redirect if logged in:
 	var user  = req.session.user;
-	
+
 	// TDR: If the user is already logged in - we redirect to the
 	// main application view. We must check both that the `userid`
 	// and the `online[userid]` are undefined. The reason is that
@@ -49,7 +49,7 @@ exports.login = function(req, res){
 exports.auth = function(req, res) {
 	// TDR: redirect if logged in:
 	//var user = req.session.user;
-	
+
 	// Pull the values from the form.
 	var username = req.body.user;
 	var password = req.body.pass;
@@ -78,7 +78,7 @@ exports.auth = function(req, res) {
 // Deletes user info & session - then redirects to login.
 exports.logout = function(req, res) {
 	var user = req.session.user;
-	
+
 	delete req.session.user;
 	res.redirect('/login');
 };
@@ -86,11 +86,11 @@ exports.logout = function(req, res) {
 // Renders the register view
 exports.register = function(req, res) {
 	var user  = req.session.user;
-	
+
 	if (user !== undefined){
 		res.redirect('/');
 	}
-	
+
 	var authmessage = req.flash('auth') || '';
 	res.render('users/register', {title: 'Register', func: 'register', message: authmessage});
 };

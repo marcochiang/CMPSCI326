@@ -20,7 +20,7 @@
 					<li class="connect<% if (func === "connect") { %> active<% } %>"><a href="/connect">Connect</a></li>
 					<li class="discover<% if (func === "discover") { %> active<% } %>"><a href="/discover">Discover</a></li>
 					<li class="me<% if (func === "me") { %> active<% } %>"><a href="/profile">Me</a></li>
-					<li class="session right">Welcome <%- session.user.username %> | <a href="/logout">Logout</a></li>
+					<li class="session right"><a href="/profile"> Welcome <%- session.user.username %> </a>| <a href="/logout">Logout</a></li>
 					<% } %>
 					<% if (!session.user) { %>
 					<li class="login<% if (func === "login") { %> active<% } %>"><a href="/login">Login</a></li>
