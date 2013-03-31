@@ -153,15 +153,14 @@ exports.followUserJon = function(req, res){
 
 // Renders the profile view:
 exports.profile = function(req, res){
-	//var display = actions.getTweets(user);
-	var myid = req.session.user.uid;
-	var display = userlib.listFollowing(myid, function(){});
+	var display = actions.getTweets(user);
  	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 };
 
 // Renders the users that the current user is following:
 exports.following = function(req, res){
-	var display = actions.getFollowing(user);
+	var myid = req.session.user.uid;
+	var display = userlib.listFollowing(myid, function(){});
 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 }
 
