@@ -1,0 +1,44 @@
+<% layout('../template') -%>
+
+<div id="leftCol" class="left">
+  <div class="content noPadding">
+    <ul class="linkList">
+      <li><a href="/profile">Tweets</a></li>
+      <li><a href="/following">Following</a></li>
+      <li><a href="/followers">Followers</a></li>
+      <li><a href="/favorites">Favorites</a></li>
+      <li><a href="/follower_requests">Requests</a></li>
+      <li><a href="/lists">Lists</a></li>
+    </ul>
+  </div>
+  <div class="content">
+    <h4><a href="/who_to_follow">Who To Follow...</a></h4>
+  </div>
+  <div class="content">
+    <h4>Trends</h4>
+  </div>
+  <div id="footer" class="content">
+    <h5>&copy 2013 Twitter</h5>
+    <p><a href="/about">About</a> | <a href="/faq">Faq</a> | <a href="/help">Help</a> | <a href="/docs/README.md.html">Documentation</a></p>
+  </div>
+</div>
+<div id="rightCol" class="right">
+  <div class="content noPadding" id="profile">
+    <div id="carbon">
+      <h2><%- session.user.username %></h2>
+      <h3><%- session.user.email %></h3>
+    </div>
+    <ul id="stats">
+      <li><a href="/profile">76<br /><span>TWEETS</span></a></li>
+      <li><a href="/following">103<br /><span>FOLLOWING</span></a></li>
+      <li><a href="/followers">171<br /><span>FOLLOWERS</span></a></li>
+    </ul>
+    <div class="clearfix">&nbsp;</div>
+  </div>
+  <div class="content">
+    <div id="data">
+      <%- data %>
+    </div>
+  </div>
+</div>
+<div class="clearfix">&nbsp;</div>

@@ -51,7 +51,7 @@ function requiresLogin(req, res, next){
 	}
 	else{
 		//in case we want to redirect the client to their intended URL
-		//res.redirect('/login?redir='+req.url); 
+		//res.redirect('/login?redir='+req.url);
 		res.redirect('/login')
 	}
 }
@@ -74,6 +74,12 @@ app.get('/login', user.login);
 app.post('/login/auth', user.auth);
 app.get('/register', user.register);
 app.post('/register/process', user.registerProcess);
+
+//Hard Coded User profiles
+app.get('/show_user/Marco', requiresLogin, user.showUserMarco);
+app.get('/show_user/Jeff', requiresLogin, user.showUserJeff);
+app.get('/show_user/Matt', requiresLogin, user.showUserMatt);
+app.get('/show_user/Jon', requiresLogin, user.showUserJon);
 
 //Logged In User Routes
 app.get('/users', requiresLogin, user.list);

@@ -5,6 +5,7 @@
 /*
  * GET users listing.
  */
+var fs = require('fs');
 
 var actions = require('../lib/users/actions.js');
 var renders = require('../lib/users/renders.js');
@@ -118,6 +119,32 @@ exports.registerProcess = function(req, res){
 	});
 };
 
+// ## Hard Coded user routes
+
+exports.showUserMarco = function(req, res){
+	//var display = actions.getTweets(user);
+	var display = "Marco";
+ 	res.render('users/showUser', {title: 'User', func: 'me', data: display});
+};
+
+exports.showUserJeff = function(req, res){
+	//var display = actions.getTweets(user);
+	var display = "Jeff";
+ 	res.render('users/showUser', {title: 'User', func: 'me', data: display});
+};
+
+exports.showUserMatt = function(req, res){
+	//var display = actions.getTweets(user);
+	var display = "Matt";
+ 	res.render('users/showUser', {title: 'User', func: 'me', data: display});
+};
+
+exports.showUserJon = function(req, res){
+	//var display = actions.getTweets(user);
+	var display = "Jon";
+ 	res.render('users/showUser', {title: 'User', func: 'me', data: display});
+};
+
 // ## Profile View
 
 // Renders the profile view:
@@ -186,7 +213,8 @@ exports.activity = function(req, res){
 
 // Renders who to follow suggestions for the current user:
 exports.who_to_follow = function(req, res){
-	var display = "<h3>Who To Follow</h3></br>Who to follow functionality will go here..";
+	//var display = "<h3>Who To Follow</h3></br>Who to follow functionality will go here..";
+	var display = fs.readFileSync('views/users/who_to_follow.ejs', 'utf8');
 	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
 };
 
