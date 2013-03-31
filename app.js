@@ -76,10 +76,10 @@ app.get('/register', user.register);
 app.post('/register/process', user.registerProcess);
 
 //Hard Coded User profiles
-app.get('/show_user/Marco', requiresLogin, user.showUserMarco);
-app.get('/show_user/Jeff', requiresLogin, user.showUserJeff);
-app.get('/show_user/Matt', requiresLogin, user.showUserMatt);
-app.get('/show_user/Jon', requiresLogin, user.showUserJon);
+app.get('/follow_user/Marco', requiresLogin, user.followUserMarco);
+app.get('/follow_user/Jeff', requiresLogin, user.followUserJeff);
+app.get('/follow_user/Matt', requiresLogin, user.followUserMatt);
+app.get('/follow_user/Jon', requiresLogin, user.followUserJon);
 
 //Logged In User Routes
 app.get('/users', requiresLogin, user.list);

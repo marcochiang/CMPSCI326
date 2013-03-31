@@ -121,35 +121,41 @@ exports.registerProcess = function(req, res){
 
 // ## Hard Coded user routes
 
-exports.showUserMarco = function(req, res){
+exports.followUserMarco = function(req, res){
 	//var display = actions.getTweets(user);
-	var display = "Marco";
- 	res.render('users/showUser', {title: 'User', func: 'me', data: display});
+	var myid = req.session.user.uid;
+	var display = userlib.follow(myid, 2, function(){});
+ 	res.render('users/profile', {title: 'User', func: 'me', data: display});
 };
 
-exports.showUserJeff = function(req, res){
+exports.followUserJeff = function(req, res){
 	//var display = actions.getTweets(user);
-	var display = "Jeff";
- 	res.render('users/showUser', {title: 'User', func: 'me', data: display});
+	var myid = req.session.user.uid;
+	var display = userlib.follow(myid, 1, function(){});
+ 	res.render('users/profile', {title: 'User', func: 'me', data: display});
 };
 
-exports.showUserMatt = function(req, res){
+exports.followUserMatt = function(req, res){
 	//var display = actions.getTweets(user);
-	var display = "Matt";
- 	res.render('users/showUser', {title: 'User', func: 'me', data: display});
+	var myid = req.session.user.uid;
+	var display = userlib.follow(myid, 3, function(){});
+ 	res.render('users/profile', {title: 'User', func: 'me', data: display});
 };
 
-exports.showUserJon = function(req, res){
+exports.followUserJon = function(req, res){
 	//var display = actions.getTweets(user);
-	var display = "Jon";
- 	res.render('users/showUser', {title: 'User', func: 'me', data: display});
+	var myid = req.session.user.uid;
+	var display = userlib.follow(myid, 4, function(){});
+ 	res.render('users/profile', {title: 'User', func: 'me', data: display});
 };
 
 // ## Profile View
 
 // Renders the profile view:
 exports.profile = function(req, res){
-	var display = actions.getTweets(user);
+	//var display = actions.getTweets(user);
+	var myid = req.session.user.uid;
+	var display = userlib.listFollowing(myid, function(){});
  	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 };
 
