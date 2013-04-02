@@ -1,6 +1,10 @@
 # CMPSCI326: Team Killington
 =============================
-
+Authors:
+Marco Chiang
+Matt Rheault
+Jonathan Godin
+Jeff Pezzone
 
 ## How to Run
 You can run our app using `node app.js` from the top level directory.
