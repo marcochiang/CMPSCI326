@@ -17,7 +17,7 @@ $('#glance #newTweet').focusout(function () {
 
 /*
 	Home Page
-*/
+	*/
 
 // Start by hiding the tweet button until form box is opened
 $('input.tweetButton').hide();
@@ -33,10 +33,16 @@ $('textarea.tweetExpand').focus(function () {
 	});
 });
 
-// Prevents the form from posting
+// 
+$('textarea.tweetExpand').focusout(function () {
+	//$('input.tweetButton').hide();
+	//$('textarea.tweetExpand').animate({ height: "16px" }, 0);
+});
+
+// Prevents the tweet form from posting
 $('form#tweet').click(function(event)
 {
-event.preventDefault();
+	event.preventDefault();
 });
 
 /*
@@ -44,14 +50,14 @@ event.preventDefault();
 	A ChatClient object for communicating
 	with the chat server.
 
-*/
-function ChatClient(config) {
-	for (var prop in config) {
-		this[prop] = config[prop];
+	*/
+	function ChatClient(config) {
+		for (var prop in config) {
+			this[prop] = config[prop];
+		}
 	}
-}
 
-ChatClient.prototype = {
+	ChatClient.prototype = {
 	// An cache of posts received from server.
 	posts : [],
 
@@ -72,10 +78,10 @@ ChatClient.prototype = {
 	// Post text to the server.
 	post : function (text) {
 		$.ajax({
-            type : 'POST',
-            url  : '/post',
-            data : { 'text' : text },
-            dataType : 'json'
+			type : 'POST',
+			url  : '/post',
+			data : { 'text' : text },
+			dataType : 'json'
 		}).done(function (data) {
 			console.log('Post status: ' + data.status);
 		});
