@@ -45,6 +45,35 @@ $('form#tweet').click(function(event)
 	event.preventDefault();
 });
 
+// Follow button clicked --> change action of form
+$('form#follow button').click(function(event)
+{
+	var followID = $(this).val();
+	//alert(followID);
+	$('form#follow').attr("action", "/follow/" + followID);
+	$(this).text("Following");
+});
+
+// Unfollow button clicked --> change action of form
+$('form#unfollow button').click(function(event)
+{
+	var followID = $(this).val();
+	//alert(followID);
+	$('form#unfollow').attr("action", "/unfollow/" + followID);
+	//$(this).text("Following");
+});
+
+// Hover event on Unfollow button
+$('form#unfollow button').hover(
+	function(event)
+	{
+		$(this).text("Unfollow");
+	},
+	function(event)
+	{
+		$(this).text("Following");
+});
+
 /*
 
 	A ChatClient object for communicating
@@ -167,4 +196,5 @@ var input = document.getElementById('newTweet'),
 input.onkeyup = function() {
    placeholder.innerHTML = input.value
 }*/
+
 

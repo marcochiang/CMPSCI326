@@ -5,14 +5,14 @@
 /*
  * GET users listing.
  */
-var fs = require('fs');
+//var fs = require('fs');
 
 var actions = require('../lib/users/actions.js');
 var renders = require('../lib/users/renders.js');
 var userlib = require('../lib/users/user.js');
 
 // User object
-var user = actions.getUser('marco');
+var user = actions.getUser('marco'); //we will eventually get rid of this
 
 // Displays list of users:
 exports.list = function(req, res){
@@ -25,16 +25,12 @@ exports.login = function(req, res){
 	// Grab any messages being sent to use from redirect.
 	var authmessage = req.flash('auth') || '';
 	var redir = req.query.redir || '';
-
+	
 	// TDR: redirect if logged in:
 	var user  = req.session.user;
-
+	
 	// TDR: If the user is already logged in - we redirect to the
-	// main application view. We must check both that the `userid`
-	// and the `online[userid]` are undefined. The reason is that
-	// the cookie may still be stored on the client even if the
-	// server has been restarted.
-	//if (user !== undefined && online[user.uid] !== undefined) {
+	// main application view.
 	if (user !== undefined){
 		res.redirect('/');
 	}
@@ -48,14 +44,12 @@ exports.login = function(req, res){
 // ## auth
 // Performs **basic** user authentication.
 exports.auth = function(req, res) {
-	// TDR: redirect if logged in:
-	//var user = req.session.user;
-
+	
 	// Pull the values from the form.
 	var username = req.body.user;
 	var password = req.body.pass;
 	// Perform the user lookup.
-	userlib.lookup(username, password, function(error, user) {
+	userlib.auth(username, password, function(error, user) {
 		if (error) {
 			// If there is an error we "flash" a message to the
 			// redirected route `/user/login`.
@@ -72,14 +66,12 @@ exports.auth = function(req, res) {
 			//res.redirect(req.body.redir || '/');
 		}
 	});
-
 };
 
 // ## logout
 // Deletes user info & session - then redirects to login.
 exports.logout = function(req, res) {
-	var user = req.session.user;
-
+	
 	delete req.session.user;
 	res.redirect('/login');
 };
@@ -87,11 +79,12 @@ exports.logout = function(req, res) {
 // Renders the register view
 exports.register = function(req, res) {
 	var user  = req.session.user;
-
-	if (user !== undefined){
+	
+	if (user !== undefined){ //redirect to home if there is a current session
 		res.redirect('/');
 	}
-
+	
+	// Grab any messages being sent to use from redirect.
 	var authmessage = req.flash('auth') || '';
 	res.render('users/register', {title: 'Register', func: 'register', message: authmessage});
 };
@@ -119,9 +112,9 @@ exports.registerProcess = function(req, res){
 	});
 };
 
-// ## Hard Coded user routes
+// ## Hard Coded user routes -- Jon's old code
 
-exports.followUserMarco = function(req, res){
+/*exports.followUserMarco = function(req, res){
 	//var display = actions.getTweets(user);
 	var myid = req.session.user.uid;
 	var display = userlib.follow(myid, 2, function(){});
@@ -147,45 +140,243 @@ exports.followUserJon = function(req, res){
 	var myid = req.session.user.uid;
 	var display = userlib.follow(myid, 4, function(){});
  	res.render('users/profile', {title: 'User', func: 'me', data: display});
-};
+};*/
 
 // ## Profile View
 
 // Renders the profile view:
 exports.profile = function(req, res){
-	var display = actions.getTweets(user);
- 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
+    var user;
+    var display;
+    //if there is a current user session where user is viewing his/her own profile page, get data & display it
+    if (req.session.user !== undefined && req.params.user === req.session.user.username){
+    	console.log('displaying your own profile');
+    	user = req.session.user;
+    	display = actions.getTweets(user);
+    	res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: true, user: user});
+    }
+    //either not logged in, or logged in & viewing another user's profile page
+    else{
+    	console.log('displaying other users profile page');
+    	var username = req.params.user; //get username from URL
+	    userlib.lookup(username, function(error, user) {
+	    	if (error){
+	    		console.log(error);
+	    		req.flash('auth', error)
+	    		//res.redirect('/register');
+	    		res.redirect('/login');
+	    		//possibly render some generic error page where user is not found??
+	    	}
+	    	else{
+	    		console.log('found user ' + user.username);
+	    		display = actions.getTweets(user);//for now
+	    		res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: false, user: user});
+	    	}
+	    });
+    }
 };
 
-// Renders the users that the current user is following:
-exports.following = function(req, res){
+//helper function that consildate code in functions like exports.following, exports.followers, etc.. 
+function renderProfile(req, res, fn){
+	console.log('got to renderProfile function');
+	//console.log('function passed in: ' + fn);
+	var user;
+	var display; 
+	//if there is a current user session where user is viewing his/her own profile page, get data & display it
+    if (req.session.user !== undefined && req.params.user === undefined){
+    	console.log('displaying your own profile');
+    	user = req.session.user;
+    	display = fn;
+    	res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: true, user: user});
+    }
+     //either not logged in, or logged in & viewing another user's profile page
+     else{
+     	console.log('displaying other users profile page');
+    	var username = req.params.user; //get username from URL
+    	userlib.lookup(username, function(error, user) {
+			if (error){
+	    		console.log(error);
+	    		req.flash('auth', error)
+	    		//res.redirect('/register');
+	    		res.redirect('/login');
+	    		//possibly render some generic error page where user is not found??
+	    	}
+	    	else{
+	    		console.log('found user ' + user.username);
+	    		display = fn;//for now
+	    		res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: false, user: user});
+	    	}
+		});
+     }
+}
+
+// Renders the users that the current user is following: -- Jon's old code
+/*exports.following = function(req, res){
 	var myid = req.session.user.uid;
 	var display = userlib.listFollowing(myid, function(){});
 	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
-}
+}*/
+
+// Renders the users that the current user is following:
+exports.following = function(req, res){
+	//renderProfile(req, res, actions.getFollowing());
+	var user;
+	var display; 
+	//if there is a current user session where user is viewing his/her own profile page, get data & display it
+    if (req.session.user !== undefined && req.params.user === undefined){
+    	console.log('displaying your own profile');
+    	user = req.session.user;
+    	display = userlib.getFollowing(user, true);
+    	res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: true, user: user});
+    }
+     //either not logged in, or logged in & viewing another user's profile page
+     else{
+     	console.log('displaying other users profile page');
+    	var username = req.params.user; //get username from URL
+    	userlib.lookup(username, function(error, user) {
+			if (error){
+	    		console.log(error);
+	    		req.flash('auth', error)
+	    		//res.redirect('/register');
+	    		res.redirect('/login');
+	    		//possibly render some generic error page where user is not found??
+	    	}
+	    	else{
+	    		console.log('found user ' + user.username);
+	    		display = userlib.getFollowing(user, false);
+	    		res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: false, user: user});
+	    	}
+		});
+     }
+};
+
 
 // Renders the followers of the current user:
 exports.followers = function(req, res){
-	var display = actions.getFollowers(user);
-	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
+	var user;
+	var display; 
+	//if there is a current user session where user is viewing his/her own profile page, get data & display it
+    if (req.session.user !== undefined && req.params.user === undefined){
+    	console.log('displaying your own profile');
+    	user = req.session.user;
+    	display = actions.getFollowers(user);
+    	res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: true, user: user});
+    }
+     //either not logged in, or logged in & viewing another user's profile page
+     else{
+     	console.log('displaying other users profile page');
+    	var username = req.params.user; //get username from URL
+    	userlib.lookup(username, function(error, user) {
+			if (error){
+	    		console.log(error);
+	    		req.flash('auth', error)
+	    		//res.redirect('/register');
+	    		res.redirect('/login');
+	    		//possibly render some generic error page where user is not found??
+	    	}
+	    	else{
+	    		console.log('found user ' + user.username);
+	    	    display = actions.getFollowers(user);//for now
+	    		res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: false, user: user});
+	    	}
+		});
+     }
 };
 
 // Renders the current user's favorited tweets:
 exports.favorites = function(req, res){
-	var display = actions.getFavorites(user);
-	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
+	var user;
+	var display; 
+	//if there is a current user session where user is viewing his/her own profile page, get data & display it
+    if (req.session.user !== undefined && req.params.user === undefined){
+    	console.log('displaying your own profile');
+    	user = req.session.user;
+    	display = actions.getFavorites(user);
+    	res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: true, user: user});
+    }
+     //either not logged in, or logged in & viewing another user's profile page
+     else{
+     	console.log('displaying other users profile page');
+    	var username = req.params.user; //get username from URL
+    	userlib.lookup(username, function(error, user) {
+			if (error){
+	    		console.log(error);
+	    		req.flash('auth', error)
+	    		//res.redirect('/register');
+	    		res.redirect('/login');
+	    		//possibly render some generic error page where user is not found??
+	    	}
+	    	else{
+	    		console.log('found user ' + user.username);
+	    		display = actions.getFavorites(user);//for now
+	    		res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: false, user: user});
+	    	}
+		});
+     }
 };
 
 // Renders the current user's follower requests:
 exports.follower_requests = function(req, res){
-	var display = actions.getFollowerRequests(user);
-	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
+	var user;
+	var display; 
+	//if there is a current user session where user is viewing his/her own profile page, get data & display it
+    if (req.session.user !== undefined && req.params.user === undefined){
+    	console.log('displaying your own profile');
+    	user = req.session.user;
+    	display = actions.getFollowerRequests(user);
+    	res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: true, user: user});
+    }
+     //either not logged in, or logged in & viewing another user's profile page
+     else{
+     	console.log('displaying other users profile page');
+    	var username = req.params.user; //get username from URL
+    	userlib.lookup(username, function(error, user) {
+			if (error){
+	    		console.log(error);
+	    		req.flash('auth', error)
+	    		//res.redirect('/register');
+	    		res.redirect('/login');
+	    		//possibly render some generic error page where user is not found??
+	    	}
+	    	else{
+	    		console.log('found user ' + user.username);
+	    		display = actions.getFollowerRequests(user);//for now
+	    		res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: false, user: user});
+	    	}
+		});
+     }
 };
 
 // Renders the current user's lists:
 exports.lists = function(req, res){
-	var display = actions.getLists(user);
-	res.render('users/profile', {title: 'Profile', func: 'me', data: display});
+	var user;
+	var display; 
+	//if there is a current user session where user is viewing his/her own profile page, get data & display it
+    if (req.session.user !== undefined && req.params.user === undefined){
+    	console.log('displaying your own profile');
+    	user = req.session.user;
+    	display = actions.getLists(user);
+    	res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: true, user: user});
+    }
+     //either not logged in, or logged in & viewing another user's profile page
+     else{
+     	console.log('displaying other users profile page');
+    	var username = req.params.user; //get username from URL
+    	userlib.lookup(username, function(error, user) {
+			if (error){
+	    		console.log(error);
+	    		req.flash('auth', error)
+	    		//res.redirect('/register');
+	    		res.redirect('/login');
+	    		//possibly render some generic error page where user is not found??
+	    	}
+	    	else{
+	    		console.log('found user ' + user.username);
+	    		display = actions.getLists(user);//for now
+	    		res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: false, user: user});
+	    	}
+		});
+     }
 };
 
 // ## Connect View
@@ -216,10 +407,47 @@ exports.activity = function(req, res){
 	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
 };
 
-// Renders who to follow suggestions for the current user:
-exports.who_to_follow = function(req, res){
+// Renders who to follow suggestions for the current user: -- Jon's old code
+/*exports.who_to_follow = function(req, res){
 	//var display = "<h3>Who To Follow</h3></br>Who to follow functionality will go here..";
 	var display = fs.readFileSync('views/users/who_to_follow.ejs', 'utf8');
+	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
+};*/
+
+// # Follow user functionality
+exports.follow = function(req, res){
+	var id = req.params.id; 
+	var user = req.session.user;
+	userlib.follow(user, id, function(error){
+		if (error){
+			console.log(error);
+			res.redirect('/');
+		}
+		else{
+			res.redirect('/who_to_follow');
+		}
+	});
+};
+
+// #Unfollow user functionality
+exports.unfollow = function(req, res){
+	var id = req.params.id;
+	var user = req.session.user;
+	userlib.unfollow(user, id, function(error){
+		if (error){
+			console.log(error);
+			res.redirect('/');
+		}
+		else{
+			res.redirect('/following');
+		}
+	});
+};
+
+// Renders who to follow suggestions for the current user:
+exports.who_to_follow = function(req, res){
+	var user = req.session.user;
+	var display = userlib.who_to_follow(user);
 	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
 };
 
