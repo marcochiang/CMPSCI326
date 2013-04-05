@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-  var relativeDir = "", thisFile = "Users/jonathangodin/Desktop/CMPSCI326/READMEmd", defaultSidebar = true;
+    var relativeDir = "", thisFile = "Users/jonathangodin/Desktop/CMPSCI326/READMEmd", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
 </head>
@@ -19,35 +19,74 @@
     <div id="tree"></div>
     <div id="headings">
       <div class="heading h1">
-        <a href="#cmpsci326">CMPSCI326</a>
+        <a href="#--cmpsci326--team-killington"># CMPSCI326: Team Killington</a>
+      </div>
+      <div class="heading h2">
+        <a href="#how-to-run">How to Run</a>
+      </div>
+      <div class="heading h2">
+        <a href="#project-assignment-03">Project Assignment 03</a>
       </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
   <div id="container"><div class="docs markdown">
-    <div class="pilwrap" id="cmpsci326">
-      <h1>
-        <a href="#cmpsci326" class="pilcrow">&#182;</a>
-        <u>CMPSCI326: Team Killington</u>
-      </h1>
-    </div>
+<div class="pilwrap" id="--cmpsci326--team-killington">
+  <h1>
+    <a href="#--cmpsci326--team-killington" class="pilcrow">&#182;</a>
+    # CMPSCI326: Team Killington
+  </h1>
+</div>
 
 
-    <h3>Web Programming 2013</h3>
-    <ul>Recreate Twitter</ul>
-    <h4>Authors:</h4>
-    <p>Marco Chiang<br>Jonathin Godin<br>Matt Rheault<br>Jeff Pezzone</p>
-    <h3>About</h3>
-    <p>
-      Overview: </br>
-Twitter(imitation).com is a social networking and microblogging service. At the heart of the operation is the tweet, which is a 140 character text message. Twitter connects you to the latest news, conversations, stories, and ideas. The best part is that you only see information that interests you. All that is required is an account and you can start following your favorite people, topics, and trends.
-</p>
-<p>
-Several other important features include mentions, hashtags, replies, the discover and connect buttons. Mentions allow users to tweet to their hearts content and mention any other twitter user who may be relevant to the original tweet. Hashtags allow users to categorize their tweets so they can be later searched through for those users who are interested in a particular topic. Replies is a simple feature where users can reply to any tweet, which will then notify the original tweet writer. The discover button at the top of the page next to the home button will allow twitter users to find activities, relevant tweets and more to keep track of. Never miss out on a good conversation with the discover feature! The connect feature allows users to find out what is going on in their immediate space - who has recently followed or mentioned you? This allows users to keep in touch with their fellow followers.
-</p>
-<p>
-This spec is a work-in-progress and the images seen here are not by any means finalized. Many revisions will need to be made for the final product to be complete. No discussion of algorithms or in-depth concepts will be shown here.
-</p>
+<p>Authors:</p>
+
+<blockquote>
+  <p>Marco Chiang - 
+  Matt Rheault - 
+  Jonathan Godin - 
+  Jeff Pezzone - </p>
+</blockquote>
+
+
+<div class="pilwrap" id="how-to-run">
+  <h2>
+    <a href="#how-to-run" class="pilcrow">&#182;</a>
+    How to Run
+  </h2>
+</div>
+
+
+<p>You can run our app using <code>node app.js</code> from the top level directory.</p>
+
+
+<div class="pilwrap" id="project-assignment-03">
+  <h2>
+    <a href="#project-assignment-03" class="pilcrow">&#182;</a>
+    Project Assignment 03
+  </h2>
+</div>
+
+
+<p>Here is a list of the files and additions we made:
+* app.js:
+     - added new routes to include tweeting functionality (uses ajax to post tweets and pull them).
+     - added login and register routes
+     - added follow_user routes to temporarily allow hardcoded following functionality
+* routes/tweet.js:
+    - added a new route file to allow posting and checking of tweets using ajax
+* js/main.js:
+    - added and modified jquery and javascript code to enhance the tweeting features. It now allows submitting tweets and using ajax to poll the tweeted messages to show up in the tweet section.
+* views/users/login.ejs &amp; register.ejs &amp; who_to_follow.ejs &amp; showUser.ejs &amp; usersList.ejs:
+    - added views so users can now register and login. Also included who to follow and showing a list of users available.
+* README.md:
+    - added documentation of things we changed.
+    - added a pdf file called colorfeature located in public/files which is the new functional spec for the new feature we plan to implement later.
+* routes/user.js</p>
+
+<ul>
+<li>lib/users/user.js</li>
+</ul></div>
   </div>
 </body>
 </html>
