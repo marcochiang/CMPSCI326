@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>user.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "Users/jonathangodin/Desktop/CMPSCI326/lib/users/userjs", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#user-library">User Library</a>
+      </div>
+      <div class="heading h2">
+        <a href="#user-objects">User Objects</a>
+      </div>
+      <div class="heading h3">
+        <a href="#following-list">Following List</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="user-library">
+  <h1>
+    <a href="#user-library" class="pilcrow">&#182;</a>
+    User Library
+  </h1>
+</div>
+
+
+<p>var LinkedList = require('linkedlist');</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Array Remove - By John Resig (MIT Licensed)</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">removeElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">rest</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">slice</span><span class="p">((</span><span class="nx">to</span> <span class="o">||</span> <span class="nx">from</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="nx">from</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="nx">from</span> <span class="o">:</span> <span class="nx">from</span><span class="p">;</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">push</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">rest</span><span class="p">);</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="user-objects">
+  <h2>
+    <a href="#user-objects" class="pilcrow">&#182;</a>
+    User Objects
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">function</span> <span class="nx">User</span><span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">role</span><span class="p">,</span> <span class="nx">uid</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">email</span> <span class="o">=</span> <span class="nx">email</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">username</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">password</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">role</span> <span class="o">=</span> <span class="nx">role</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">uid</span> <span class="o">=</span> <span class="nx">uid</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>this.followList = new LinkedList();</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">this</span><span class="p">.</span><span class="nx">followList</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+<span class="p">}</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>This is our stub database until we look at a real database!</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">userdb</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="s1">&#39;test@test.com&#39;</span><span class="p">,</span> <span class="s1">&#39;jeff&#39;</span><span class="p">,</span>   <span class="s1">&#39;jeff&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+  <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="s1">&#39;test@test.com&#39;</span><span class="p">,</span> <span class="s1">&#39;marco&#39;</span><span class="p">,</span> <span class="s1">&#39;marco&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+  <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="s1">&#39;test@test.com&#39;</span><span class="p">,</span> <span class="s1">&#39;matt&#39;</span><span class="p">,</span> <span class="s1">&#39;matt&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+  <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="s1">&#39;test@test.com&#39;</span><span class="p">,</span> <span class="s1">&#39;jon&#39;</span><span class="p">,</span> <span class="s1">&#39;jon&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="p">];</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>Export the <code>users</code> list.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">users</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>Creates a user and adds it to the user db</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">createUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">email1</span><span class="p">,</span> <span class="nx">email2</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">uid</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">uid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//increment uid</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">email1</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that email was entered</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;please enter an email address&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">email2</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that email was verified</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;please verify your email address&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">username</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that username was entered</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;please enter a username&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">password</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that password was entered</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;please enter a password&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">email1</span> <span class="o">!==</span> <span class="nx">email2</span><span class="p">){</span> <span class="c1">//check that emails match</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;emails do not match&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span><span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//loop through userdb, make sure username not taken already</span>
+      <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">===</span> <span class="nx">username</span><span class="p">){</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;username &#39;</span> <span class="o">+</span> <span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39; is already in use&#39;</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>create new user, add to user db</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">var</span> <span class="nx">newUser</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="nx">email1</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="nx">uid</span><span class="p">);</span>
+    <span class="nx">userdb</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">newUser</span><span class="p">);</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">newUser</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>Authorize user -- check if credentials are in the user db</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">auth</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">===</span> <span class="nx">username</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">password</span> <span class="o">===</span> <span class="nx">password</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">u</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;password is not correct&#39;</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;user not found&#39;</span><span class="p">);</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>Looks up user in user db by username</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">lookup</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">username</span> <span class="o">===</span> <span class="nx">username</span><span class="p">){</span> <span class="c1">//found user</span>
+      <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">u</span><span class="p">);</span>
+      <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;user not found&#39;</span><span class="p">)</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
+<p>Returns a list of all the users in the userdb</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3&gt;Users&lt;/h3&gt;&#39;</span><span class="p">;</span>
+  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;ul style=&quot;list-style-type: none; padding:0px; margin:0px;&quot;&gt;&#39;</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li&gt;&lt;b&gt;Username:&lt;/b&gt; &#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39;, &lt;b&gt;Password:&lt;/b&gt; &#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">password</span> <span class="o">+</span>
+    <span class="s1">&#39;, &lt;b&gt;Email:&lt;/b&gt;&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">email</span> <span class="o">+</span> <span class="s1">&#39;, &lt;b&gt;id: &lt;/b&gt;&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uid</span> <span class="o">+</span><span class="s1">&#39;&lt;/li&gt;&#39;</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&#39;</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">content</span><span class="p">;</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>Adds the followUID User to your following list -- Jon's old code</p>
+
+<div class="dox">
+  <div class="summary"><p>exports.follow = function(myUID, followUID, cb){
+if(userdb[myUID] === userdb[followUID]) {
+return "You cannot follow yourself";
+}
+var me = userdb[myUID-1];
+var following = userdb[followUID-1];</p>
+  </div>
+  <div class="body"><p>while (me.followList.next()) {
+var id = me.followList.current;
+var u = userdb[id-1];
+if(id.toString() === followUID.toString()) {
+return "Already following " + u.username;
+}
+}
+me.followList.resetCursor();</p>
+
+<p>me.followList.push(following.uid.toString());</p>
+
+<p>return 'Successfully following: ' + following.username;
+}  </p>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+</div>
+<p>Follows user with ID followID</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">follow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">followID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+  <span class="kd">var</span> <span class="nx">follow</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">followID</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+  <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">follow</span><span class="p">.</span><span class="nx">uid</span><span class="p">);</span><span class="c1">//add to my followList</span>
+  <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span><span class="c1">//possible errors?</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>Unfollows user with ID followID</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">unfollow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">followID</span> <span class="p">,</span><span class="nx">cb</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+  <span class="kd">var</span> <span class="nx">follow</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">followID</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+  <span class="kd">var</span> <span class="nx">remove</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span> <span class="c1">//loop through followList</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">followID</span><span class="p">){</span> <span class="c1">//found user</span>
+      <span class="nx">remove</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">remove</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;cannot find user&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span><span class="p">{</span>
+    <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">removeElement</span><span class="p">(</span><span class="nx">remove</span><span class="p">);</span> <span class="c1">//remove userID from followList</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>Lists suggestions of users to follow
+For now, just returns all users in userdb that the user is currently not following</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">who_to_follow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+  <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">followSuggestions</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span> <span class="c1">//loop through all users in the user db</span>
+    <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">alreadyFollowed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">!==</span> <span class="nx">me</span><span class="p">.</span><span class="nx">username</span><span class="p">){</span> <span class="c1">//can&#39;t follow yourself</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">){</span> <span class="c1">//loop through current user&#39;s follow list</span>
+        <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span> <span class="o">===</span> <span class="nx">id</span><span class="p">){</span> <span class="c1">//don&#39;t add to follow list if user is already being followed</span>
+          <span class="nx">alreadyFollowed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+          <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">alreadyFollowed</span><span class="p">){</span>
+        <span class="nx">followSuggestions</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">id</span><span class="o">:</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="p">,</span> <span class="nx">username</span><span class="o">:</span> <span class="nx">u</span><span class="p">.</span><span class="nx">username</span><span class="p">});</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;follow&quot; id=&quot;follow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt;Who To Follow&lt;/h3&gt;&lt;ul style=&quot;list-style-type: none; margin: 0px;&quot;&gt;&#39;</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">followSuggestions</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">followSuggestions</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>content += '<li><a href="/follow_user/' + f.id + '"> ' + f.username + ' </a></li>';</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">f</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt; &#39;</span> <span class="o">+</span> <span class="nx">f</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39; &lt;/a&gt;&#39;</span><span class="p">;</span>
+    <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;follow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">f</span><span class="p">.</span><span class="nx">id</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Follow&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">content</span><span class="p">;</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>Lists all of the users that the current user is following</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">getFollowing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;unfollow&quot; id=&quot;unfollow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt;Following&lt;/h3&gt;&lt;ul style=&quot;list-style-type: none; margin: 0px;&quot;&gt;&#39;</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">id</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+    <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt; &#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39; &lt;/a&gt;&#39;</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">button</span><span class="p">){</span> <span class="c1">//only display button if viewing your own profile</span>
+      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+  <span class="p">}</span>
+  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;ul&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">content</span><span class="p">;</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><p>Lists all of the people you are following -- Jon's old code</p>
+
+<div class="dox">
+  <div class="summary"><p>exports.listFollowing = function(myUID, cb){
+var me = userdb[myUID-1];
+var content = '
+<div class="pilwrap" id="following-list">
+  <h3>
+    <a href="#following-list" class="pilcrow">&#182;</a>
+    Following List
+  </h3>
+</div>
+';
+content += '<ul style="list-style-type: none; padding:0px; margin:0px;">';
+while (me.followList.next()) {
+var u = userdb[me.followList.current-1];
+content += '<li><b>Username:</b> ' + u.username + ', <b>id: </b>' + u.uid +'</li>';
+}
+content += '</ul>';
+me.followList.resetCursor();
+return content;
+}  </p>
+  </div>
+  <div class="body">
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

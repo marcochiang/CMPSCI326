@@ -21,3 +21,9 @@ Here is a list of the files and additions we made:
 	- added and modified jquery and javascript code to enhance the tweeting features. It now allows submitting tweets and using ajax to poll the tweeted messages to show up in the tweet section.
 * views/users/login.ejs & register.ejs & who_to_follow.ejs & showUser.ejs & usersList.ejs:
 	- added views so users can now register and login. Also included who to follow and showing a list of users available.
+* README.md:
+	- added documentation of things we changed.
+	- added a pdf file called colorfeature located in public/files which is the new functional spec for the new feature we plan to implement later.
+* routes/user.js
+
+* lib/users/user.js
