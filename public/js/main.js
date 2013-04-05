@@ -49,7 +49,6 @@ $('form#tweet').click(function(event)
 $('form#follow button').click(function(event)
 {
 	var followID = $(this).val();
-	//alert(followID);
 	$('form#follow').attr("action", "/follow/" + followID);
 	$(this).text("Following");
 });
