@@ -24,3 +24,6 @@ Here is a list of the files and additions we made:
 * README.md:
 	- added documentation of things we changed.
 	- added a pdf file called colorfeature located in public/files which is the new functional spec for the new feature we plan to implement later.
+* routes/user.js
+
+* lib/users/user.js
