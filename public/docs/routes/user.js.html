@@ -519,6 +519,23 @@ res.render('users/profile', {title: 'User', func: 'me', data: display});
 <span class="nx">exports</span><span class="p">.</span><span class="nx">profile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">followButton</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">){</span> <span class="c1">//session exists</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">==</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">){</span> <span class="c1">//user is viewing his/her own profile page</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
+        <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+        <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getTweets</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+        <span class="nx">followButton</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1">//viewing your own profile --&gt; no follow/unfollow button</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span> <span class="c1">//user is viewing another user&#39;s profile page</span>
+        <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
+        <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//lookup user</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+            <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -528,15 +545,34 @@ res.render('users/profile', {title: 'User', func: 'me', data: display});
 <div class="pilwrap">
   <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
-<p>if there is a current user session where user is viewing his/her own profile page, get data &amp; display it</p>
+<p>possibly render some generic error page where user is not found??</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">){</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
-      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
-      <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getTweets</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
+          <span class="p">}</span>
+          <span class="k">else</span><span class="p">{</span>
+            <span class="nx">userlib</span><span class="p">.</span><span class="nx">profileButton</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">button</span><span class="p">){</span> <span class="c1">//get follow/unfollow button</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span> <span class="c1">//error page?</span>
+              <span class="p">}</span>
+              <span class="k">else</span><span class="p">{</span>
+                <span class="nx">followButton</span> <span class="o">=</span> <span class="nx">button</span><span class="p">;</span>
+                <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getTweets</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span><span class="c1">//for now</span>
+                <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+              <span class="p">}</span>
+            <span class="p">});</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
     <span class="p">}</span>
+
+    <span class="k">else</span><span class="p">{</span> <span class="c1">//user not logged in</span>
+      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
+      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//lookup user</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -546,16 +582,19 @@ res.render('users/profile', {title: 'User', func: 'me', data: display});
 <div class="pilwrap">
   <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
-<p>either not logged in, or logged in &amp; viewing another user's profile page</p>
+<p>possibly render some generic error page where user is not found??</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">else</span><span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
-      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
-      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="nx">followButton</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1">//not logged in --&gt; don&#39;t display follow button</span>
+          <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getTweets</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span><span class="c1">//for now</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+      <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
 
 </pre></div>
         </td>
@@ -565,9 +604,28 @@ res.render('users/profile', {title: 'User', func: 'me', data: display});
 <div class="pilwrap">
   <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
-<p>res.redirect('/register');</p>
+<p>helper function that consildate code in functions like exports.following, exports.followers, etc.. </p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">function</span> <span class="nx">renderProfile</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">fn</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">followButton</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span> <span class="c1">//no :user variable --&gt; user is viewing his/her own profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
+      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+      <span class="nx">display</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">;</span>
+      <span class="nx">followButton</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1">//viewing your own profile --&gt; no follow/unfollow button</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span> <span class="c1">//viewing another user&#39;s profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
+      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//lookup user</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
           <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
 
 </pre></div>
@@ -583,112 +641,20 @@ res.render('users/profile', {title: 'User', func: 'me', data: display});
         <td class="code highlight"><div class="highlight"><pre>
         <span class="p">}</span>
         <span class="k">else</span><span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;found user &#39;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>
-          <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getTweets</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span><span class="c1">//for now</span>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
+          <span class="nx">userlib</span><span class="p">.</span><span class="nx">profileButton</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">button</span><span class="p">){</span> <span class="c1">//get follow/unfollow button</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span> <span class="c1">//error page?</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">followButton</span> <span class="o">=</span> <span class="nx">button</span><span class="p">;</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">;</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
         <span class="p">}</span>
       <span class="p">});</span>
     <span class="p">}</span>
-<span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
-</div>
-<p>helper function that consildate code in functions like exports.following, exports.followers, etc.. </p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="kd">function</span> <span class="nx">renderProfile</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">fn</span><span class="p">){</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;got to renderProfile function&#39;</span><span class="p">);</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
-</div>
-<p>console.log('function passed in: ' + fn);</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span> 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
-</div>
-<p>if there is a current user session where user is viewing his/her own profile page, get data &amp; display it</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
-      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
-      <span class="nx">display</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">;</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-    <span class="p">}</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
-</div>
-<p>either not logged in, or logged in &amp; viewing another user's profile page</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-     <span class="k">else</span><span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
-      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
-      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
-</div>
-<p>res.redirect('/register');</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
-</div>
-<p>possibly render some generic error page where user is not found??</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="p">}</span>
-        <span class="k">else</span><span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;found user &#39;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>
-          <span class="nx">display</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">;</span><span class="c1">//for now</span>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-        <span class="p">}</span>
-    <span class="p">});</span>
-     <span class="p">}</span>
 <span class="p">}</span>
 
 
@@ -698,7 +664,7 @@ res.render('users/profile', {title: 'User', func: 'me', data: display});
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>Renders the users that the current user is following: -- Jon's old code</p>
 
@@ -722,7 +688,7 @@ res.render('users/profile', {title: 'Profile', func: 'me', data: display});
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>Renders the users that the current user is following:</p>
         </td>
@@ -735,13 +701,217 @@ res.render('users/profile', {title: 'Profile', func: 'me', data: display});
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>renderProfile(req, res, actions.getFollowing());</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span> 
+    <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">followButton</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span> <span class="c1">//no :user variable --&gt; user is viewing his/her own profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
+      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+      <span class="nx">display</span> <span class="o">=</span> <span class="nx">userlib</span><span class="p">.</span><span class="nx">getFollowing</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+      <span class="nx">followButton</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1">//viewing your own profile --&gt; no follow/unfollow button</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span> <span class="c1">//viewing another user&#39;s profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
+      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//lookup user</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+</div>
+<p>possibly render some generic error page where user is not found??</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">userlib</span><span class="p">.</span><span class="nx">profileButton</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">button</span><span class="p">){</span> <span class="c1">//get follow/unfollow button</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span> <span class="c1">//error page?</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">followButton</span> <span class="o">=</span> <span class="nx">button</span><span class="p">;</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">userlib</span><span class="p">.</span><span class="nx">getFollowing</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+</div>
+<p>Renders the followers of the current user:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">followers</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">followButton</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span> <span class="c1">//no :user variable --&gt; user is viewing his/her own profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
+      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+      <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowers</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+      <span class="nx">followButton</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1">//viewing your own profile --&gt; no follow/unfollow button</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span> <span class="c1">//viewing another user&#39;s profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
+      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//lookup user</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+</div>
+<p>possibly render some generic error page where user is not found??</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">userlib</span><span class="p">.</span><span class="nx">profileButton</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">button</span><span class="p">){</span> <span class="c1">//get follow/unfollow button</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span> <span class="c1">//error page?</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">followButton</span> <span class="o">=</span> <span class="nx">button</span><span class="p">;</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowers</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+</div>
+<p>Renders the current user's favorited tweets:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">favorites</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">followButton</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span> <span class="c1">//no :user variable --&gt; user is viewing his/her own profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
+      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+      <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFavorites</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+      <span class="nx">followButton</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1">//viewing your own profile --&gt; no follow/unfollow button</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span> <span class="c1">//viewing another user&#39;s profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
+      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//lookup user</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+</div>
+<p>possibly render some generic error page where user is not found??</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">userlib</span><span class="p">.</span><span class="nx">profileButton</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">button</span><span class="p">){</span> <span class="c1">//get follow/unfollow button</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span> <span class="c1">//error page?</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">followButton</span> <span class="o">=</span> <span class="nx">button</span><span class="p">;</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFavorites</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+</div>
+<p>Renders the current user's follower requests:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">follower_requests</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">followButton</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span> <span class="c1">//no :user variable --&gt; user is viewing his/her own profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
+      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+      <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowerRequests</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+      <span class="nx">followButton</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1">//viewing your own profile --&gt; no follow/unfollow button</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span> <span class="c1">//viewing another user&#39;s profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
+      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//lookup user</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -751,15 +921,27 @@ res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 <div class="pilwrap">
   <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
-<p>if there is a current user session where user is viewing his/her own profile page, get data &amp; display it</p>
+<p>possibly render some generic error page where user is not found??</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
-      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
-      <span class="nx">display</span> <span class="o">=</span> <span class="nx">userlib</span><span class="p">.</span><span class="nx">getFollowing</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">userlib</span><span class="p">.</span><span class="nx">profileButton</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">button</span><span class="p">){</span> <span class="c1">//get follow/unfollow button</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span> <span class="c1">//error page?</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">followButton</span> <span class="o">=</span> <span class="nx">button</span><span class="p">;</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowerRequests</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
     <span class="p">}</span>
+<span class="p">};</span>
+
 
 </pre></div>
         </td>
@@ -769,16 +951,29 @@ res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 <div class="pilwrap">
   <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
 </div>
-<p>either not logged in, or logged in &amp; viewing another user's profile page</p>
+<p>Renders the current user's lists:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-     <span class="k">else</span><span class="p">{</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">lists</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">followButton</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span> <span class="c1">//no :user variable --&gt; user is viewing his/her own profile page</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
+      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+      <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getLists</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+      <span class="nx">followButton</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span> <span class="c1">//viewing your own profile --&gt; no follow/unfollow button</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span> <span class="c1">//viewing another user&#39;s profile page</span>
       <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
       <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
-      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//lookup user</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
           <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
+          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
 
 </pre></div>
         </td>
@@ -788,379 +983,25 @@ res.render('users/profile', {title: 'Profile', func: 'me', data: display});
 <div class="pilwrap">
   <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
 </div>
-<p>res.redirect('/register');</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
-</div>
 <p>possibly render some generic error page where user is not found??</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="p">}</span>
         <span class="k">else</span><span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;found user &#39;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>
-          <span class="nx">display</span> <span class="o">=</span> <span class="nx">userlib</span><span class="p">.</span><span class="nx">getFollowing</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
+          <span class="nx">userlib</span><span class="p">.</span><span class="nx">profileButton</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">button</span><span class="p">){</span> <span class="c1">//get follow/unfollow button</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span> <span class="c1">//error page?</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">followButton</span> <span class="o">=</span> <span class="nx">button</span><span class="p">;</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getLists</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+              <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="o">:</span> <span class="nx">followButton</span><span class="p">});</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
         <span class="p">}</span>
-    <span class="p">});</span>
-     <span class="p">}</span>
-<span class="p">};</span>
-
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
-</div>
-<p>Renders the followers of the current user:</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">followers</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span> 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
-</div>
-<p>if there is a current user session where user is viewing his/her own profile page, get data &amp; display it</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
-      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
-      <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowers</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
+      <span class="p">});</span>
     <span class="p">}</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
-</div>
-<p>either not logged in, or logged in &amp; viewing another user's profile page</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-     <span class="k">else</span><span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
-      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
-      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
-</div>
-<p>res.redirect('/register');</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
-</div>
-<p>possibly render some generic error page where user is not found??</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="p">}</span>
-        <span class="k">else</span><span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;found user &#39;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>
-            <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowers</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span><span class="c1">//for now</span>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-        <span class="p">}</span>
-    <span class="p">});</span>
-     <span class="p">}</span>
-<span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
-</div>
-<p>Renders the current user's favorited tweets:</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">favorites</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span> 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
-</div>
-<p>if there is a current user session where user is viewing his/her own profile page, get data &amp; display it</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
-      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
-      <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFavorites</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-    <span class="p">}</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
-</div>
-<p>either not logged in, or logged in &amp; viewing another user's profile page</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-     <span class="k">else</span><span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
-      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
-      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
-</div>
-<p>res.redirect('/register');</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-54" id="section-54">&#182;</a>
-</div>
-<p>possibly render some generic error page where user is not found??</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="p">}</span>
-        <span class="k">else</span><span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;found user &#39;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>
-          <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFavorites</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span><span class="c1">//for now</span>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-        <span class="p">}</span>
-    <span class="p">});</span>
-     <span class="p">}</span>
-<span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-55" id="section-55">&#182;</a>
-</div>
-<p>Renders the current user's follower requests:</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">follower_requests</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span> 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-56" id="section-56">&#182;</a>
-</div>
-<p>if there is a current user session where user is viewing his/her own profile page, get data &amp; display it</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
-      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
-      <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowerRequests</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-    <span class="p">}</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-57" id="section-57">&#182;</a>
-</div>
-<p>either not logged in, or logged in &amp; viewing another user's profile page</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-     <span class="k">else</span><span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
-      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
-      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-58" id="section-58">&#182;</a>
-</div>
-<p>res.redirect('/register');</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-59" id="section-59">&#182;</a>
-</div>
-<p>possibly render some generic error page where user is not found??</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="p">}</span>
-        <span class="k">else</span><span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;found user &#39;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>
-          <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowerRequests</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span><span class="c1">//for now</span>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-        <span class="p">}</span>
-    <span class="p">});</span>
-     <span class="p">}</span>
-<span class="p">};</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-60" id="section-60">&#182;</a>
-</div>
-<p>Renders the current user's lists:</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">lists</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">user</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">display</span><span class="p">;</span> 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-61" id="section-61">&#182;</a>
-</div>
-<p>if there is a current user session where user is viewing his/her own profile page, get data &amp; display it</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="o">&amp;&amp;</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
-      <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
-      <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getLists</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-    <span class="p">}</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-62" id="section-62">&#182;</a>
-</div>
-<p>either not logged in, or logged in &amp; viewing another user's profile page</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-     <span class="k">else</span><span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying other users profile page&#39;</span><span class="p">);</span>
-      <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span> <span class="c1">//get username from URL</span>
-      <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-          <span class="nx">req</span><span class="p">.</span><span class="nx">flash</span><span class="p">(</span><span class="s1">&#39;auth&#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-63" id="section-63">&#182;</a>
-</div>
-<p>res.redirect('/register');</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-64" id="section-64">&#182;</a>
-</div>
-<p>possibly render some generic error page where user is not found??</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="p">}</span>
-        <span class="k">else</span><span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;found user &#39;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>
-          <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getLists</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span><span class="c1">//for now</span>
-          <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Profile&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
-        <span class="p">}</span>
-    <span class="p">});</span>
-     <span class="p">}</span>
 <span class="p">};</span>
 
 
@@ -1186,7 +1027,7 @@ res.render('users/profile', {title: 'Profile', func: 'me', data: display});
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-66" id="section-66">&#182;</a>
+  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
 </div>
 <p>Renders the connect view:</p>
         </td>
@@ -1203,7 +1044,7 @@ res.render('users/profile', {title: 'Profile', func: 'me', data: display});
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-67" id="section-67">&#182;</a>
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
 </div>
 <p>Renders tweets that the current user has been mentioned in:</p>
         </td>
@@ -1236,7 +1077,7 @@ res.render('users/profile', {title: 'Profile', func: 'me', data: display});
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-69" id="section-69">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>Renders the discover view:</p>
         </td>
@@ -1253,7 +1094,7 @@ res.render('users/profile', {title: 'Profile', func: 'me', data: display});
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-70" id="section-70">&#182;</a>
+  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
 </div>
 <p>Renders the current user's activity:</p>
         </td>
@@ -1355,7 +1196,7 @@ res.render('users/discover', {title: 'Discover', func: 'discover', data: display
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-74" id="section-74">&#182;</a>
+  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
 </div>
 <p>Renders who to follow suggestions for the current user:</p>
         </td>
@@ -1373,7 +1214,7 @@ res.render('users/discover', {title: 'Discover', func: 'discover', data: display
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-75" id="section-75">&#182;</a>
+  <a class="pilcrow" href="#section-54" id="section-54">&#182;</a>
 </div>
 <p>Renders the find friends functionality for the current user:</p>
         </td>
@@ -1390,7 +1231,7 @@ res.render('users/discover', {title: 'Discover', func: 'discover', data: display
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-76" id="section-76">&#182;</a>
+  <a class="pilcrow" href="#section-55" id="section-55">&#182;</a>
 </div>
 <p>Renders the browse categories functionality for the current user:</p>
         </td>

@@ -1,6 +1,19 @@
 <% layout('../template') -%>
-<div class="content">
-	<h1>Get to Know Twitter: New User FAQ</h1>    
-	<h3>What is Twitter?</h3>
-	<p>Twitter is a service for friends, family, and co–workers to communicate and stay connected through the exchange of quick, frequent messages. People write short updates,<span> often called "Tweets" of 140 characters or fewer. These messages are posted to your profile, sent to your followers, and are searchable on Twitter search.</span></p>
+<div id="leftCol" class="left">
+	<%- include ../includes/loginRegisterList.ejs %>
+	<%- include ../includes/staticSidebar.ejs %>
+	<%- include ../includes/footer.ejs %>
 </div>
+<div id="rightCol" class="right">
+	<div class="content">
+		<h2>Frequently Asked Questions</h2>
+		<ul>
+			<li><a href="#whatistwitter">What is Twitter?</a></li>
+		</ul>
+		<hr />
+		<a name="whatistwitter"></a>
+		<h3>What is Twitter?</h3>
+		<p>Twitter is a service for friends, family, and co–workers to communicate and stay connected through the exchange of quick, frequent messages. People write short updates,<span> often called "Tweets" of 140 characters or fewer. These messages are posted to your profile, sent to your followers, and are searchable on Twitter search.</span></p>
+	</div>
+</div>
+<div class="clearfix">&nbsp;</div>

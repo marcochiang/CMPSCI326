@@ -1,0 +1,21 @@
+<% layout('../../template') -%>
+
+<div id="leftCol" class="left">
+	<%- include ../../includes/profileSidebar.ejs %>
+	<%- include ../../includes/discoverSidebar.ejs %>
+	<%- include ../../includes/footer.ejs %>
+</div>
+<div id="rightCol" class="right">
+	<!--<div class="content">
+		<h3>Tweets</h3>
+		<div id="data">
+			<p>Tweets will go here...</p>
+		</div>
+	</div>-->
+	<div class="content">
+		<div id="data">
+			<%- data %>
+		</div>
+	</div>
+</div>
+<div class="clearfix">&nbsp;</div>

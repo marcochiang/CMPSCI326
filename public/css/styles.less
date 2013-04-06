@@ -129,10 +129,20 @@
 				li {
 					.reset;border-bottom: 1px solid @grey;
 					a {display: block;padding: 10px 20px;text-decoration: none;}
+					&.active a {color: @dark;}
 				}
 			}
 	
 			/* HOME PAGE */
+			#tweet {
+				.reset;
+				li {
+					margin: 0;padding: 1em 0;border-bottom: 1px solid @grey;
+					span.tweet {}
+					span.date {color: @grey;}
+				}
+			}
+			
 			&#profile {
 				&.profileGlance {
 					ul#stats li:first-child {padding: .5em 1em .5em 0;}
@@ -155,7 +165,7 @@
 						line-height: 16px;font-size: 12px;margin: 0;padding: .5em 1em .5em 1em;border-right: 1px solid @grey;.left;
 						a {
 							color: @dark;font-weight: bold;text-decoration: none;
-							span {color: @greyer;}
+							span {color: @greyer;text-transform: uppercase;}
 							&:hover {color: @blue;}
 						}
 						&:last-child {padding: .5em 0 .5em 1em;border-right: none;}

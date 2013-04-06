@@ -16,15 +16,15 @@
 		  	<nav class="wrapper"> <!-- nav -->
 				<ul>
 					<% if (session.user) { %>
-					<li class="home<% if (func === "home") { %> active<% } %>"><a href="/">Home</a></li>
-					<li class="connect<% if (func === "connect") { %> active<% } %>"><a href="/connect">Connect</a></li>
-					<li class="discover<% if (func === "discover") { %> active<% } %>"><a href="/discover">Discover</a></li>
-					<li class="me<% if (func === "me") { %> active<% } %>"><a href="/user/<%- session.user.username %>">Me</a></li>
-					<li class="session right">Welcome <%- session.user.username %> | <a href="/logout">Logout</a></li>
+					<li class="home<% if (nav === "home") { %> active<% } %>"><a href="/">Home</a></li>
+					<li class="connect<% if (nav === "connect") { %> active<% } %>"><a href="/connect">Connect</a></li>
+					<li class="discover<% if (nav === "discover") { %> active<% } %>"><a href="/discover">Discover</a></li>
+					<li class="me<% if (nav === "me") { %> active<% } %>"><a href="/user/<%- session.user.username %>">Me</a></li>
+					<li class="session right">Welcome <%- session.user.username %> | <a href="/settings">Settings</a> | <a href="/logout">Logout</a></li>
 					<% } %>
 					<% if (!session.user) { %>
-					<li class="login<% if (func === "login") { %> active<% } %>"><a href="/login">Login</a></li>
-					<li class="register<% if (func === "register") { %> active<% } %>"><a href="/register">Get Started</a></li>
+					<li class="login<% if (nav === "login") { %> active<% } %>"><a href="/login">Login</a></li>
+					<li class="register<% if (nav === "register") { %> active<% } %>"><a href="/register">Get Started</a></li>
 					<% } %>
 				</ul>
 			</nav> <!-- nav -->

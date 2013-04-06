@@ -82,24 +82,22 @@ app.get('/follow_user/Matt', requiresLogin, user.followUserMatt);
 app.get('/follow_user/Jon', requiresLogin, user.followUserJon);*/
 
 //Logged In User Routes
-app.get('/users', requiresLogin, user.list);
-app.get('/following', requiresLogin, user.following);
 app.get('/user/:user/following', requiresLogin, user.following);
-app.get('/followers', requiresLogin, user.followers);
 app.get('/user/:user/followers', requiresLogin, user.followers);
-app.get('/favorites', requiresLogin, user.favorites);
 app.get('/user/:user/favorites', requiresLogin, user.favorites);
-app.get('/follower_requests', requiresLogin, user.follower_requests);
 app.get('/user/:user/follower_requests', requiresLogin, user.follower_requests);
-app.get('/lists', requiresLogin, user.lists); //needed??
 app.get('/user/:user/lists', requiresLogin, user.lists); //needed??
+
 app.get('/connect', requiresLogin, user.connect);
-app.get('/mentions', requiresLogin, user.mentions);
+app.get('/connect/mentions', requiresLogin, user.mentions);
+
 app.get('/discover', requiresLogin, user.discover);
-app.get('/activity', requiresLogin, user.activity);
-app.get('/who_to_follow', requiresLogin, user.who_to_follow);
-app.get('/find_friends', requiresLogin, user.find_friends);
-app.get('/browse_categories', requiresLogin, user.browse_categories);
+app.get('/discover/activity', requiresLogin, user.activity);
+app.get('/discover/who_to_follow', requiresLogin, user.who_to_follow);
+app.get('/discover/find_friends', requiresLogin, user.find_friends);
+app.get('/discover/browse_categories', requiresLogin, user.browse_categories);
+
+app.get('/settings', requiresLogin, user.settings);
 app.get('/logout', requiresLogin, user.logout);
 
 //follow user

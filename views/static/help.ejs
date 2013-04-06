@@ -1,8 +1,18 @@
 <% layout('../template') -%>
-<div class="content">
-	<h1>Welcome! How can we help you?</h1>
-	<p>Twitter basics</p>
-	<p>Something's not working</p>
-	<p>Report Abuse or Policy Violations</p>
-	<p>Support</p>
+<div id="leftCol" class="left">
+	<%- include ../includes/loginRegisterList.ejs %>
+	<%- include ../includes/staticSidebar.ejs %>
+	<%- include ../includes/footer.ejs %>
 </div>
+<div id="rightCol" class="right">
+	<div class="content">
+		<h2>Welcome! How can we help you?</h2>
+		<ul>
+			<li>Twitter basics</li>
+			<li>Something's not working</li>
+			<li>Report Abuse or Policy Violations</li>
+			<li>Support</li>
+		</ul>
+	</div>
+</div>
+<div class="clearfix">&nbsp;</div>

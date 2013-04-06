@@ -8,5 +8,5 @@
 
 // Renders the index view:
 exports.index = function(req, res){
-  res.render('index', { title: 'Twitter', func: 'home' });
+  res.render('index', { title: 'Twitter', func: 'home', nav: 'home', });
 };

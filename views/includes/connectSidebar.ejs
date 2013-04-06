@@ -1,0 +1,8 @@
+<% if (session.user) { %>
+	<div class="content noPadding">
+		<ul class="linkList">
+			<li<% if (func === "connect") { %> class="active"<% } %>><a href="/connect">Connect</a></li>
+			<li<% if (func === "mentions") { %> class="active"<% } %>><a href="/connect/mentions">Mentions</a></li>
+		</ul>
+	</div>
+<% } %>

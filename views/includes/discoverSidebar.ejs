@@ -1,0 +1,11 @@
+<% if (session.user) { %>
+	<div class="content noPadding">
+		<ul class="linkList">
+			<li<% if (func === "discover") { %> class="active"<% } %>><a href="/discover">Discover</a></li>
+			<li<% if (func === "activity") { %> class="active"<% } %>><a href="/discover/activity">Activity</a></li>
+			<li<% if (func === "who_to_follow") { %> class="active"<% } %>><a href="/discover/who_to_follow">Who To Follow</a></li>
+			<li<% if (func === "find_friends") { %> class="active"<% } %>><a href="/discover/find_friends">Find Friends</a></li>
+			<li<% if (func === "browse_categories") { %> class="active"<% } %>><a href="/discover/browse_categories">Browse Categories</a></li>
+		</ul>
+	</div>
+<% } %>

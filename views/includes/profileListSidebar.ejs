@@ -1,0 +1,10 @@
+<div class="content noPadding">
+	<ul class="linkList">
+		<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%- user.username %>">Tweets</a></li>
+		<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%- user.username %>/following">Following</a></li>
+		<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%- user.username %>/followers">Followers</a></li>
+		<li<% if (func === "favorites") { %> class="active"<% } %>><a href="/user/<%- user.username %>/favorites">Favorites</a></li>
+		<% if (self === true) { %><li<% if (func === "requests") { %> class="active"<% } %>><a href="/user/<%- user.username %>/follower_requests">Requests</a></li><% } %>
+		<li<% if (func === "lists") { %> class="active"<% } %>><a href="/user/<%- user.username %>/lists">Lists</a></li>
+	</ul>
+</div>

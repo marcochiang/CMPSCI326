@@ -1,4 +1,6 @@
-<% layout('../template') -%>
+<% layout('../../template') -%>
+
+
 <div id="leftCol" class="left">
 	<div class="content noPadding">
 		<ul class="linkList">
@@ -12,15 +14,13 @@
 	<div class="content">
 		<h4>Trends</h4>
 	</div>
-	<div id="footer" class="content">
-		<h5>&copy 2013 Twitter</h5>
-		<p><a href="/about">About</a> | <a href="/faq">Faq</a> | <a href="/help">Help</a> | <a href="/docs/README.md.html">Documentation</a></p>
-	</div>
+	<%- include ../../includes/footer.ejs %>
 </div>
 <div id="rightCol" class="right">
 	<div class="content">
 		<div id="data">
-			<%- data %>
+			<h2>Settings</h2>
+			<p>User settings go here.</p>
 		</div>
 	</div>
 </div>
