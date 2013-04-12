@@ -525,7 +525,7 @@ exports.follow = function(req, res) {
 			res.redirect('/');
 		}
 		else {
-			res.redirect('/who_to_follow');
+			res.redirect('/discover/who_to_follow');
 		}
 	});
 	
