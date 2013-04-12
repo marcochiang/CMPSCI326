@@ -184,7 +184,7 @@ exports.profile = function(req, res) {
 	    				else {
 	    					followButton = button;
 	    					display = actions.getTweets(user);//for now
-	    					res.render('users/profile', {title: 'Profile', func: 'me', data: display, self: false, user: user, button: followButton});
+	    					res.render('users/profile', {title: 'Profile', func: 'me', nav: '', data: display, self: false, user: user, button: followButton});
 	    				}
 	    			});
     			}
@@ -244,7 +244,7 @@ function renderProfile(req, res, fn) {
     				else {
     					followButton = button;
     					display = fn;
-    					res.render('users/profile', {title: 'Profile', func: 'renderProfile', nav: 'me', data: display, self: false, user: user, button: followButton});
+    					res.render('users/profile', {title: 'Profile', func: 'renderProfile', nav: '', data: display, self: false, user: user, button: followButton});
     				}
     			});
     		}
