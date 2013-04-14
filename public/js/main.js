@@ -39,10 +39,16 @@ var username = test.name;
 			count = max - document.getElementById(textbox).value.length;
 			if (count < 0) 
 			{
-				document.getElementById(tweetButton).disabled = true;
+				$('input.tweetButton').attr("src","/img/Tweet_Disabled.jpg");
+				document.getElementById('tweetButton').disabled = true;
 				document.getElementById(counter).innerHTML = "<span style=\"color: red;\">" + count + "</span>"; 
 			}
-			else { document.getElementById(counter).innerHTML = count; }
+			else
+			{
+				$('input.tweetButton').attr("src","/img/Tweet_Focus_Out.jpg");
+				document.getElementById('tweetButton').disabled = false;
+				document.getElementById(counter).innerHTML = count;
+			}
 		}
 	}
 
@@ -63,6 +69,8 @@ $('input.tweetButton').hide();
 
 // Expands the form box when focused on and adds hover over feature when going over tweet button
 $('textarea.tweetExpand').focus(function () {
+	document.getElementById('tweetButton').disabled = false;
+	$('input.tweetButton').attr("src","/img/Tweet_Focus_Out.jpg");
 	//if($(this).text() === 'Compose a new tweet...') {
 		$(this).val("");
 	//}
@@ -180,7 +188,7 @@ $('form#unfollow button').hover(
 			for (var i = 0; i < that.posts.length; i++) {
 				var li   = $('<li>');
 				var date = new Date(that.posts[i].date);
-				li.html(username + ':</br>' + '<span class="tweet">' + that.posts[i].text + '</span><br /><span class="date">' + date.toDateString() + '</span>');
+				li.html(username + ': ' + '<span class="tweet">' + that.posts[i].text + '</span><br /><span class="date">' + date.toDateString() + '</span>');
 				that.view.append(li);
 			}
 		});
@@ -205,7 +213,7 @@ PostButton.prototype = {
 $(function () {
 	// Get the list view that the chat client
 	// will populate with incoming messages:	
-	var chatc = new ChatClient({ view : $('ul#tweet') });
+	var chatc = new ChatClient({ view : $('ul#tweets') });
 
 	// Start polling:
 	chatc.poll();

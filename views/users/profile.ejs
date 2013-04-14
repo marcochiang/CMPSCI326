@@ -1,21 +1,22 @@
 <% layout('../template') -%>
 
 <div id="leftCol" class="left">
+	<%- include ../includes/loginRegisterList.ejs %>
 	<%- include ../includes/profileSidebar.ejs %>
 	<%- include ../includes/profileListSidebar.ejs %>
 	<%- include ../includes/footer.ejs %>
 </div>
 <div id="rightCol" class="right">
-	<div class="content noPadding" id="profile">
+	<div class="profile content noPadding">
 		<div id="carbon">
 			<h2><%- user.username %></h2>
 			<h3><%- user.email %></h3>
 			<h3><%- button %></h3>
 		</div>
-		<ul id="stats">
-			<li><a href="/user/<%- user.username %>">76<br /><span>Tweets</span></a></li>
-			<li><a <% if (self === true) { %> href="/user/<%- user.username %>/following" <% } else { %> href="/user/<%- user.username %>/following" <% } %>>103<br /><span>Following</span></a></li>
-			<li><a <% if (self === true) { %> href="/user/<%- user.username %>/followers" <% } else { %> href="/user/<%- user.username %>/followers" <% } %>>171<br /><span>Followers</span></a></li>
+		<ul class="stats">
+			<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= user.username %>/">76<br /><span>Tweets</span></a></li>
+			<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%= user.username %>/following">103<br /><span>Following</span></a></li>
+			<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= user.username %>/followers">9001<br /><span>Followers</span></a></li>
 		</ul>
 		<div class="clearfix">&nbsp;</div>
 	</div>

@@ -1,19 +1,7 @@
 <% layout('../../template') -%>
 
-
 <div id="leftCol" class="left">
-	<div class="content noPadding">
-		<ul class="linkList">
-			<li><a href="/connect">Interactions</a></li>
-			<li><a href="/mentions">Mentions</a></li>
-		</ul>
-	</div>
-	<div class="content">
-		<h4><a href="/who_to_follow">Who To Follow...</a></h4>
-	</div>
-	<div class="content">
-		<h4>Trends</h4>
-	</div>
+	<%- include ../../includes/profileSidebar.ejs %>
 	<%- include ../../includes/footer.ejs %>
 </div>
 <div id="rightCol" class="right">

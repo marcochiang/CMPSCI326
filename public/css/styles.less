@@ -92,10 +92,7 @@
    					width: auto;.left;padding: 0 1em;
    					a {
 						display: block;height: 35px;padding: 15px 0 0 32px;background-image: url("../img/navIcons.png");background-repeat: no-repeat;.opacity(.6);.transition(opacity);
-						&:hover {.opacity(1);}
-					}
-					span {
-						display: block;height: 35px;color: #fff;padding: 15px 0 0 32px;text-decoration: none;font-size: 13px;text-shadow: 1px 1px #000;text-transform: uppercase;
+						&:hover, &.active {.opacity(1);}
 					}
 					&.home a {background-position: 0 0;}
 					&.connect a {background-position: 0 -50px;}
@@ -105,7 +102,8 @@
 					&.register a {background-position: 0 -250px;}
 					&.session.right {
 						.right;padding: 15px 0 0 0;
-						a {display: inline;background-image: none;padding: 0;}
+						span.welcome {.opacity(.6);}
+						a {display: inline;background-image: none;padding: 0;text-decoration: underline;}
 					}
 					&.active {
 						background: url("../img/navActive.jpg") repeat-x 0 0;border-left: 1px solid @dark;border-right: 1px solid @dark;
@@ -134,7 +132,7 @@
 			}
 	
 			/* HOME PAGE */
-			#tweet {
+			#tweets {
 				.reset;
 				li {
 					margin: 0;padding: 1em 0;border-bottom: 1px solid @grey;
@@ -143,9 +141,9 @@
 				}
 			}
 			
-			&#profile {
+			&.profile {
 				&.profileGlance {
-					ul#stats li:first-child {padding: .5em 1em .5em 0;}
+					ul.stats li:first-child {padding: .5em 1em .5em 0;}
 				}
 				#carbon {
 					height: 80px;padding: 40px;background: url("../img/carbon.jpg") repeat-x 0 0;.txtCenter;color: #fff;text-shadow: 1px 1px #000;.borderRadius;
@@ -159,15 +157,16 @@
 						&:hover {color: @blue;}
 					}
 				}
-				ul#stats {
+				ul.stats {
 					.reset;list-style-type: none;
 					li {
-						line-height: 16px;font-size: 12px;margin: 0;padding: .5em 1em .5em 1em;border-right: 1px solid @grey;.left;
+						line-height: 16px;font-size: 12px;margin: 0;padding: .5em 1em;border-right: 1px solid @grey;.left;
 						a {
 							color: @dark;font-weight: bold;text-decoration: none;
 							span {color: @greyer;text-transform: uppercase;}
 							&:hover {color: @blue;}
 						}
+						&.active a {color: @blue;}
 						&:last-child {padding: .5em 0 .5em 1em;border-right: none;}
 					}
 				}

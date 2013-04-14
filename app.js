@@ -6,6 +6,7 @@
 var express = require('express')
 	, engine = require('ejs-locals')
 	, routes = require('./routes')
+	, auth = require('./routes/auth')
 	, user = require('./routes/user')
 	, stat = require('./routes/static')
 	, tweet = require('./routes/tweet')
@@ -70,23 +71,14 @@ app.post('/post', tweet.post);
 app.post('/check', tweet.check);
 
 //Logged Out User Routes
-app.get('/login', user.login);
-app.post('/login/auth', user.auth);
-app.get('/register', user.register);
-app.post('/register/process', user.registerProcess);
-
-//Hard Coded User profiles
-/*app.get('/follow_user/Marco', requiresLogin, user.followUserMarco);
-app.get('/follow_user/Jeff', requiresLogin, user.followUserJeff);
-app.get('/follow_user/Matt', requiresLogin, user.followUserMatt);
-app.get('/follow_user/Jon', requiresLogin, user.followUserJon);*/
+app.get('/login', auth.login);
+app.post('/login/auth', auth.loginAuth);
+app.get('/register', auth.register);
+app.post('/register/process', auth.registerProcess);
+app.get('/logout', requiresLogin, auth.logout);
 
 //Logged In User Routes
-app.get('/user/:user/following', requiresLogin, user.following);
-app.get('/user/:user/followers', requiresLogin, user.followers);
-app.get('/user/:user/favorites', requiresLogin, user.favorites);
 app.get('/user/:user/follower_requests', requiresLogin, user.follower_requests);
-app.get('/user/:user/lists', requiresLogin, user.lists); //needed??
 
 app.get('/connect', requiresLogin, user.connect);
 app.get('/connect/mentions', requiresLogin, user.mentions);
@@ -98,7 +90,6 @@ app.get('/discover/find_friends', requiresLogin, user.find_friends);
 app.get('/discover/browse_categories', requiresLogin, user.browse_categories);
 
 app.get('/settings', requiresLogin, user.settings);
-app.get('/logout', requiresLogin, user.logout);
 
 //follow user
 app.post('/follow/:id', requiresLogin, user.follow);
@@ -106,8 +97,11 @@ app.post('/follow/:id', requiresLogin, user.follow);
 app.post('/unfollow/:id', requiresLogin, user.unfollow);
 
 //Universal User Routes
-//app.get('/profile', user.profile);
-app.get('/user/:user', user.profile); //all profiles now have URL mapping: /user/*username*
+app.get('/user/:user', user.profile);
+app.get('/user/:user/following', user.following);
+app.get('/user/:user/followers', user.followers);
+app.get('/user/:user/favorites', user.favorites);
+app.get('/user/:user/lists', user.lists); //needed??
 
 http.createServer(app).listen(app.get('port'), function(){
 	console.log("Express server listening on port " + app.get('port'));
