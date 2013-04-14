@@ -17,10 +17,19 @@ $('#glance #newTweet').focusout(function () {
 
 /*
 	=========================
+		Gets username
+	=========================
+*/
+var test = document.getElementById("newTweet");
+var username = test.name;
+
+/*
+	=========================
 		Character Count
 	=========================
-	*/
-	function countChars(textbox, counter, max) {
+*/
+
+	function countChars(textbox, counter, max, tweetButton) {
 		var count;
 		if($('textarea.tweetExpand').text() === 'Compose a new tweet...'){
 			document.getElementById(counter).innerHTML = 140;
@@ -28,7 +37,11 @@ $('#glance #newTweet').focusout(function () {
 
 		else{
 			count = max - document.getElementById(textbox).value.length;
-			if (count < 0) { document.getElementById(counter).innerHTML = "<span style=\"color: red;\">" + count + "</span>"; }
+			if (count < 0) 
+			{
+				document.getElementById(tweetButton).disabled = true;
+				document.getElementById(counter).innerHTML = "<span style=\"color: red;\">" + count + "</span>"; 
+			}
 			else { document.getElementById(counter).innerHTML = count; }
 		}
 	}
@@ -50,7 +63,9 @@ $('input.tweetButton').hide();
 
 // Expands the form box when focused on and adds hover over feature when going over tweet button
 $('textarea.tweetExpand').focus(function () {
-	$(this).val("");
+	//if($(this).text() === 'Compose a new tweet...') {
+		$(this).val("");
+	//}
 	$(this).animate({ height: "100px" }, 0);
 	$('span#char_count').show();
 	$('input.tweetButton').show();
@@ -165,7 +180,7 @@ $('form#unfollow button').hover(
 			for (var i = 0; i < that.posts.length; i++) {
 				var li   = $('<li>');
 				var date = new Date(that.posts[i].date);
-				li.html('<span class="tweet">' + that.posts[i].text + '</span><br /><span class="date">' + date.toDateString() + '</span>');
+				li.html(username + ':</br>' + '<span class="tweet">' + that.posts[i].text + '</span><br /><span class="date">' + date.toDateString() + '</span>');
 				that.view.append(li);
 			}
 		});
