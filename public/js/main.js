@@ -16,15 +16,43 @@ $('#glance #newTweet').focusout(function () {
 });*/
 
 /*
-	Home Page
+	=========================
+		Character Count
+	=========================
+	*/
+	function countChars(textbox, counter, max) {
+		var count;
+		if($('textarea.tweetExpand').text() === 'Compose a new tweet...'){
+			document.getElementById(counter).innerHTML = 140;
+		}
+
+		else{
+			count = max - document.getElementById(textbox).value.length;
+			if (count < 0) { document.getElementById(counter).innerHTML = "<span style=\"color: red;\">" + count + "</span>"; }
+			else { document.getElementById(counter).innerHTML = count; }
+		}
+	}
+
+
+
+
+
+
+/*
+	=========================
+			Home Page
+	=========================
 	*/
 
-// Start by hiding the tweet button until form box is opened
+// Start by hiding the tweet button and count until form box is opened
+$('span#char_count').hide();
 $('input.tweetButton').hide();
 
 // Expands the form box when focused on and adds hover over feature when going over tweet button
 $('textarea.tweetExpand').focus(function () {
+	$(this).val("");
 	$(this).animate({ height: "100px" }, 0);
+	$('span#char_count').show();
 	$('input.tweetButton').show();
 	$('input.tweetButton').hover(function () {
 		$(this).attr("src","/img/Tweet_Focus_In.jpg");
@@ -33,11 +61,12 @@ $('textarea.tweetExpand').focus(function () {
 	});
 });
 
-// 
-$('textarea.tweetExpand').focusout(function () {
-	//$('input.tweetButton').hide();
-	//$('textarea.tweetExpand').animate({ height: "16px" }, 0);
-});
+//console.log($('textarea.tweetExpand').value);
+//if($('textarea').value == 'Compose a new tweet...' || $('textarea').value == ''){	
+/*	$('form#tweet').focusout(function () {
+		$('input.tweetButton').hide();
+		$('textarea.tweetExpand').animate({ height: "16px" }, 0);
+	});*/
 
 // Prevents the tweet form from posting
 $('form#tweet').click(function(event)
@@ -71,7 +100,7 @@ $('form#unfollow button').hover(
 	function(event)
 	{
 		$(this).text("Following");
-});
+	});
 
 /*
 
@@ -179,6 +208,7 @@ $(function () {
 		chatc.post(text);
 		// clear input text:
 		this.input.val('Compose a new tweet...');
+		$('span#char_count').hide();
 		$('input.tweetButton').hide();
 		$('textarea.tweetExpand').animate({ height: "16px" }, 0);
 		alert('Tweet successfully posted');

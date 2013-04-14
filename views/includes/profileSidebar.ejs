@@ -1,17 +1,31 @@
 <% if (session.user) { %>
-	<div id="profile" class="content profileGlance">
-		<p><a href="/user/<%- session.user.username %>"><img src="/img/Marco_Chiang.jpeg" width="32" height="32" class="left" /><%- session.user.username %><br /><span>View my profile page</span></a></p>
-		<ul id="stats">
-			<li><a href="/user/<%- session.user.username %>">76<br /><span>TWEETS</span></a></li>
-			<li><a href="/following">103<br /><span>FOLLOWING</span></a></li>
-			<li><a href="/followers">9001<br /><span>FOLLOWERS</span></a></li>
-		</ul>
-		<div class="clearfix">&nbsp;</div>
-		<form id="tweet">
-			<textarea class="tweetExpand" id="newTweet" name="newTweet"
-			onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;">Compose a new tweet...</textarea>
-			<input class="tweetButton" id="tweetButton" type="image" src="img/Tweet_Focus_Out.jpg" name="tweetButton"/>
-		</form>
-		<div class="clearfix"></div>
-	</div>
+<div id="profile" class="content profileGlance">
+	<p><a href="/user/<%- session.user.username %>"><img src="/img/Marco_Chiang.jpeg" width="32" height="32" class="left" /><%- session.user.username %><br /><span>View my profile page</span></a></p>
+	<ul id="stats">
+		<li><a href="/user/<%- session.user.username %>">76<br /><span>TWEETS</span></a></li>
+		<li><a href="/following">103<br /><span>FOLLOWING</span></a></li>
+		<li><a href="/followers">9001<br /><span>FOLLOWERS</span></a></li>
+	</ul>
+	<div class="clearfix">&nbsp;</div>
+	<form id="tweet">
+
+
+	<textarea
+		class="tweetExpand" id="newTweet" name="newTweet"
+		onblur="if(this.value=='')this.value=this.defaultValue;"
+		onfocus="if(this.value==this.defaultValue)this.value=''; countChars('newTweet','char_count',140);"
+		onKeyDown="countChars('newTweet','char_count',140)"
+		onKeyUp="countChars('newTweet','char_count',140)"
+		>Compose a new tweet...
+	</textarea>
+
+	<input class="tweetButton" id="tweetButton" type="image" src="img/Tweet_Focus_Out.jpg" name="tweetButton"/>
+
+	<span id="char_count"></span>
+
+
+
+</form>
+<div class="clearfix"></div>
+</div>
 <% } %>
