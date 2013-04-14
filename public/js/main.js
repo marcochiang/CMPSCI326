@@ -39,10 +39,16 @@ var username = test.name;
 			count = max - document.getElementById(textbox).value.length;
 			if (count < 0) 
 			{
-				document.getElementById(tweetButton).disabled = true;
+				$('input.tweetButton').attr("src","/img/Tweet_Disabled.jpg");
+				document.getElementById('tweetButton').disabled = true;
 				document.getElementById(counter).innerHTML = "<span style=\"color: red;\">" + count + "</span>"; 
 			}
-			else { document.getElementById(counter).innerHTML = count; }
+			else
+			{
+				$('input.tweetButton').attr("src","/img/Tweet_Focus_Out.jpg");
+				document.getElementById('tweetButton').disabled = false;
+				document.getElementById(counter).innerHTML = count;
+			}
 		}
 	}
 
@@ -63,6 +69,8 @@ $('input.tweetButton').hide();
 
 // Expands the form box when focused on and adds hover over feature when going over tweet button
 $('textarea.tweetExpand').focus(function () {
+	document.getElementById('tweetButton').disabled = false;
+	$('input.tweetButton').attr("src","/img/Tweet_Focus_Out.jpg");
 	//if($(this).text() === 'Compose a new tweet...') {
 		$(this).val("");
 	//}
