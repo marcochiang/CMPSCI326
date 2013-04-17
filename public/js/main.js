@@ -2,15 +2,15 @@
 	=========================
 		Gets username
 	=========================
-*/
-var test = document.getElementById("newTweet");
-var username = test.name;
+	*/
+	var test = document.getElementById("newTweet");
+	var username = test.name;
 
 /*
 	=========================
 		Character Count
 	=========================
-*/
+	*/
 
 	function countChars(textbox, counter, max, tweetButton) {
 		var count;
@@ -34,10 +34,6 @@ var username = test.name;
 			}
 		}
 	}
-
-
-
-
 
 
 /*
@@ -78,10 +74,13 @@ $('textarea.tweetExpand').focus(function () {
 $('form#tweet').click(function(event)
 {
 	event.preventDefault();
+	var tweet = $('<div id="tweet" class="center"> \
+		<img src="http://localhost:3000/img/" /> \
+		</div>');
 });
 
 // Follow button clicked --> change action of form
-$('form#follow .hover').click(function(event)
+$('form#follow button').click(function(event)
 {
 	var followID = $(this).val();
 	$('form#follow').attr("action", "/follow/" + followID);
@@ -89,7 +88,7 @@ $('form#follow .hover').click(function(event)
 });
 
 // Unfollow button clicked --> change action of form
-$('form#unfollow .hover').click(function(event)
+$('form#unfollow button').click(function(event)
 {
 	var followID = $(this).val();
 	//alert(followID);
@@ -98,7 +97,7 @@ $('form#unfollow .hover').click(function(event)
 });
 
 // Hover event on Unfollow button
-$('form#unfollow .hover').hover(
+$('form#unfollow button').hover(
 	function(event)
 	{
 		$(this).text("Unfollow");
@@ -106,6 +105,23 @@ $('form#unfollow .hover').hover(
 	function(event)
 	{
 		$(this).text("Following");
+	});
+
+// Settings/Gear button clicked -> display drop down list
+$('.session').click(
+	function(event)
+	{
+		$(this).addClass('active');
+
+	});
+
+// Buggy won't remove the class on focusOut
+$('.session').focusout(
+	function(event){
+		if($('.session').hasClass('active'))
+		{
+			$('.session').removeClass('active');
+		}
 	});
 
 /*
