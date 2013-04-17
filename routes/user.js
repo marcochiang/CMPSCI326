@@ -128,7 +128,18 @@ exports.favorites = function(req, res) {
 // Renders the current user's follower requests:
 exports.follower_requests = function(req, res) {
 	
-	profileRender(req, res, 5);
+	//Ensures that only you can view your own follower requests
+	if(req.session.user != undefined) {
+		if(req.params.user == req.session.user.username) {
+			profileRender(req, res, 5);
+		}
+		else {
+			res.redirect('/user/'+req.params.user);
+		}
+	}
+	else {
+		res.redirect('/login');
+	}
 	
 };
 
@@ -175,13 +186,6 @@ exports.activity = function(req, res) {
 	res.render('users/active/discover', {title: 'Discover', func: 'activity', nav: 'discover', data: display});
 	
 };
-
-// Renders who to follow suggestions for the current user: -- Jon's old code
-/*exports.who_to_follow = function(req, res){
-	//var display = "<h3>Who To Follow</h3></br>Who to follow functionality will go here..";
-	var display = fs.readFileSync('views/users/who_to_follow.ejs', 'utf8');
-	res.render('users/discover', {title: 'Discover', func: 'discover', data: display});
-};*/
 
 // # Follow user functionality
 exports.follow = function(req, res) {
