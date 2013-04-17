@@ -1,4 +1,4 @@
-// # Static.js
+// # static.js
 // This is the routes module for accessing the static
 // pages of the app.
 

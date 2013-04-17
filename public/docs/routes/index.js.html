@@ -19,7 +19,7 @@
     <div id="tree"></div>
     <div id="headings">
       <div class="heading h1">
-        <a href="#index.js">Index.js</a>
+        <a href="#index.js">index.js</a>
       </div>
     </div>
   </div>
@@ -32,13 +32,13 @@
 <div class="pilwrap" id="index.js">
   <h1>
     <a href="#index.js" class="pilcrow">&#182;</a>
-    Index.js
+    index.js
   </h1>
 </div>
 
 
-<p>This is the routes module for accessing the index
-page of the app.</p>
+<p>This is the routes module for accessing the dynamic views
+and elements of the app.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre></pre></div>
         </td>
@@ -48,29 +48,11 @@ page of the app.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
 </div>
-<div class="dox">
-  <div class="summary"><p>GET home page.</p>
-  </div>
-  <div class="body">
-  </div>
-</div>
+<p>Displays list of users:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
-</div>
-<p>Renders the index view:</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Twitter&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;home&#39;</span> <span class="p">});</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Home&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;home&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span><span class="p">});</span>
 <span class="p">};</span>
 </pre></div>
         </td>

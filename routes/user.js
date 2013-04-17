@@ -1,4 +1,4 @@
-// # User.js
+// # user.js
 // This is the routes module for accessing the dynamic views
 // and elements of the app.
 
@@ -19,7 +19,7 @@ exports.list = function(req, res) {
 
 //Profile Render helper function
 var profileRender = function(req, res, fn) {
-	
+
 	var requestedUser;
     var display = '';
     var followButton = '';
@@ -28,7 +28,7 @@ var profileRender = function(req, res, fn) {
 	var func;
 	var nav = '';
 	var username = req.params.user;
-	
+
 	//Lookup User
 	userlib.lookup(username, function(error, user) {
 		if (error) {
@@ -91,7 +91,7 @@ var profileRender = function(req, res, fn) {
 	});
 
 	res.render('users/profile', {title: username, func: func, nav: nav, data: display, self: self, user: requestedUser, buttons: followButton+messageButton});
-	
+
 };
 
 
@@ -100,7 +100,7 @@ var profileRender = function(req, res, fn) {
 exports.profile = function(req, res) {
 
 	profileRender(req, res, 1);
-	
+
 };
 
 
@@ -108,27 +108,27 @@ exports.profile = function(req, res) {
 exports.following = function(req, res) {
 
 	profileRender(req, res, 2);
-	
+
 };
 
 
 // Renders the followers of the current user:
 exports.followers = function(req, res) {
-	
+
 	profileRender(req, res, 3);
-	
+
 };
 
 // Renders the current user's favorited tweets:
 exports.favorites = function(req, res) {
 
 	profileRender(req, res, 4);
-	
+
 };
 
 // Renders the current user's follower requests:
 exports.follower_requests = function(req, res) {
-	
+
 	//Ensures that only you can view your own follower requests
 	if(req.session.user != undefined) {
 		if(req.params.user == req.session.user.username) {
@@ -141,14 +141,14 @@ exports.follower_requests = function(req, res) {
 	else {
 		res.redirect('/login');
 	}
-	
+
 };
 
 // Renders the current user's lists:
 exports.lists = function(req, res) {
 
 	profileRender(req, res, 6);
-	
+
 };
 
 
@@ -159,7 +159,7 @@ exports.connect = function(req, res) {
 
 	var display = actions.getInteractions(req.session.user);
 	res.render('users/active/connect', {title: 'Connect', func: 'connect', nav: 'connect', data: display});
-	
+
 };
 
 // Renders tweets that the current user has been mentioned in:
@@ -167,7 +167,7 @@ exports.mentions = function(req, res) {
 
 	var display = actions.getMentions(req.session.user);
 	res.render('users/active/connect', {title: 'Connect', func: 'mentions', nav: 'connect', data: display});
-	
+
 };
 
 // ## Discover View
@@ -177,7 +177,7 @@ exports.discover = function(req, res) {
 
 	var display = "<h3>Tweets</h3></br>Tweets will go here..";
 	res.render('users/active/discover', {title: 'Discover', func: 'discover', nav: 'discover', data: display});
-	
+
 };
 
 // Renders the current user's activity:
@@ -185,13 +185,13 @@ exports.activity = function(req, res) {
 
 	var display = "<h3>Activity</h3></br>Activity will go here..";
 	res.render('users/active/discover', {title: 'Discover', func: 'activity', nav: 'discover', data: display});
-	
+
 };
 
 // # Follow user functionality
 exports.follow = function(req, res) {
 
-	var id = req.params.id; 
+	var id = req.params.id;
 	var user = req.session.user;
 	userlib.follow(user, id, function(error) {
 		if (error) {
@@ -202,10 +202,10 @@ exports.follow = function(req, res) {
 			res.redirect('/discover/who_to_follow');
 		}
 	});
-	
+
 };
 
-// #Unfollow user functionality
+// # Unfollow user functionality
 exports.unfollow = function(req, res) {
 
 	var id = req.params.id;
@@ -219,7 +219,7 @@ exports.unfollow = function(req, res) {
 			res.redirect('/user/'+user.username+'/following');
 		}
 	});
-	
+
 };
 
 // Renders who to follow suggestions for the current user:
@@ -228,7 +228,7 @@ exports.who_to_follow = function(req, res) {
 	var user = req.session.user;
 	var display = userlib.who_to_follow(user);
 	res.render('users/active/discover', {title: 'Who to Follow', func: 'who_to_follow', nav: 'discover', data: display});
-	
+
 };
 
 // Renders the find friends functionality for the current user:
@@ -236,7 +236,7 @@ exports.find_friends = function(req, res) {
 
 	var display = "<h3>Find Friends</h3></br>Find friends functionality will go here..";
 	res.render('users/active/discover', {title: 'Find Friends', func: 'find_friends', nav: 'discover', data: display});
-	
+
 };
 
 // Renders the browse categories functionality for the current user:
@@ -244,16 +244,17 @@ exports.browse_categories = function(req, res) {
 
 	var display = "<h3>Browse Categories</h3></br>Browse categories functionality will go here..";
 	res.render('users/active/discover', {title: 'Browse Categories', func: 'browse_categories', nav: 'discover', data: display});
-	
+
 };
 
 // Renders the settings page functionality for the current user:
 exports.settings = function(req, res) {
 
 	res.render('users/active/settings', {title: 'Settings', func: 'settings', nav: 'settings'});
-	
+
 };
 
+// # Message functionality
 // Renders the send message view
 exports.sendMessage = function(req, res) {
 
@@ -269,12 +270,12 @@ exports.sendMessage = function(req, res) {
 	else {
 		res.redirect('/login');
 	}
-	
+
 };
 
 // Renders the messages page functionality for the current user:
 exports.messages = function(req, res) {
 
 	res.render('users/active/messages', {title: 'Messages', func: 'messages', nav: 'messages'});
-	
+
 };

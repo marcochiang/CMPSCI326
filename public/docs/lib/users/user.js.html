@@ -435,7 +435,7 @@ For now, just returns all users in userdb that the user is currently not followi
     <span class="k">if</span> <span class="p">(</span><span class="nx">button</span><span class="p">){</span> <span class="c1">//only display button if viewing your own profile</span>
       <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
     <span class="p">}</span>
-    
+
   <span class="p">}</span>
   <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;ul&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
   <span class="k">return</span> <span class="nx">content</span><span class="p">;</span>
@@ -507,11 +507,11 @@ return content;
     <span class="kd">var</span> <span class="nx">button</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">following</span><span class="p">){</span> <span class="c1">//if already following, display &quot;Unfollow&quot; button</span>
       <span class="nx">button</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;unfollow&quot; id=&quot;unfollow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
-      <span class="nx">button</span> <span class="o">+=</span> <span class="s1">&#39;&lt;button type=&quot;submit&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
+      <span class="nx">button</span> <span class="o">+=</span> <span class="s1">&#39;&lt;button type=&quot;submit&quot; class=&quot;hover&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">else</span><span class="p">{</span> <span class="c1">//if not following, display &quot;Follow&quot; button</span>
       <span class="nx">button</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;follow&quot; id=&quot;follow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
-      <span class="nx">button</span> <span class="o">+=</span> <span class="s1">&#39;&lt;button type=&quot;submit&quot; form=&quot;follow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Follow&lt;/button&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
+      <span class="nx">button</span> <span class="o">+=</span> <span class="s1">&#39;&lt;button type=&quot;submit&quot; class=&quot;hover&quot; form=&quot;follow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Follow&lt;/button&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">button</span><span class="p">);</span>
   <span class="p">}</span>
