@@ -119,7 +119,7 @@
 								}
 							}
 						}
-						&:hover {
+						&.active {
 							cursor: pointer;background: url("../img/arrow.png") no-repeat center bottom;
 							span.gear {.opacity(1);}
 							ul {
@@ -157,9 +157,12 @@
 			#tweets {
 				.reset;
 				li {
-					padding: 1em;line-height: .9;border-bottom: 3px double @lightGrey;.transition(background);
-					span.tweet {}
-					span.date {color: @grey;font-size: 11px;}
+					padding: 1em;border: 1px solid @grey;.transition(background);.borderRadius;
+					span {
+						&.user {.left;font-weight: bold;}
+						&.date {.right;color: @greyer;font-size: 11px;}
+						&.tweet {}
+					}
 					&:hover {
 						background: @lightGrey;
 					}

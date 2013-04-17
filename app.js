@@ -69,6 +69,7 @@ app.get('/faq', stat.faq);
 app.get('/', tweet.tweet);
 app.post('/post', tweet.post);
 app.post('/check', tweet.check);
+app.get('/tweet/:tweetid', tweet.displayTweet);
 
 //Logged Out User Routes
 app.get('/login', auth.login);

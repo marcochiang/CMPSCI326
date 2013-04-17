@@ -37,3 +37,10 @@ exports.check = function (req, res) {
 	var rest = posts.slice(last, posts.length);
 	res.json(rest);
 };
+
+exports.displayTweet = function (req, res) {
+
+	var display = actions.getInteractions(req.session.user);
+	res.render('users/active/connect', {title: 'Connect', func: 'connect', nav: 'connect', data: display});
+	
+};
