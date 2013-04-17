@@ -1,4 +1,4 @@
-// # User.js
+// # auth.js
 // This is the routes module for accessing the dynamic views
 // and elements of the app.
 
@@ -14,10 +14,10 @@ exports.login = function(req, res) {
 	// Grab any messages being sent to use from redirect.
 	var authmessage = req.flash('auth') || '';
 	var redir = req.query.redir || '';
-	
+
 	// TDR: redirect if logged in:
 	var user  = req.session.user;
-	
+
 	// TDR: If the user is already logged in - we redirect to the
 	// main application view.
 	if (user !== undefined) {
@@ -27,13 +27,13 @@ exports.login = function(req, res) {
 		// Render the login view if this is a new login.
 		res.render('users/login', {title: 'Login', nav: 'login', func: 'login', message: authmessage});
 	}
-	
+
 };
 
 // ## auth
 // Performs **basic** user authentication.
 exports.loginAuth = function(req, res) {
-	
+
 	// Pull the values from the form.
 	var username = req.body.user;
 	var password = req.body.pass;
@@ -55,22 +55,22 @@ exports.loginAuth = function(req, res) {
 			//res.redirect(req.body.redir || '/');
 		}
 	});
-	
+
 };
 
 // Renders the register view
 exports.register = function(req, res) {
 
 	var user  = req.session.user;
-	
+
 	if (user !== undefined) { //redirect to home if there is a current session
 		res.redirect('/');
 	}
-	
+
 	// Grab any messages being sent to use from redirect.
 	var authmessage = req.flash('auth') || '';
 	res.render('users/register', {title: 'Get Started', func: 'register', nav: 'register', message: authmessage});
-	
+
 };
 
 exports.registerProcess = function(req, res) {
@@ -95,14 +95,14 @@ exports.registerProcess = function(req, res) {
 			res.redirect('/');
 		}
 	});
-	
+
 };
 
 // ## logout
 // Deletes user info & session - then redirects to login.
 exports.logout = function(req, res) {
-	
+
 	delete req.session.user;
 	res.redirect('/login');
-	
+
 };
