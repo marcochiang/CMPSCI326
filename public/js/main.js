@@ -171,7 +171,7 @@ $('form#unfollow .hover').hover(
 			for (var i = 0; i < that.posts.length; i++) {
 				var li   = $('<li>');
 				var date = new Date(that.posts[i].date);
-				li.html('<span class="user">@' + username + '</span>' + '</span><span class="date">' + date.toDateString() + '</br><span class="tweet clearfix">' + that.posts[i].text + '</span>');
+				li.html('<span class="user">@' + username + '</span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].text + '</span>');
 				that.view.append(li);
 			}
 		});
