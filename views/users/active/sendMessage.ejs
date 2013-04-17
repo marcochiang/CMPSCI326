@@ -1,0 +1,21 @@
+<% layout('../../template') -%>
+
+<div id="leftCol" class="left">
+	<%- include ../../includes/profileSidebar.ejs %>
+	<%- include ../../includes/footer.ejs %>
+</div>
+<div id="rightCol" class="right">
+	<div class="content">
+		<div id="data">
+			<h2>Messages</h2>
+			<div id="chat-app">
+				<p><textarea id="chat-text-area" rows="5" cols="50"></textarea></p>
+				<p><input id="chat-post-button" type="submit" value="Post"></p>
+			</div>
+			<hr />
+			<h3>Message History</h3>
+			<ul id="inbox"></ul>
+		</div>
+	</div>
+</div>
+<div class="clearfix">&nbsp;</div>

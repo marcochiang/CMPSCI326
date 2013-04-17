@@ -23,6 +23,7 @@ var profileRender = function(req, res, fn) {
 	var requestedUser;
     var display = '';
     var followButton = '';
+	var messageButton = '';
 	var self = false;
 	var func;
 	var nav = '';
@@ -89,7 +90,7 @@ var profileRender = function(req, res, fn) {
 		}
 	});
 
-	res.render('users/profile', {title: username, func: func, nav: nav, data: display, self: self, user: requestedUser, button: followButton});
+	res.render('users/profile', {title: username, func: func, nav: nav, data: display, self: self, user: requestedUser, buttons: followButton+messageButton});
 	
 };
 
@@ -250,5 +251,30 @@ exports.browse_categories = function(req, res) {
 exports.settings = function(req, res) {
 
 	res.render('users/active/settings', {title: 'Settings', func: 'settings', nav: 'settings'});
+	
+};
+
+// Renders the send message view
+exports.sendMessage = function(req, res) {
+
+	//Ensures that only you can view your own follower requests
+	if(req.session.user != undefined) {
+		if(req.params.user == req.session.user.username) {
+			res.redirect('/user/'+req.session.user.username);
+		}
+		else {
+			res.render('users/active/sendMessage', {title: 'Message', func: 'sendMessage', nav: 'messages'});
+		}
+	}
+	else {
+		res.redirect('/login');
+	}
+	
+};
+
+// Renders the messages page functionality for the current user:
+exports.messages = function(req, res) {
+
+	res.render('users/active/messages', {title: 'Messages', func: 'messages', nav: 'messages'});
 	
 };

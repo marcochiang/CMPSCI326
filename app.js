@@ -89,6 +89,7 @@ app.get('/discover/who_to_follow', requiresLogin, user.who_to_follow);
 app.get('/discover/find_friends', requiresLogin, user.find_friends);
 app.get('/discover/browse_categories', requiresLogin, user.browse_categories);
 
+app.get('/messages', requiresLogin, user.messages);
 app.get('/settings', requiresLogin, user.settings);
 
 //follow user
@@ -102,7 +103,20 @@ app.get('/user/:user/following', user.following);
 app.get('/user/:user/followers', user.followers);
 app.get('/user/:user/favorites', user.favorites);
 app.get('/user/:user/lists', user.lists); //needed??
+app.get('/user/:user/message', user.sendMessage);
 
-http.createServer(app).listen(app.get('port'), function(){
-	console.log("Express server listening on port " + app.get('port'));
+var server = http.createServer(app);
+
+// WebSockets/Socket.IO
+var io      = require('socket.io', {'log level': 0}).listen(server);
+var chatApp = require('./chat');
+
+io.sockets.on('connection', function (socket) {
+	chatApp.init(socket);
+});
+
+
+server.listen(3000, function(){
+  console.log("Express server listening on port %d in %s mode",
+              server.address().port, app.settings.env);
 });

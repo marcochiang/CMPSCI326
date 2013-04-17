@@ -1,20 +1,3 @@
-/*$('#glance #newTweet').focus(function () {
-    $(this).animate({ height: "100px" }, 500);
-	if($(this).text() === 'Compose a new tweet...') {
-		$(this).text('');
-	}
-});
-
-$('#glance #newTweet').focusout(function () {
-	if($(this).text() === 'Compose a new tweet...') {
-		$(this).animate({ height: "16px" }, 500);
-	}
-	else if($(this).text() === '') {
-		$(this).animate({ height: "16px" }, 500);
-		$(this).text('Compose a new tweet...');
-	}
-});*/
-
 /*
 	=========================
 		Gets username
@@ -98,7 +81,7 @@ $('form#tweet').click(function(event)
 });
 
 // Follow button clicked --> change action of form
-$('form#follow button').click(function(event)
+$('form#follow .hover').click(function(event)
 {
 	var followID = $(this).val();
 	$('form#follow').attr("action", "/follow/" + followID);
@@ -106,7 +89,7 @@ $('form#follow button').click(function(event)
 });
 
 // Unfollow button clicked --> change action of form
-$('form#unfollow button').click(function(event)
+$('form#unfollow .hover').click(function(event)
 {
 	var followID = $(this).val();
 	//alert(followID);
@@ -115,7 +98,7 @@ $('form#unfollow button').click(function(event)
 });
 
 // Hover event on Unfollow button
-$('form#unfollow button').hover(
+$('form#unfollow .hover').hover(
 	function(event)
 	{
 		$(this).text("Unfollow");

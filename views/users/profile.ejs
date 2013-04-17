@@ -11,12 +11,13 @@
 		<div id="carbon">
 			<h2><%- user.username %></h2>
 			<h3><%- user.email %></h3>
-			<h3><%- button %></h3>
+			<%- buttons %>
 		</div>
 		<ul class="stats">
 			<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= user.username %>/">76<br /><span>Tweets</span></a></li>
 			<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%= user.username %>/following">103<br /><span>Following</span></a></li>
 			<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= user.username %>/followers">9001<br /><span>Followers</span></a></li>
+			<li class="right<% if (func === "sendMessage") { %> active<% } %>"><a href="/user/<%= user.username %>/message">Send a Message<br /><span>Testing...</span></a></li>
 		</ul>
 		<div class="clearfix">&nbsp;</div>
 	</div>
