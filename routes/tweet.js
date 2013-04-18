@@ -40,7 +40,8 @@ exports.check = function (req, res) {
 
 exports.displayTweet = function (req, res) {
 
-	var display = actions.getInteractions(req.session.user);
-	res.render('users/active/connect', {title: 'Connect', func: 'connect', nav: 'connect', data: display});
+	var tweetID = req.params.tweetid;
+	display = tweetID;
+	res.render('tweets/displayTweet', {title: 'Tweet', func: 'displayTweet', nav: '', data: display});
 	
 };
