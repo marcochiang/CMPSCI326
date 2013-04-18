@@ -126,6 +126,7 @@
 								display: block;
 							}
 						}
+						&:hover {cursor: hand;cursor: pointer;}
 					}
 					&.active {
 						background: url("../img/navActive.jpg") repeat-x 0 0;border-left: 1px solid @dark;border-right: 1px solid @dark;
@@ -140,7 +141,7 @@
 		#leftCol {width: 280px;} #rightCol {width: 620px;}
 		.content {
 	
-			margin: 0 0 1em 0;padding: 1em;background: #fff;.borderRadius;
+			margin: 0 0 1em 0;padding: 1em;background: #fff url("../img/content.jpg") repeat-x 0 top;border: 4px double @lightGrey;.borderRadius;
 			&.noPadding {padding: 0;}
 			p, li {margin: 1em 0;}
 			ul, ol {margin: 0 0 0 40px;}
@@ -150,6 +151,9 @@
 					.reset;border-bottom: 1px solid @grey;
 					a {display: block;padding: 10px 20px;text-decoration: none;}
 					&.active a {color: @dark;}
+					&:last-child {
+						border-bottom: none;
+					}
 				}
 			}
 	
