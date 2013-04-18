@@ -201,7 +201,7 @@ $(document).ready(function() {
     }); 
 
     $('li.session').bind('clickoutside', function (event) {
-	   $('li.session').toggleClass('active');
+	   $('li.session').removeClass('active');
     });
 
 
