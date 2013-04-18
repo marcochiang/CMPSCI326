@@ -10,15 +10,16 @@
 		<p><em><%= message %></em></p>
 		<form action="/register/process" method="post">
 			<p><label for="email1">Email</label><br />
-			<input type="text" name="email1" id="email1" /></p>
+			<input type="text" name="email1" id="email1" size="30" /></p>
 			<p><label for="email2">Verify Email</label><br />
-			<input type="text" name="email2" id="email2" /></p>
+			<input type="text" name="email2" id="email2" size="30" /></p>
 			<p><label for="user">Username:</label><br />
-			<input type="text" name="user" id="user" /></p>
+			<input type="text" name="user" id="user" size="30" /></p>
 			<p><label for="pass">Password:</label><br />
-			<input type="password" name="pass" id="pass" /></p>
+			<input type="password" name="pass" id="pass" size="30" /></p>
 			<p><input type="submit" value="Register" name="q" /></p>
 		</form>
+		<p>Already have an account? <a href="/login">Login</a></p>
 	</div>
 </div>
 <div class="clearfix">&nbsp;</div>

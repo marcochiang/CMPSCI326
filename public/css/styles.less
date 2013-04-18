@@ -79,7 +79,7 @@
 
 #site {
    	header#header {
-   		height: 50px;background: url("../img/nav.jpg") repeat-x 0 0;
+   		position: fixed;width: 100%;height: 50px;background: url("../img/nav.jpg") repeat-x 0 0;z-index: 100;
    		hgroup {
    			.hidden;
    			h1#title {color: #fff;}
@@ -113,7 +113,7 @@
 							background: url("../img/arrow.png") no-repeat center bottom;border-left: none;border-right: none;
 							span.gear {.opacity(1);}
 							ul {
-								display: block;top: 50px;width: 250px;margin: 0 0 0 -120px;border: 4px double @grey;background: @lightGrey;.opacity(.96);
+								display: block;top: 50px;width: 250px;margin: 0 0 0 -120px;border: 4px double @grey;background: @lightGrey;.opacity(.97);
 								li {
 									.reset;float: none;border-bottom: 1px solid @grey;text-indent: 0;border-bottom: 1px solid @grey;
 									a {
@@ -140,12 +140,13 @@
    			}
 		}
 	}
+	#headerClear {height: 50px;}
 	#main {
-		width: 920px;margin: 0 auto;padding: 20px;background: url("../img/opaque.png") repeat 0 0;
+		position: relative;width: 920px;margin: 0 auto;padding: 0 20px 20px 20px;background: url("../img/opaque.png") repeat 0 0;z-index: 50;
 		#leftCol {width: 280px;} #rightCol {width: 620px;}
 		.content {
 	
-			margin: 0 0 1em 0;padding: 1em;background: #fff url("../img/content.jpg") repeat-x 0 top;border-top: 1px solid #fff;.borderRadius;
+			margin: 1em 0 0 0;padding: 1em;background: #fff url("../img/content.jpg") repeat-x 0 top;border-top: 1px solid #fff;.borderRadius;
 			&.noPadding {padding: 0;}
 			p, li {margin: 1em 0;}
 			ul, ol {margin: 0 0 0 40px;}
@@ -229,5 +230,10 @@
 	footer#footer {
 		margin-top: 1em;margin-bottom: 3em;
 		p {.txtCenter;color: #868889;}
+	}
+	
+	.tweet_posted {
+		display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: url("../img/opaqueDark.png") repeat 0 0;z-index: 500;
+		h1 {position: fixed;width: 100%;top: 33%;color: #fff;font-size: 250%;text-shadow: 1px 1px #000;text-transform: uppercase;.txtCenter;}
 	}
 }

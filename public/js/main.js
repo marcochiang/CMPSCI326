@@ -229,23 +229,12 @@ $(document).ready(function() {
 		$('span#char_count').hide();
 		$('input.tweetButton').hide();
 		$('textarea.tweetExpand').animate({ height: "16px" }, 0);
-		$('img.tweet_posted').show();
+		$('.tweet_posted').show();
 		setTimeout(function(){
-			$('img.tweet_posted').fadeOut(500);
-		},2000);
+			$('.tweet_posted').fadeOut(500);
+		},1000);
 		//alert('Tweet successfully posted');
 		return false;
 	});
 
 });
-
-
-/*// Get tweet button to display stuff
-var input = document.getElementById('newTweet'),
-    placeholder = document.getElementById('tweetMSG');
-
-input.onkeyup = function() {
-   placeholder.innerHTML = input.value
-}*/
-
-
