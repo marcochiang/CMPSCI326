@@ -113,6 +113,10 @@
 								a {
 									height: auto;padding: .8em 0;.txtCenter;color: @dark;text-shadow: 1px 1px #fff;border-top: 1px solid #fff;background-image: none;background-color: #fff;
 								}
+								&.active {
+									background-image: none;border-left: none;border-right: none;
+									a {.opacity(1);}
+								}
 							}
 						}
 						&:hover {
@@ -153,9 +157,12 @@
 			#tweets {
 				.reset;
 				li {
-					margin: 0;padding: 1em 0;border-bottom: 1px solid @grey;
+					padding: 1em;line-height: .9;border-bottom: 3px double @lightGrey;.transition(background);
 					span.tweet {}
-					span.date {color: @grey;}
+					span.date {color: @grey;font-size: 11px;}
+					&:hover {
+						background: @lightGrey;
+					}
 				}
 			}
 			
