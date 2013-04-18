@@ -123,7 +123,7 @@ $('form#unfollow .hover').hover(
 	ChatClient.prototype = {
 	// An cache of posts received from server.
 	posts : [],
-
+	
 	// Start polling the server.
 	poll : function () {
 		var that = this;
@@ -171,11 +171,11 @@ $('form#unfollow .hover').hover(
 			for (var i = 0; i < that.posts.length; i++) {
 				var li   = $('<li>');
 				var date = new Date(that.posts[i].date);
-				li.html(username + ': ' + '<span class="tweet">' + that.posts[i].text + '</span><br /><span class="date">' + date.toDateString() + '</span>');
+				li.html('<strong>' + username + ' </strong>' + '<span class="user">@' + username + '</span></br>' + '<span class="tweet">' + that.posts[i].text + '</span></br><span class="date">' + date.toDateString() + '</span>');
 				that.view.append(li);
 			}
 		});
-	}	
+	}
 };
 
 function PostButton(config) {
@@ -197,7 +197,8 @@ $(function () {
 	// Get the list view that the chat client
 	// will populate with incoming messages:	
 	var chatc = new ChatClient({ view : $('ul#tweets') });
-
+	// Check for tweets first so they load immediately
+	chatc.check();
 	// Start polling:
 	chatc.poll();
 
