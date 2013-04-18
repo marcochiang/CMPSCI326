@@ -3,6 +3,7 @@
 		Gets username
 	=========================
 	*/
+
 	var test = document.getElementById("newTweet");
 	var username = test.name;
 
@@ -45,6 +46,7 @@
 // Start by hiding the tweet button and count until form box is opened
 $('span#char_count').hide();
 $('input.tweetButton').hide();
+$('img.tweet_posted').hide();
 
 // Expands the form box when focused on and adds hover over feature when going over tweet button
 $('textarea.tweetExpand').focus(function () {
@@ -106,7 +108,6 @@ $('form#unfollow button').hover(
 	{
 		$(this).text("Following");
 	});
-
 
 /*
 
@@ -228,7 +229,11 @@ $(document).ready(function() {
 		$('span#char_count').hide();
 		$('input.tweetButton').hide();
 		$('textarea.tweetExpand').animate({ height: "16px" }, 0);
-		alert('Tweet successfully posted');
+		$('img.tweet_posted').show();
+		setTimeout(function(){
+			$('img.tweet_posted').fadeOut(500);
+		},2000);
+		//alert('Tweet successfully posted');
 		return false;
 	});
 
