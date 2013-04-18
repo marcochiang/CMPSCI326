@@ -107,22 +107,6 @@ $('form#unfollow button').hover(
 		$(this).text("Following");
 	});
 
-// Settings/Gear button clicked -> display drop down list
-$('.session').click(
-	function(event)
-	{
-		$(this).addClass('active');
-
-	});
-
-// Buggy won't remove the class on focusOut
-$('.session').focusout(
-	function(event){
-		if($('.session').hasClass('active'))
-		{
-			$('.session').removeClass('active');
-		}
-	});
 
 /*
 
@@ -209,7 +193,17 @@ PostButton.prototype = {
 	}};
 
 // jQuery ready handler:
-$(function () {
+$(document).ready(function() {
+
+	$("li.session").click(function() {
+        $(this).toggleClass('active'); 
+    }); 
+
+    $('li.session').bind('clickoutside', function (event) {
+	   $('li.session').toggleClass('active');
+    });
+
+
 	// Get the list view that the chat client
 	// will populate with incoming messages:	
 	var chatc = new ChatClient({ view : $('ul#tweets') });
