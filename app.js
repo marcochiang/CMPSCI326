@@ -79,6 +79,11 @@ app.post('/register/process', auth.registerProcess);
 app.get('/logout', requiresLogin, auth.logout);
 
 //Logged In User Routes
+app.get('/user/:user/following', requiresLogin, user.following);
+app.get('/user/:user/followers', requiresLogin, user.followers);
+app.get('/user/:user/favorites', requiresLogin, user.favorites);
+app.get('/user/:user/lists', requiresLogin, user.lists); //needed??
+app.get('/user/:user/message', requiresLogin, user.sendMessage);
 app.get('/user/:user/follower_requests', requiresLogin, user.follower_requests);
 
 app.get('/connect', requiresLogin, user.connect);
@@ -100,11 +105,7 @@ app.post('/unfollow/:id', requiresLogin, user.unfollow);
 
 //Universal User Routes
 app.get('/user/:user', user.profile);
-app.get('/user/:user/following', user.following);
-app.get('/user/:user/followers', user.followers);
-app.get('/user/:user/favorites', user.favorites);
-app.get('/user/:user/lists', user.lists); //needed??
-app.get('/user/:user/message', user.sendMessage);
+
 
 var server = http.createServer(app);
 

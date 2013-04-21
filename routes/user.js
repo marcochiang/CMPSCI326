@@ -9,6 +9,7 @@
 var actions = require('../lib/users/actions.js');
 var renders = require('../lib/users/renders.js');
 var userlib = require('../lib/users/user.js');
+var async   = require('async');
 
 // Displays list of users:
 exports.list = function(req, res) {
@@ -29,69 +30,105 @@ var profileRender = function(req, res, fn) {
 	var nav = '';
 	var username = req.params.user;
 
-	//Lookup User
-	userlib.lookup(username, function(error, user) {
-		if (error) {
-			console.log(error);
-		}
-		//User exists
-		else {
-			requestedUser = user;
-			//User is logged in
-			if (req.session.user !== undefined) {
-				//User is viewing their own profile
-				if (user.username == req.session.user.username) {
-					console.log('displaying your own profile');
-					self = true;
-					nav = 'me';
-				}
-				//User is viewing other profile
-				else {
-					//Get follow/unfollow button
-					userlib.profileButton(req.session.user, user.username, function(error, button) {
-						if (error) {
-							console.log(error);
-						}
-						else {
-							followButton = button;
-						}
-					});
-				}
-			}
-			switch(fn) {
-				case 1:
-				func = 'profile';
-				display = actions.getTweets(user);
-				break;
-				case 2:
-				func = 'following';
-				display = userlib.getFollowing(user, false);
-				break;
-				case 3:
-				func = 'followers';
-				display = actions.getFollowers(user);
-				break;
-				case 4:
-				func = 'favorites';
-				display = actions.getFavorites(user);
-				break;
-				case 5:
-				func = 'requests';
-				display = actions.getFollowerRequests(user);
-				break;
-				case 6:
-				func = 'lists';
-				display = actions.getLists(user);
-				break;
-				default:
-				func = 'profile';
-				display = actions.getTweets(user);
-			}
-		}
-	});
 
-	res.render('users/profile', {title: username, func: func, nav: nav, data: display, self: self, user: requestedUser, buttons: followButton+messageButton});
+	//DEFINITELY USE ASYNCH LIBRARY HERE!!!!
+	//right now, res.render gets hit before userlib.followButton completes!
+	async.series([
+			//first series function: lookup user in DB
+			function (callback){
+				userlib.lookup(username, function(error, user) {
+					if (error){
+						callback(error); //pass error to callback, stop series
+					}
+					else{
+						//set requestedUser variable, scoped for profileRender function above
+						//need to do this for second series function
+						requestedUser = user; 
+						callback(null, 1);
+					}
+				});
+			},
 
+			//second series function: check if session exists, and get follow/unfollow button if so
+			function (callback){
+				if (req.session.user !== undefined) {
+					//User is viewing their own profile
+					if (requestedUser.uname === req.session.user.uname){
+						self = true;
+						nav = 'me';
+						callback(null, 2); 
+					}
+					//User is viewing other user's profile
+					else{
+						//Get follow/unfollow button
+						userlib.followButton(req.session.user, requestedUser, function(error, button) {
+							if (error) {
+								callback(error); //pass error to callback, stop series
+							}
+							else {
+								followButton = button;
+								callback(null, 2);
+							}
+						});
+					}
+				}
+				//User is not logged in
+				else{
+					//still need to a call to the callback
+					//if this isn't wrapped in an else, this line might get executed while waiting for userlib.followButton to return
+					callback(null, 2);
+				}
+			},
+
+			//third series function: get appropriate data and render profile page
+			function (callback){
+				//these functions will all eventually have callbacks as they will need to access DB
+				//makes sense to separate into a separate series function
+				switch(fn) {
+					case 1:
+					func = 'profile';
+					display = actions.getTweets(requestedUser);
+					break;
+					case 2:
+					func = 'following';
+					display = userlib.getFollowing(requestedUser, false);
+					break;
+					case 3:
+					func = 'followers';
+					display = actions.getFollowers(requestedUser);
+					break;
+					case 4:
+					func = 'favorites';
+					display = actions.getFavorites(requestedUser);
+					break;
+					case 5:
+					func = 'requests';
+					display = actions.getFollowerRequests(requestedUser);
+					break;
+					case 6:
+					func = 'lists';
+					display = actions.getLists(requestedUser);
+					break;
+					default:
+					func = 'profile';
+					display = actions.getTweets(requestedUser);
+				}
+				callback(null, 3);			
+			}
+		],
+
+		//callback function: called after all above functions complete
+		function callback(error, results){
+			if (error){
+				console.log('Error: ' + error);
+				//render error page
+				res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
+			}
+			if (results[2]){ //populated after third function completes
+				res.render('users/profile', {title: username, func: func, nav: nav, data: display, self: self, user: requestedUser, buttons: followButton+messageButton});
+			}
+		}
+	);
 };
 
 
@@ -131,7 +168,8 @@ exports.follower_requests = function(req, res) {
 
 	//Ensures that only you can view your own follower requests
 	if(req.session.user != undefined) {
-		if(req.params.user == req.session.user.username) {
+		//if(req.params.user == req.session.user.username) {
+		if(req.params.user == req.session.user['uname']) {
 			profileRender(req, res, 5);
 		}
 		else {
@@ -195,11 +233,13 @@ exports.follow = function(req, res) {
 	var user = req.session.user;
 	userlib.follow(user, id, function(error) {
 		if (error) {
-			console.log(error);
-			res.redirect('/');
+			console.log('Error: ' + error);
+			//res.redirect('/');
+			res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
 		}
 		else {
-			res.redirect('/discover/who_to_follow');
+			//res.redirect('/discover/who_to_follow');
+			res.redirect('/user/'+user.uname);
 		}
 	});
 
@@ -226,9 +266,15 @@ exports.unfollow = function(req, res) {
 exports.who_to_follow = function(req, res) {
 
 	var user = req.session.user;
-	var display = userlib.who_to_follow(user);
-	res.render('users/active/discover', {title: 'Who to Follow', func: 'who_to_follow', nav: 'discover', data: display});
-
+	var display = userlib.who_to_follow(user, function(error, display){
+		if (error){
+			console.log(error);
+			res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
+		}
+		else{
+			res.render('users/active/discover', {title: 'Who to Follow', func: 'who_to_follow', nav: 'discover', data: display});
+		}
+	});
 };
 
 // Renders the find friends functionality for the current user:

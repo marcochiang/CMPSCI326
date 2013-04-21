@@ -19,10 +19,10 @@
 						<li class="home<% if (nav === "home") { %> active<% } %>"><a href="/">Home</a></li>
 						<li class="connect<% if (nav === "connect") { %> active<% } %>"><a href="/connect">Connect</a></li>
 						<li class="discover<% if (nav === "discover") { %> active<% } %>"><a href="/discover">Discover</a></li>
-						<li class="me<% if (nav === "me") { %> active<% } %>"><a href="/user/<%- session.user.username %>">Me</a></li>
+						<li class="me<% if (nav === "me") { %> active<% } %>"><a href="/user/<%- session.user.uname %>">Me</a></li>
 						<li class="session right"><span class="gear">Menu</span>
 							<ul>
-								<li<% if (nav === "me") { %> class="active"<% } %>><a href="/user/<%= session.user.username %>">View Your Profile</a></li>
+								<li<% if (nav === "me") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>">View Your Profile</a></li>
 								<li<% if (nav === "messages") { %> class="active"<% } %>><a href="/messages">Messages</a></li>
 								<li<% if (nav === "settings") { %> class="active"<% } %>><a href="/settings">Settings</a></li>
 								<li><a href="/logout">Logout</a></li>

@@ -1,15 +1,15 @@
 <% if (session.user !== undefined) { %>
 	<div id="profile" class="profile content profileGlance">
-		<p><a href="/user/<%- session.user.username %>"><img src="/img/Marco_Chiang.jpeg" width="32" height="32" class="left" /><%- session.user.username %><br /><span>View my profile page</span></a></p>
+		<p><a href="/user/<%- session.user.uname %>"><img src="/img/Marco_Chiang.jpeg" width="32" height="32" class="left" /><%- session.user.uname %><br /><span>View my profile page</span></a></p>
 		<ul class="stats">
-			<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= session.user.username %>/">76<br /><span>Tweets</span></a></li>
-			<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%= session.user.username %>/following">103<br /><span>Following</span></a></li>
-			<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= session.user.username %>/followers">9001<br /><span>Followers</span></a></li>
+			<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>/">76<br /><span>Tweets</span></a></li>
+			<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>/following">103<br /><span>Following</span></a></li>
+			<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>/followers">9001<br /><span>Followers</span></a></li>
 		</ul>
 		<div class="clearfix">&nbsp;</div>
 		<form id="tweet">
 			<textarea
-				class="tweetExpand" id="newTweet" name="<%- session.user.username %>"
+				class="tweetExpand" id="newTweet" name="<%- session.user.uname %>"
 				onblur="if(this.value=='')this.value=this.defaultValue;"
 				onfocus="if(this.value==this.defaultValue)this.value=''; countChars('newTweet','char_count',140, tweetButton);"
 				onKeyDown="countChars('newTweet','char_count',140, tweetButton)"

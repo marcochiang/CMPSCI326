@@ -60,7 +60,6 @@ exports.loginAuth = function(req, res) {
 
 // Renders the register view
 exports.register = function(req, res) {
-
 	var user  = req.session.user;
 
 	if (user !== undefined) { //redirect to home if there is a current session
@@ -81,7 +80,7 @@ exports.registerProcess = function(req, res) {
 	var username = req.body.user;
 	var password = req.body.pass;
 	userlib.createUser(email1, email2, username, password, function(error, user) {
-		if (error) {
+		if (error){
 			// If there is an error we "flash" a message to the
 			// redirected route `/user/login`.
 			req.flash('auth', error);
@@ -89,9 +88,7 @@ exports.registerProcess = function(req, res) {
 		}
 		else{
 			req.session.user = user;
-			// Store the user in our in memory database.
-			//online[user.uid] = user;
-			// Redirect to main.
+			//redirect to main
 			res.redirect('/');
 		}
 	});
