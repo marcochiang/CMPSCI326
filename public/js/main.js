@@ -195,6 +195,12 @@ PostButton.prototype = {
 // jQuery ready handler:
 $(document).ready(function() {
 
+	// Tipsy Class Definition
+	$('.north').tipsy({gravity: 'n'});
+	$('.south').tipsy({gravity: 's'});
+	$('.east').tipsy({gravity: 'e'});
+	$('.west').tipsy({gravity: 'w'});
+
 	$("li.session").click(function() {
         $(this).toggleClass('active'); 
     }); 

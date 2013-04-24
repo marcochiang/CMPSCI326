@@ -112,16 +112,16 @@
 							background: url("../img/arrow.png") no-repeat center bottom;border-left: none;border-right: none;
 							span.gear {.opacity(1);}
 							ul {
-								display: block;top: 50px;width: 250px;margin: 0 0 0 -120px;border: 4px double @grey;background: @lightGrey;.opacity(.97);
+								display: block;top: 50px;width: 250px;margin: 0 0 0 -120px;padding: 0 8px 8px 8px;background: url("../img/opaque.png") repeat 0 0;
 								li {
-									.reset;float: none;border-bottom: 1px solid @grey;text-indent: 0;border-bottom: 1px solid @grey;
+									.reset;float: none;text-indent: 0;border-bottom: 1px solid #eee;
 									a {
-										height: auto;padding: .8em 0;.txtCenter;color: @dark;text-shadow: 1px 1px #fff;border-top: 1px solid #fff;background-image: none;background-color: #fff;.opacity(.6);
-										&:hover {.opacity(1);}
+										height: auto;padding: .8em 0;.txtCenter;color: @greyer;text-shadow: 1px 1px #fff;border-top: 1px solid #fff;background-image: none;background-color: #fff;.opacity(1);.transition(color);
+										&:hover {color: @dark;}
 									}
 									&.active {
 										background-image: none;border-left: none;border-right: none;
-										a {.opacity(1);}
+										a {color: @dark;}
 									}
 								}
 							}
