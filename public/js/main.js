@@ -18,7 +18,6 @@
 		if($('textarea.tweetExpand').text() === 'Compose a new tweet...'){
 			document.getElementById(counter).innerHTML = 140;
 		}
-
 		else{
 			count = max - document.getElementById(textbox).value.length;
 			if (count < 0) 
@@ -155,25 +154,25 @@ $('form#unfollow button').hover(
 	// given the last index we have for the
 	// current posts.
 	check : function () {
-		var that = this;		
+		var that = this;	
 		$.ajax({
 			type : 'POST',
 			url  : '/check',
 			data : { last : that.posts.length },
 			dataType : 'json'
 		}).done(function (data) {
-			console.log('Check rcvd: ' + JSON.stringify(data));
+			
+			if (data != ""){
+				that.posts = that.posts.concat(data);
 
-			// Append the posts to the current posts:
-			that.posts = that.posts.concat(data);
-
-			// Rewrite to the view:
-			that.view.empty();
-			for (var i = 0; i < that.posts.length; i++) {
-				var li   = $('<li>');
-				var date = new Date(that.posts[i].date);
-				li.html('<span class="user">@' + username + '</span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].text + '</span>');
-				that.view.append(li);
+				// Rewrite to the view:
+				that.view.empty();
+				for (var i = 0; i < that.posts.length; i++) {
+					var li   = $('<li>');
+					var date = new Date(that.posts[i].time);
+					li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>');
+					that.view.append(li);
+				}
 			}
 		});
 	}
@@ -203,7 +202,6 @@ $(document).ready(function() {
     $('li.session').bind('clickoutside', function (event) {
 	   $('li.session').removeClass('active');
     });
-
 
 	// Get the list view that the chat client
 	// will populate with incoming messages:	
