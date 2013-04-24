@@ -18,7 +18,7 @@
 			<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/">76<br /><span>Tweets</span></a></li>
 			<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/following">103<br /><span>Following</span></a></li>
 			<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/followers">9001<br /><span>Followers</span></a></li>
-			<li class="right<% if (func === "sendMessage") { %> active<% } %>"><a href="/user/<%= user.uname %>/message">Send a Message<br /><span>Testing...</span></a></li>
+			<li class="right<% if (func === "sendMessage") { %> active<% } %>"><a href="/user/<%= user.uname %>/message?iframe=true&width=100%&height=100%" rel="prettyPhoto">Send <%= user.uname %> a Message<br /><span>0 New Messages</span></a></li>
 		</ul>
 		<div class="clearfix">&nbsp;</div>
 	</div>

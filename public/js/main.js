@@ -20,11 +20,11 @@
 		}
 		else{
 			count = max - document.getElementById(textbox).value.length;
-			if (count < 0) 
+			if (count < 0)
 			{
 				$('input.tweetButton').attr("src","/img/Tweet_Disabled.jpg");
 				document.getElementById('tweetButton').disabled = true;
-				document.getElementById(counter).innerHTML = "<span style=\"color: red;\">" + count + "</span>"; 
+				document.getElementById(counter).innerHTML = "<span style=\"color: red;\">" + count + "</span>";
 			}
 			else
 			{
@@ -65,7 +65,7 @@ $('textarea.tweetExpand').focus(function () {
 });
 
 //console.log($('textarea.tweetExpand').value);
-//if($('textarea').value == 'Compose a new tweet...' || $('textarea').value == ''){	
+//if($('textarea').value == 'Compose a new tweet...' || $('textarea').value == ''){
 /*	$('form#tweet').focusout(function () {
 		$('input.tweetButton').hide();
 		$('textarea.tweetExpand').animate({ height: "16px" }, 0);
@@ -123,7 +123,7 @@ $('form#unfollow button').hover(
 	ChatClient.prototype = {
 	// An cache of posts received from server.
 	posts : [],
-	
+
 	// Start polling the server.
 	poll : function () {
 		var that = this;
@@ -154,14 +154,14 @@ $('form#unfollow button').hover(
 	// given the last index we have for the
 	// current posts.
 	check : function () {
-		var that = this;	
+		var that = this;
 		$.ajax({
 			type : 'POST',
 			url  : '/check',
 			data : { last : that.posts.length },
 			dataType : 'json'
 		}).done(function (data) {
-			
+
 			if (data != ""){
 				that.posts = that.posts.concat(data);
 
@@ -201,16 +201,19 @@ $(document).ready(function() {
 	$('.east').tipsy({gravity: 'e'});
 	$('.west').tipsy({gravity: 'w'});
 
+	// PrettyPhoto Call
+	$("a[rel^='prettyPhoto']").prettyPhoto();
+
 	$("li.session").click(function() {
-        $(this).toggleClass('active'); 
-    }); 
+        $(this).toggleClass('active');
+    });
 
     $('li.session').bind('clickoutside', function (event) {
 	   $('li.session').removeClass('active');
     });
 
 	// Get the list view that the chat client
-	// will populate with incoming messages:	
+	// will populate with incoming messages:
 	var chatc = new ChatClient({ view : $('ul#tweets') });
 	// Check for tweets first so they load immediately
 	chatc.check();
