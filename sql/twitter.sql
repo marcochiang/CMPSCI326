@@ -19,6 +19,13 @@ create table follows (
 	primary key (uid, followid)
 );
 
+create table tweets (
+	tid integer primary key autoincrement,
+	uid int not null,
+	tweet varchar(140) not null,
+	time datetime not null
+);
+
 
 
 -- add data
