@@ -37,6 +37,11 @@
 	}
 
 
+	function tweetReply(name, id){
+		$('textarea.tweetExpand').focus();
+		$('textarea.tweetExpand').val('@'+ name + ' ');
+	}
+
 /*
 	=========================
 			Home Page
@@ -80,7 +85,7 @@ $('form#tweet').click(function(event)
 {
 	event.preventDefault();
 	var tweet = $('<div id="tweet" class="center"> \
-		<img src="http://localhost:3000/img/" /> \
+		\
 		</div>');
 });
 
@@ -111,20 +116,6 @@ $('form#unfollow button').hover(
 	{
 		$(this).text("Following");
 	});
-
-
-//Show and hiding tweet reply
-$('#tweets').hover(function () {
-	$('.action-reply').attr('id').click(function() {
-		alert('click');
-	});
-	
-/*	for (var i = tweet_count-1; i >= 0; i--) {
-		if($('.action-reply').attr('id') === i)
-			$('.action-reply').hide();
-	}*/
-});
-
 
 
 /*
@@ -189,7 +180,7 @@ $('#tweets').hover(function () {
 				for (var i = that.posts.length-1; i >= 0; i--) {
 					var li   = $('<li>');
 					var date = new Date(that.posts[i].time);
-					li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>' + '<a role="button" class="action-reply"' + 'id=' + '"' + i + '"' + '>Reply</a>');
+					li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>' + '<a onclick="tweetReply(this. name, this.id)" role="button" name="' + that.posts[i].uname + '" class="action-reply"' + 'id=' + '"' + i + '"' + '>Reply</a>');
 					that.view.append(li);
 				}
 				tweet_count = that.posts.length
@@ -263,6 +254,7 @@ $(document).ready(function() {
 			$('.tweet_posted').fadeOut(500);
 		},1000);
 		//alert('Tweet successfully posted');
+
 		return false;
 	});
 
