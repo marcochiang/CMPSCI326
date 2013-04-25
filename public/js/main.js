@@ -163,7 +163,7 @@ $('form#unfollow button').hover(
 		}).done(function (data) {
 
 			if (data != ""){
-				that.posts = that.posts.concat(data);
+				that.posts = data;
 
 				// Rewrite to the view:
 				that.view.empty();
