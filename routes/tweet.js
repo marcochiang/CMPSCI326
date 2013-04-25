@@ -45,6 +45,25 @@ exports.check = function (req, res) {
 	console.log('exports.check method');
 	var u = req.session.user;
 	if (u){//session defined
+		tweetlib.getAllTweets(u, function(error, tweets){
+			if (error){
+				console.log('Error: ' + error);
+				//render error page
+				res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
+			}
+			else{
+				if (tweets){
+					res.json(tweets);
+				}
+				else{
+					res.json("");
+				}
+			}
+		});
+	}
+
+
+	/*if (u){//session defined
 		//need to check if lastTweet array has been populated
 		//if it has not, grab all tweets -- this is when the user first loads "Home" page
 		if (lastTweet[u.uid]){
@@ -98,7 +117,7 @@ exports.check = function (req, res) {
 				}
 			});
 		}
-	}
+	}*/
 };
 
 exports.displayTweet = function (req, res) {

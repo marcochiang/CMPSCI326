@@ -167,7 +167,7 @@ $('form#unfollow button').hover(
 
 				// Rewrite to the view:
 				that.view.empty();
-				for (var i = 0; i < that.posts.length; i++) {
+				for (var i = that.posts.length-1; i >= 0; i--) {
 					var li   = $('<li>');
 					var date = new Date(that.posts[i].time);
 					li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>');
