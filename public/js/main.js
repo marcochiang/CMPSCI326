@@ -6,6 +6,7 @@
 
 	var test = document.getElementById("newTweet");
 	var username = test.name;
+	var tweet_count = 0;
 
 /*
 	=========================
@@ -42,10 +43,13 @@
 	=========================
 	*/
 
+
+
 // Start by hiding the tweet button and count until form box is opened
 $('span#char_count').hide();
 $('input.tweetButton').hide();
 $('img.tweet_posted').hide();
+
 
 // Expands the form box when focused on and adds hover over feature when going over tweet button
 $('textarea.tweetExpand').focus(function () {
@@ -109,6 +113,20 @@ $('form#unfollow button').hover(
 	});
 
 /*
+//Show and hiding tweet reply
+$('#tweets').hover(function () {
+	for (var i = tweet_count-1; i >= 0; i--) {
+	if(this.id === i)
+	$('.action-reply').hide();
+}
+});
+
+$('#tweets').focusout(function () {
+	$('.action-reply').hide();
+});*/
+
+
+/*
 
 	A ChatClient object for communicating
 	with the chat server.
@@ -168,15 +186,18 @@ $('form#unfollow button').hover(
 				// Rewrite to the view:
 				that.view.empty();
 				for (var i = that.posts.length-1; i >= 0; i--) {
-					var li   = $('<li>');
+					var li   = $('<li id=' + '"' + i + '"' + '>');
 					var date = new Date(that.posts[i].time);
-					li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>');
+					li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>' + '<a role="button" class="action-reply">Reply</a>');
 					that.view.append(li);
 				}
+				tweet_count = that.posts.length
+				//$('.action-reply').hide();
 			}
 		});
 	}
 };
+
 
 function PostButton(config) {
 	for (var prop in config) {
@@ -205,12 +226,12 @@ $(document).ready(function() {
 	$("a[rel^='prettyPhoto']").prettyPhoto();
 
 	$("li.session").click(function() {
-        $(this).toggleClass('active');
-    });
+		$(this).toggleClass('active');
+	});
 
-    $('li.session').bind('clickoutside', function (event) {
-	   $('li.session').removeClass('active');
-    });
+	$('li.session').bind('clickoutside', function (event) {
+		$('li.session').removeClass('active');
+	});
 
 	// Get the list view that the chat client
 	// will populate with incoming messages:
