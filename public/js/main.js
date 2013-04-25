@@ -112,18 +112,19 @@ $('form#unfollow button').hover(
 		$(this).text("Following");
 	});
 
-/*
+
 //Show and hiding tweet reply
 $('#tweets').hover(function () {
-	for (var i = tweet_count-1; i >= 0; i--) {
-	if(this.id === i)
-	$('.action-reply').hide();
-}
+	$('.action-reply').attr('id').click(function() {
+		alert('click');
+	});
+	
+/*	for (var i = tweet_count-1; i >= 0; i--) {
+		if($('.action-reply').attr('id') === i)
+			$('.action-reply').hide();
+	}*/
 });
 
-$('#tweets').focusout(function () {
-	$('.action-reply').hide();
-});*/
 
 
 /*
@@ -186,9 +187,9 @@ $('#tweets').focusout(function () {
 				// Rewrite to the view:
 				that.view.empty();
 				for (var i = that.posts.length-1; i >= 0; i--) {
-					var li   = $('<li id=' + '"' + i + '"' + '>');
+					var li   = $('<li>');
 					var date = new Date(that.posts[i].time);
-					li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>' + '<a role="button" class="action-reply">Reply</a>');
+					li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>' + '<a role="button" class="action-reply"' + 'id=' + '"' + i + '"' + '>Reply</a>');
 					that.view.append(li);
 				}
 				tweet_count = that.posts.length
