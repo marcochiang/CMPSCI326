@@ -9,6 +9,7 @@
 var actions = require('../lib/users/actions.js');
 var renders = require('../lib/users/renders.js');
 var userlib = require('../lib/users/user.js');
+var tweetlib = require('../lib/users/tweets.js');
 var async   = require('async');
 
 //Profile Render helper function
@@ -79,8 +80,15 @@ var profileRender = function(req, res, fn) {
 				switch(fn) {
 					case 1:
 					func = 'profile';
-					display = actions.getTweets(requestedUser);
-					callback(null, 3);
+					tweetlib.getMyTweets(requestedUser, function(error, tweets){
+						if (error){
+							callback(error); //pass error to callback, stop series
+						}
+						else{
+							display = tweets;
+							callback(null, 3);
+						}
+					});
 					break;
 					case 2:
 					func = 'following';

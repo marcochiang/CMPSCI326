@@ -28,7 +28,6 @@ exports.post = function (req, res) {
 		}
 		else{
 			var time = new Date(tweet.time);
-			//lastID[tweet.uid] = time.toDateString();
 			lastTweet[tweet.uid] = time.getTime();
 			console.log('setting time of last tweet: ' + lastTweet[tweet.uid]);
 			res.json({ status: 'OK'});
@@ -41,10 +40,9 @@ exports.post = function (req, res) {
 // expected to send a post request with a JSON body containing
 // a single object: { last : <value> }.
 exports.check = function (req, res) {
-
-	console.log('exports.check method');
 	var u = req.session.user;
 	if (u){//session defined
+		console.log('exports.check method');
 		tweetlib.getAllTweets(u, function(error, tweets){
 			if (error){
 				console.log('Error: ' + error);

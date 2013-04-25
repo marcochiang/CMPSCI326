@@ -177,6 +177,21 @@
 				}
 			}
 
+			#profileTweets{
+				.reset;
+				li {
+					padding: 1em;border: 1px solid @grey;.transition(background);.borderRadius;
+					span {
+						&.user {.left;font-weight: bold;}
+						&.date {.right;color: @greyer;font-size: 11px;}
+						&.tweet {}
+					}
+					&:hover {
+						background: @lightGrey;
+					}
+				}
+			}
+
 			&.profile {
 				&.profileGlance {
 					ul.stats li:first-child {padding: .5em 1em .5em 0;}

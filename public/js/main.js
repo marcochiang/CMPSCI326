@@ -84,10 +84,21 @@ $('textarea.tweetExpand').focus(function () {
 $('form#tweet').click(function(event)
 {
 	event.preventDefault();
+	/*var tweet = $('<div id="tweet" class="center"> \
+		<img src="http://localhost:3000/img/" /> \
+		</div>');*/
 	var tweet = $('<div id="tweet" class="center"> \
 		\
 		</div>');
 });
+
+
+/*
+	=========================
+	    Follow/Unfollow
+	=========================
+	*/
+
 
 // Follow button clicked --> change action of form
 $('form#follow button').click(function(event)
@@ -116,7 +127,6 @@ $('form#unfollow button').hover(
 	{
 		$(this).text("Following");
 	});
-
 
 /*
 
@@ -171,15 +181,15 @@ $('form#unfollow button').hover(
 			data : { last : that.posts.length },
 			dataType : 'json'
 		}).done(function (data) {
-
 			if (data != ""){
 				that.posts = data;
 
 				// Rewrite to the view:
 				that.view.empty();
-				for (var i = that.posts.length-1; i >= 0; i--) {
-					var li   = $('<li>');
+				for (var i=0; i<that.posts.length; i++){
+					var li   = $('<li id=' + '"' + i + '"' + '>');
 					var date = new Date(that.posts[i].time);
+					//li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span>' + '</span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>' + '<a role="button" class="action-reply">Reply</a>');
 					li.html('<span class="user"><a href="/user/' + that.posts[i].uname + '" style="text-decoration:none;">' + that.posts[i].uname + '</a></span><span class="date">' + date.toDateString() + '</span></br><span class="tweet clearfix">' + that.posts[i].tweet + '</span>' + '<a onclick="tweetReply(this. name, this.id)" role="button" name="' + that.posts[i].uname + '" class="action-reply"' + 'id=' + '"' + i + '"' + '>Reply</a>');
 					that.view.append(li);
 				}
@@ -227,11 +237,16 @@ $(document).ready(function() {
 
 	// Get the list view that the chat client
 	// will populate with incoming messages:
+	//for the tweets on a users home page!!
 	var chatc = new ChatClient({ view : $('ul#tweets') });
-	// Check for tweets first so they load immediately
-	chatc.check();
-	// Start polling:
-	chatc.poll();
+
+	//only poll the server if we are on the home page (where the element $('ul#tweets') resides)
+	if ($('ul#tweets').length > 0){
+		// Check for tweets first so they load immediately
+		chatc.check();
+		// Start polling:
+		chatc.poll();
+	}
 
 	// Setup the post button:
 	var postb = new PostButton({
@@ -253,9 +268,6 @@ $(document).ready(function() {
 		setTimeout(function(){
 			$('.tweet_posted').fadeOut(500);
 		},1000);
-		//alert('Tweet successfully posted');
-
 		return false;
 	});
-
 });
