@@ -53,11 +53,16 @@ function publisher() {
 function chatTextArea() {
   var obj = Object.create(publisher());
   obj.elm = $('#chat-text-area');
+  obj.user = $('#username');
 
   // Returns the text contained in the textarea:
   obj.getText = function () {
     return obj.elm.val();
   };
+
+  obj.getUser = function () {
+    return obj.user.val();
+  }
 
   // Removes the text from the text area:
   obj.clearText = function () {
@@ -94,8 +99,8 @@ function messageList() {
 
   // A method to add a message to the list:
   obj.addMessage = function (msg) {
-    var next = $('<li>');
-    next.text(msg);
+    var next = $('<li class="message">');
+    next.html(msg);
     obj.elm.prepend(next);
   };
 
@@ -118,7 +123,8 @@ function chatApp(socket) {
   // our callback when it is ready to do so:
   obj.post.subscribe('submit', function () {
     // Grab the textarea's text and send to server:
-    var message = obj.text.getText();
+    var user = obj.text.getUser();
+    var message = "<a href=\"/user/" + user + "/\" javascript=\"parent.window.location.href=\"/user/" + user + "\"\">" + user + "</a>" + ": " + obj.text.getText();
     socket.emit('post', { post : message });
     // Clear the text box and add the message locally:
     obj.text.clearText();

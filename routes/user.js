@@ -35,7 +35,7 @@ var profileRender = function(req, res, fn) {
 					else{
 						//set requestedUser variable, scoped for profileRender function above
 						//need to do this for second series function
-						requestedUser = user; 
+						requestedUser = user;
 						callback(null, 1);
 					}
 				});
@@ -48,7 +48,7 @@ var profileRender = function(req, res, fn) {
 					if (requestedUser.uname === req.session.user.uname){
 						self = true;
 						nav = 'me';
-						callback(null, 2); 
+						callback(null, 2);
 					}
 					//User is viewing other user's profile
 					else{
@@ -125,7 +125,7 @@ var profileRender = function(req, res, fn) {
 					func = 'profile';
 					display = actions.getTweets(requestedUser);
 					callback(null, 3);
-				}		
+				}
 			}
 		],
 
@@ -321,7 +321,8 @@ exports.sendMessage = function(req, res) {
 			res.redirect('/user/'+req.session.user.username);
 		}
 		else {
-			res.render('users/active/sendMessage', {title: 'Message', func: 'sendMessage', nav: 'messages'});
+			var user = req.params.user;
+			res.render('users/active/sendMessage', {title: 'Message', func: 'sendMessage', nav: 'messages', user: user});
 		}
 	}
 	else {

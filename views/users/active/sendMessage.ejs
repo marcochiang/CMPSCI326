@@ -3,8 +3,11 @@
 	<div class="content">
 		<div id="data">
 			<h2>Messages</h2>
+			<p>You are chatting with <%= user %></p>
+			<hr />
 			<div id="chat-app">
-				<p><textarea id="chat-text-area" rows="5" cols="50"></textarea></p>
+				<p><textarea id="chat-text-area" rows="5" cols="50"></textarea>
+				<input type="hidden" name="user" value="<%= session.user.uname %>" id="username" /></p>
 				<p><input id="chat-post-button" type="submit" value="Post"></p>
 			</div>
 			<hr />

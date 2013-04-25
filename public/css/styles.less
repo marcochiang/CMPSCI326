@@ -209,6 +209,7 @@
 				}
 				form {
 					margin: 1em 0 0 0;
+					&#tweet {margin: 0;}
 					#newTweet {
 						width: 230px;height: 16px;padding: .5em;background: #fff;border: 1px solid @grey;color: @greyer;resize: none;
 						&:focus {color: @dark;}
@@ -240,4 +241,8 @@
 #skeleton {
 	padding: 5em;
 	h1, h2, h3, h4, h5, h6, p, li {color: @dark;}
+	#inbox {
+		list-style-type: none;
+		li {margin: 1em 0 0 0;padding: 10px;border: 1px solid @lightGrey;.borderRadius;}
+	}
 }
