@@ -239,10 +239,17 @@
 }
 
 #skeleton {
-	padding: 5em;
-	h1, h2, h3, h4, h5, h6, p, li {color: @dark;}
-	#inbox {
-		list-style-type: none;
-		li {margin: 1em 0 0 0;padding: 10px;border: 1px solid @lightGrey;.borderRadius;}
+	#site {
+		padding: 5em;
+		h1, h2, h3, h4, h5, h6, p, li {color: @dark;}
+	}
+}
+
+#skeleton, #template {
+	#site {
+		ul#inbox {
+			.reset;list-style-type: none;
+			li {margin: .5em 0;padding: 10px;border: 1px solid @lightGrey;.borderRadius;}
+		}
 	}
 }
