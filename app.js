@@ -71,6 +71,9 @@ app.post('/post', tweet.post);
 app.post('/check', tweet.check);
 app.get('/tweet/:tweetid', tweet.displayTweet);
 
+//Load profileSidebar with number of tweets, following, followers..
+app.post('/loadProfile', user.loadProfile);
+
 //Logged Out User Routes
 app.get('/login', auth.login);
 app.post('/login/auth', auth.loginAuth);

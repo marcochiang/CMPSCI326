@@ -215,6 +215,33 @@ PostButton.prototype = {
 		});
 	}};
 
+//load data into profileSidebar
+function loadProfileSideBar(){
+	$.ajax({
+		type : 'POST',
+		url  : '/loadProfile',
+		//data : { last : that.posts.length },
+		dataType : 'json'
+	}).done(function (data) {
+		var numFollowing = data.numFollowing;
+		var numFollowers = data.numFollowers;
+		var numTweets = data.numTweets;
+		var username = data.username;
+
+		var tweetLI = $('<li>');
+		tweetLI.append('<a href="/user/' + username + '">' + numTweets + '<br /><span>Tweets</span></a>');
+		$('ul#profileSidebar').append(tweetLI);
+
+		var followingLI = $('<li>');
+		followingLI.append('<a href="/user/' + username + '/following">' + numFollowing + '<br /><span>Following</span></a>');
+		$('ul#profileSidebar').append(followingLI);
+
+		var followersLI = $('<li>');
+		followersLI.append('<a href="/user/' + username + '/followers">' + numFollowers + '<br /><span>Followers</span></a>');
+		$('ul#profileSidebar').append(followersLI);
+	});
+}
+
 // jQuery ready handler:
 $(document).ready(function() {
 
@@ -234,6 +261,11 @@ $(document).ready(function() {
 	$('li.session').bind('clickoutside', function (event) {
 		$('li.session').removeClass('active');
 	});
+
+	//check for existence of <ul> in profileSidebar --> if so, load it with number of tweets, followers, following..
+	if ($('ul#profileSidebar').length > 0){
+		loadProfileSideBar();
+	}
 
 	// Get the list view that the chat client
 	// will populate with incoming messages:

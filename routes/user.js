@@ -23,6 +23,9 @@ var profileRender = function(req, res, fn) {
 	var func;
 	var nav = '';
 	var username = req.params.user;
+	var numFollowing;
+	var numFollowers;
+	var numTweets;
 
 	//need to use async.series here because of problems with asynchronous JavaScript & nested callbacks
 	//functions need to run in a serial order
@@ -73,10 +76,49 @@ var profileRender = function(req, res, fn) {
 				}
 			},
 
-			//third series function: get appropriate data and render profile page
+			//third series function: get the total number of users that the requested user is following
 			function (callback){
-				//these functions will all eventually have callbacks as they will need to access DB
-				//makes sense to separate into a separate series function
+				console.log('Going to get number following, followers, tweets!');
+				userlib.getNumFollowing(requestedUser, function(error, num){
+					if (error){
+						callback(error); //pass error to callback, stop series
+					}
+					else{
+						numFollowing = num;
+						callback(null, 3);
+					}
+				});
+			},
+
+			//fourth series function: get the total number of users that are following the requested user
+			function (callback) {
+				userlib.getNumFollowers(requestedUser, function(error, num){
+					if (error){
+						callback(error); //pass error to callback, stop series
+					}
+					else{
+						numFollowers = num;
+						callback(null, 4);
+					}
+				});
+			},
+
+			//fifth series function: get the number of tweets of the requested user
+			function (callback){
+				tweetlib.getNumTweets(requestedUser, function(error, num){
+					if (error){
+						callback(error); //pass error to callback, stop series
+					}
+					else{
+						numTweets = num;
+						callback(null, 5);
+					}
+				});
+			},
+
+			//sixth series function: get appropriate data and render profile page
+			function (callback){
+
 				switch(fn) {
 					case 1:
 					func = 'profile';
@@ -86,7 +128,7 @@ var profileRender = function(req, res, fn) {
 						}
 						else{
 							display = tweets;
-							callback(null, 3);
+							callback(null, 6);
 						}
 					});
 					break;
@@ -98,7 +140,7 @@ var profileRender = function(req, res, fn) {
 						}
 						else{
 							display = following;
-							callback(null, 3);
+							callback(null, 6);
 						}
 					});
 					break;
@@ -110,29 +152,36 @@ var profileRender = function(req, res, fn) {
 						}
 						else{
 							display = followers;
-							callback(null, 3);
+							callback(null, 6);
 						}
 					});
 					break;
 					case 4:
 					func = 'favorites';
 					display = actions.getFavorites(requestedUser);
-					callback(null, 3);
+					callback(null, 6);
 					break;
 					case 5:
 					func = 'requests';
 					display = actions.getFollowerRequests(requestedUser);
-					callback(null, 3);
+					callback(null, 6);
 					break;
 					case 6:
 					func = 'lists';
 					display = actions.getLists(requestedUser);
-					callback(null, 3);
+					callback(null, 6);
 					break;
 					default:
 					func = 'profile';
-					display = actions.getTweets(requestedUser);
-					callback(null, 3);
+					tweetlib.getMyTweets(requestedUser, function(error, tweets){
+						if (error){
+							callback(error); //pass error to callback, stop series
+						}
+						else{
+							display = tweets;
+							callback(null, 6);
+						}
+					});
 				}
 			}
 		],
@@ -144,8 +193,10 @@ var profileRender = function(req, res, fn) {
 				//render error page
 				res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
 			}
-			if (results[2]){ //populated after third function completes
-				res.render('users/profile', {title: username, func: func, nav: nav, data: display, self: self, user: requestedUser, buttons: followButton+messageButton});
+			if (results[5]){ //populated after third function completes
+				res.render('users/profile', 
+				{title: username, func: func, nav: nav, numFollowing: numFollowing, numFollowers: numFollowers, numTweets: numTweets,
+				data: display, self: self, user: requestedUser, buttons: followButton+messageButton});
 			}
 		}
 	);
@@ -206,6 +257,67 @@ exports.lists = function(req, res) {
 
 	profileRender(req, res, 6);
 
+};
+
+// Loads data into the profileSidebar:
+exports.loadProfile = function(req, res){
+	var u = req.session.user;
+	var numFollowing, numFollowers, numTweets;
+
+	async.series([
+		//first series function: get the total number of users that the requested user is following
+		function (callback){
+			userlib.getNumFollowing(u, function(error, num){
+				if (error){
+					callback(error); //pass error to callback, stop series
+				}
+				else{
+					numFollowing = num;
+					callback(null, 1);
+				}
+			});
+		},
+
+		//second series function: get the total number of users that are following the requested user
+		function (callback) {
+			userlib.getNumFollowers(u, function(error, num){
+				if (error){
+					callback(error); //pass error to callback, stop series
+				}
+				else{
+					numFollowers = num;
+					callback(null, 2);
+				}
+			});
+		},
+
+		//third series function: get the number of tweets of the requested user
+		function (callback){
+			tweetlib.getNumTweets(u, function(error, num){
+				if (error){
+					callback(error); //pass error to callback, stop series
+				}
+				else{
+					numTweets = num;
+					callback(null, 3);
+				}
+			});
+		}
+
+	],
+
+	//callback function: called after all above functions complete
+	function callback(error, results){
+		if (error){
+			console.log('Error: ' + error);
+			//render error page
+			res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
+		}
+		if (results[2]){ //populated after third function completes
+			res.json({numFollowing: numFollowing, numFollowers: numFollowers, numTweets: numTweets, username: u.uname});
+		}
+	} 
+	);
 };
 
 

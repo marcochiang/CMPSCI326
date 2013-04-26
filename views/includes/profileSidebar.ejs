@@ -1,10 +1,10 @@
 <% if (session.user !== undefined) { %>
 	<div id="profile" class="profile content profileGlance">
 		<p><a href="/user/<%- session.user.uname %>"><img src="/img/user_pics/<%= session.user.uname %>.jpeg" onerror="this.src='/img/user_pics/default.jpeg';" width="32" height="32" class="left" /><%- session.user.uname %><br /><span>View my profile page</span></a></p>
-		<ul class="stats">
-			<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>/">76<br /><span>Tweets</span></a></li>
+		<ul id="profileSidebar" class="stats">
+			<!--<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>/">76<br /><span>Tweets</span></a></li>
 			<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>/following">103<br /><span>Following</span></a></li>
-			<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>/followers">9001<br /><span>Followers</span></a></li>
+			<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>/followers">9001<br /><span>Followers</span></a></li>-->
 		</ul>
 		<div class="clearfix">&nbsp;</div>
 		<form id="tweet">
