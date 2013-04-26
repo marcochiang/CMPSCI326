@@ -24,6 +24,13 @@
 						<li class="connect<% if (nav === "connect") { %> active<% } %>"><a href="/connect">Connect</a></li>
 						<li class="discover<% if (nav === "discover") { %> active<% } %>"><a href="/discover">Discover</a></li>
 						<li class="me<% if (nav === "me") { %> active<% } %>"><a href="/user/<%- session.user.uname %>">Me</a></li>
+						<li>
+							<form class="form-search js-search-form" action="/search">
+								<input class="search-input" type="text" id="search-query" placeholder="Search" autocomplete="off">
+								    <button type="submit" class="icon nav-search" tabindex="-1">
+								    </button>
+							</form>
+						</li>
 						<li class="session right tip east" title="0 Notifications"><span class="gear">Menu</span>
 							<ul>
 								<li<% if (nav === "me") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>">View Your Profile</a></li>
