@@ -25,10 +25,9 @@
 						<li class="discover<% if (nav === "discover") { %> active<% } %>"><a href="/discover">Discover</a></li>
 						<li class="me<% if (nav === "me") { %> active<% } %>"><a href="/user/<%- session.user.uname %>">Me</a></li>
 						<li>
-							<form class="form-search js-search-form" action="/search">
-								<input class="search-input" type="text" id="search-query" placeholder="Search" autocomplete="off">
-								    <button type="submit" class="icon nav-search" tabindex="-1">
-								    </button>
+							<form action="/search/process" method="post">
+								<input type="text" name="search" id="search">
+								<input type="submit" value="Search" name="q" />
 							</form>
 						</li>
 						<li class="session right tip east" title="0 Notifications"><span class="gear">Menu</span>

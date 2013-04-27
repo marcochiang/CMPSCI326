@@ -101,6 +101,9 @@ app.get('/discover/browse_categories', requiresLogin, user.browse_categories);
 app.get('/messages', requiresLogin, user.messages);
 app.get('/settings', requiresLogin, user.settings);
 
+app.get('/search', requiresLogin, user.search);
+app.post('/search/process', requiresLogin, user.searchProcess)
+
 //follow user
 app.post('/follow/:id', requiresLogin, user.follow);
 //unfollow user

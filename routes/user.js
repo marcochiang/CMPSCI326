@@ -12,6 +12,9 @@ var userlib = require('../lib/users/user.js');
 var tweetlib = require('../lib/users/tweets.js');
 var async   = require('async');
 
+
+var searchParameter = "";
+
 //Profile Render helper function
 var profileRender = function(req, res, fn) {
 
@@ -194,7 +197,7 @@ var profileRender = function(req, res, fn) {
 				res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
 			}
 			if (results[5]){ //populated after third function completes
-				res.render('users/profile', 
+				res.render('users/profile',
 				{title: username, func: func, nav: nav, numFollowing: numFollowing, numFollowers: numFollowers, numTweets: numTweets,
 				data: display, self: self, user: requestedUser, buttons: followButton+messageButton});
 			}
@@ -316,7 +319,7 @@ exports.loadProfile = function(req, res){
 		if (results[2]){ //populated after third function completes
 			res.json({numFollowing: numFollowing, numFollowers: numFollowers, numTweets: numTweets, username: u.uname});
 		}
-	} 
+	}
 	);
 };
 
@@ -455,5 +458,31 @@ exports.sendMessage = function(req, res) {
 exports.messages = function(req, res) {
 
 	res.render('users/active/messages', {title: 'Messages', func: 'messages', nav: 'messages'});
+
+};
+
+exports.search = function(req, res) {
+
+	res.render('users/search', {title: 'Search', func: 'search', nav: 'search', data: searchParameter});
+
+};
+
+exports.searchProcess = function(req, res) {
+
+// Pull the values from the form.
+var myText = req.body.search;
+console.log('myText: ' + myText);
+
+	userlib.search(myText, function(error, myText) {
+		if (error) {
+			// error code
+		}
+		else {
+			searchParameter = myText;
+			res.redirect('/search');
+		}
+	});
+
+	// res.render('users/search', {title: 'Search', func: 'search', nav: 'search', data: myText});
 
 };
