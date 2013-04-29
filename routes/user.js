@@ -12,7 +12,6 @@ var userlib = require('../lib/users/user.js');
 var tweetlib = require('../lib/users/tweets.js');
 var async   = require('async');
 
-
 var searchParameter = "";
 
 //Profile Render helper function
@@ -463,7 +462,23 @@ exports.messages = function(req, res) {
 
 exports.search = function(req, res) {
 
-	res.render('users/search', {title: 'Search', func: 'search', nav: 'search', data: searchParameter});
+	var u = req.session.user;
+
+  if (u){//session defined
+    tweetlib.getSearchTweets(u, searchParameter, function(error, tweets){
+      if (error){
+        console.log('Error: ' + error);
+        //render error page
+        res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
+      }
+      else{
+				res.render('users/search', {title: 'Search', func: 'search', nav: 'search', param: searchParameter, data: tweets});
+      }
+    });
+  }
+  else {
+		res.redirect('/login');
+	}
 
 };
 
