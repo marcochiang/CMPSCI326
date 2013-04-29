@@ -486,18 +486,11 @@ exports.searchProcess = function(req, res) {
 
 // Pull the values from the form.
 var myText = req.body.search;
-console.log('myText: ' + myText);
+//console.log('myText: ' + myText);
 
-	userlib.search(myText, function(error, myText) {
-		if (error) {
-			// error code
-		}
-		else {
-			searchParameter = myText;
-			res.redirect('/search');
-		}
-	});
+searchParameter = myText;
+res.redirect('/search');
 
-	// res.render('users/search', {title: 'Search', func: 'search', nav: 'search', data: myText});
+// res.render('users/search', {title: 'Search', func: 'search', nav: 'search', data: myText});
 
 };
