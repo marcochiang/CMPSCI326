@@ -24,19 +24,19 @@
 						<li class="connect<% if (nav === "connect") { %> active<% } %>"><a href="/connect">Connect</a></li>
 						<li class="discover<% if (nav === "discover") { %> active<% } %>"><a href="/discover">Discover</a></li>
 						<li class="me<% if (nav === "me") { %> active<% } %>"><a href="/user/<%- session.user.uname %>">Me</a></li>
-						<li>
-							<form action="/search/process" method="post">
-								<input type="text" name="search" id="search">
-								<input type="submit" value="Search" name="q" />
-							</form>
-						</li>
-						<li class="session right tip east" title="0 Notifications"><span class="gear">Menu</span>
+						<li class="session right tip west" title="0 Notifications"><span class="gear">Menu</span>
 							<ul>
 								<li<% if (nav === "me") { %> class="active"<% } %>><a href="/user/<%= session.user.uname %>">View Your Profile</a></li>
 								<li<% if (nav === "messages") { %> class="active"<% } %>><a href="/messages">Messages (0)</a></li>
 								<li<% if (nav === "settings") { %> class="active"<% } %>><a href="/settings">Settings</a></li>
 								<li><a href="/logout">Logout</a></li>
 							</ul>
+						</li>
+						<li class="search right">
+							<form action="/search/process" method="post">
+								<input type="text" name="search" placeholder="Search..." id="search" />
+								<input type="submit" value="Search" class="hidden" name="q" />
+							</form>
 						</li>
 					<% } %>
 					<% if (!session.user) { %>

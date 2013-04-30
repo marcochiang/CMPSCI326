@@ -3,8 +3,9 @@
 		<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= user.uname %>">Tweets</a></li>
 		<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/following">Following</a></li>
 		<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/followers">Followers</a></li>
-		<li<% if (func === "favorites") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/favorites">Favorites</a></li>
 		<% if (self === true) { %><li<% if (func === "requests") { %> class="active"<% } %>><a href="/user/<%- user.uname %>/follower_requests">Requests</a></li><% } %>
-		<li<% if (func === "lists") { %> class="active"<% } %>><a href="/user/<%- user.uname %>/lists">Lists</a></li>
+		<% if (user.uname != session.user.uname) { %><li class="<% if (func === "sendMessage") { %> active<% } %>"><a href="/user/<%= user.uname %>/message?iframe=true&width=100%&height=100%" rel="prettyPhoto">Message <%= user.uname %></a></li><% } %>
+		<!--<li<% if (func === "favorites") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/favorites">Favorites</a></li>
+		<li<% if (func === "lists") { %> class="active"<% } %>><a href="/user/<%- user.uname %>/lists">Lists</a></li>-->
 	</ul>
 </div>

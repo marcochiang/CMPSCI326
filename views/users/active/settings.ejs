@@ -8,7 +8,20 @@
 	<div class="content">
 		<div id="data">
 			<h2>Settings</h2>
-			<p>User settings go here.</p>
+			<p>This page is incomplete. Submitting the form will not do anything.</p>
+			<%- message %>
+			<hr />
+			<form id="settings" name="settings" action="/settings" method="post">
+				<p><label for="username">Username:</label><br />
+				<input type="text" name="username" id="user" size="30" placeholder="<%- user.uname %>" /></p>
+				<p><label for="email">email:</label><br />
+				<input type="text" name="email" id="email" size="30" placeholder="<%- user.email %>" /></p>
+				<p><label for="pass">Password:</label><br />
+				<input type="password" name="pass" id="pass" size="30" placeholder="Minimum of 7 Characters" /></p>
+				<p><label for="pass2">Confirm Password:</label><br />
+				<input type="password" name="pass2" id="pass2" size="30" placeholder="Minimum of 7 Characters" /></p>
+				<p><input type="submit" value="Submit Changes" name="q" /> <input type="reset" value="Reset to Default" name="r" /></p>
+			</form>
 		</div>
 	</div>
 </div>

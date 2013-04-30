@@ -56,19 +56,21 @@
    ========================================================================== */
 
 
-	*, html, body {.reset;}
-	html, button, select, textarea {color: @grey;}
-	body#template {background: #C0DEED url("../img/body.jpg") repeat-x 0 0;color: @dark;font-size: 1em;line-height: 1.4;font: 15px/22px "Open Sans", Helvetica, Helvetica Neue, Arial, sans-serif;}
-	hr {display: block;height: 1px;border: 0;border-top: 1px solid #fff;border-bottom: 1px solid @grey;margin: 1.5em 0;padding: 0;}
-	img {vertical-align: middle;}
-	fieldset {border: 0;.reset;}
-	h1, h2, h3, h4, h5, h6 {font-family: 'Open Sans Condensed', sans-serif;}
-	a {color: @blue;.transition;} a:hover {color: @dark;}
+*, html, body {.reset;}
+html, button, select, textarea {color: @grey;}
+body#template {background: #C0DEED url("../img/body.jpg") repeat-x 0 0;color: @dark;font-size: 1em;line-height: 1.4;font: 15px/22px "Open Sans", Helvetica, Helvetica Neue, Arial, sans-serif;}
+hr {display: block;height: 1px;border: 0;border-top: 1px solid #fff;border-bottom: 1px solid @grey;margin: 1.5em 0;padding: 0;}
+img {vertical-align: middle;}
+fieldset {border: 0;.reset;}
+h1, h2, h3, h4, h5, h6 {font-family: 'Open Sans Condensed', sans-serif;}
+a {color: @blue;.transition;} a:hover {color: @dark;}
+form {
 	input[type="text"], input[type="password"], textarea {
 		padding: 5px;background: #f5f5f5;color: @greyer;border: 1px solid @grey;
 		&:focus {background: #fff;color: @dark;}
 	}
-	input[type="submit"], input[type="reset"], button {padding: 8px;color: @dark;}
+	input[type="submit"], input[type="reset"], button, .btn {padding: 8px;color: @dark;}
+}
 
 
 /* ==========================================================================
@@ -98,6 +100,12 @@
 					&.connect a {background-position: 0 -50px;}
 					&.discover a {background-position: 0 -100px;}
 					&.me a {background-position: 0 -150px;}
+					&.search {
+						.right;
+						#search {
+							width: 200px;height: 22px;margin: 8px 0 0 0;padding: 4px;
+						}
+					}
 					&.login a {background-position: 0 -200px;}
 					&.register a {background-position: 0 -250px;}
 					&.session.right {
@@ -112,7 +120,7 @@
 							background: url("../img/arrow.png") no-repeat center bottom;border-left: none;border-right: none;
 							span.gear {.opacity(1);}
 							ul {
-								display: block;top: 50px;width: 250px;margin: 0 0 0 -120px;padding: 0 8px 8px 8px;background: url("../img/opaque.png") repeat 0 0;
+								display: block;top: 50px;width: 280px;margin: 0 0 0 -245px;padding: 0 8px 8px 8px;background: url("../img/opaque.png") repeat 0 0;
 								li {
 									.reset;float: none;text-indent: 0;border-bottom: 1px solid #eee;
 									a {
@@ -162,7 +170,7 @@
 			}
 
 			/* HOME PAGE */
-			#tweets {
+			#tweets, .tweets {
 				.reset;
 				li {
 					padding: 1em;border: 1px solid @grey;.transition(background);.borderRadius;
@@ -170,6 +178,12 @@
 						&.user {.left;font-weight: bold;}
 						&.date {.right;color: @greyer;font-size: 11px;}
 						&.tweet {}
+					}
+					a.action-reply {
+						font-size: 11px;
+						&:hover {
+							cursor: pointer;
+						}
 					}
 					&:hover {
 						background: @lightGrey;
@@ -193,7 +207,9 @@
 			}
 
 			&.profile {
+				border-top: none;
 				&.profileGlance {
+					border-top: 1px solid #fff;
 					ul.stats li:first-child {padding: .5em 1em .5em 0;}
 				}
 				#carbon {
@@ -224,12 +240,24 @@
 				}
 				form {
 					margin: 1em 0 0 0;
-					&#tweet {margin: 0;}
+					&#tweet {margin: 1em 0 0 0;}
 					#newTweet {
-						width: 230px;height: 16px;padding: .5em;background: #fff;border: 1px solid @grey;color: @greyer;resize: none;
+						width: 230px;height: 16px;padding: .5em;background: #fff;border: 1px solid @grey;color: @greyer;resize: none;overflow: hidden;
 						&:focus {color: @dark;}
 					}
 					#tweetButton{.right;margin: .5em 5px 0 0;}
+				}
+			}
+
+			#data {
+				ul {
+					.reset;list-style-type: none;
+					li {
+						margin: .5em 0;padding: 1em 0;border-bottom: 1px solid @lightGrey;
+					}
+					&.tweets {
+						li {padding: 1em;border: 1px solid @grey;}
+					}
 				}
 			}
 

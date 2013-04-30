@@ -429,7 +429,12 @@ exports.browse_categories = function(req, res) {
 // Renders the settings page functionality for the current user:
 exports.settings = function(req, res) {
 
-	res.render('users/active/settings', {title: 'Settings', func: 'settings', nav: 'settings'});
+	var user = req.session.user;
+	var message;
+	if(req.body.q) {
+		message = "<p>Seriously this doesn't work......</p>";
+	}
+	res.render('users/active/settings', {title: 'Settings', func: 'settings', nav: 'settings', user: user, message: message});
 
 };
 

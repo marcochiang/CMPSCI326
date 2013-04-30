@@ -99,6 +99,7 @@ app.get('/discover/find_friends', requiresLogin, user.find_friends);
 app.get('/discover/browse_categories', requiresLogin, user.browse_categories);
 
 app.get('/messages', requiresLogin, user.messages);
+app.post('/settings', requiresLogin, user.settings);
 app.get('/settings', requiresLogin, user.settings);
 
 app.get('/search', requiresLogin, user.search);
