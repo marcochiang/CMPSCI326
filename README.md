@@ -33,6 +33,19 @@ Here is a list of the files and additions we made:
 * lib/users/user.js
 	- Lots of functions added in the user lib directory to support creating new users, looking them up in the fake user db, authorizing them, etc.
 	- New functions were also added to support the following/unfollowing functionality.
+* views/users/active/messages.ejs
+	- New view to view messages sent from the new messaging feature.
+* views/users/active/sendMessage.ejs
+	- New view which is the chatroom type of popup that allows users to send direct and instant messages to one other user.
+* views/users/search.ejs
+	- Created a new search view which allows users to search for tweets based on username and hashtags.
 
+
+
+## New Feature: Private Messaging using WebSockets
+Two separate users must be logged in to private message each other. A user must visit the desired users profle and click Send a Message. A popup window will display a private chat room between the two users. Messages will also show up in the users inbox.
 
 Please note that some old/out-of-place code that will eventually be changed has been left in for this assignment.
+
+## Other notes:
+	- We've decided not to implement mentions, reply notifications, and trends.
