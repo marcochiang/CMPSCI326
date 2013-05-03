@@ -80,7 +80,6 @@ var profileRender = function(req, res, fn) {
 
 			//third series function: get the total number of users that the requested user is following
 			function (callback){
-				console.log('Going to get number following, followers, tweets!');
 				userlib.getNumFollowing(requestedUser, function(error, num){
 					if (error){
 						callback(error); //pass error to callback, stop series
@@ -136,7 +135,7 @@ var profileRender = function(req, res, fn) {
 					break;
 					case 2:
 					func = 'following';
-					userlib.getFollowing(requestedUser, self, function(error, following){
+					userlib.getFollowing(requestedUser, req.session.user, self, function(error, following){
 						if (error){
 							callback(error); //pass error to callback, stop series
 						}
@@ -148,7 +147,7 @@ var profileRender = function(req, res, fn) {
 					break;
 					case 3:
 					func = 'followers';
-					userlib.getFollowers(requestedUser, self, function(error, followers){
+					userlib.getFollowers(requestedUser, req.session.user, function(error, followers){
 						if (error){
 							callback(error); //pass error to callback, stop series
 						}
@@ -361,18 +360,39 @@ exports.activity = function(req, res) {
 
 // # Follow user functionality
 exports.follow = function(req, res) {
-
 	var id = req.params.id;
 	var user = req.session.user;
+	var page = req.body.page; //get page from client side window.location object
 	userlib.follow(user, id, function(error) {
 		if (error) {
 			console.log('Error: ' + error);
-			//res.redirect('/');
 			res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
 		}
 		else {
-			//res.redirect('/discover/who_to_follow');
-			res.redirect('/user/'+user.uname+'/following');
+			//regular expressions to search for in the page parameter to determine which page we're on
+			var who_to_follow = new RegExp("who_to_follow", "i");
+			var followers = new RegExp("followers", "i");
+
+			//follow button was clicked on "Who to follow" page
+			if (page.search(who_to_follow) !== -1){
+				res.json({status: 'OK', page: 'who_to_follow'});
+			}
+			//follow button was clicked on "Followers" page
+			else if (page.search(followers) !== -1){
+				var idx = page.lastIndexOf('/');
+				var userURL = page.substring(6, idx); //get username from URL
+				//if username from URL is the same as session user username, user is viewing own profile
+				if (user.uname === userURL){
+					res.json({status: 'OK', page: 'followers', self: true});
+				}
+				else{
+					res.json({status: 'OK', page: 'followers', self: false});
+				}
+			}
+			//otherwise, simply send status of OK
+			else{
+				res.json({status: 'OK'});
+			}
 		}
 	});
 
@@ -380,16 +400,47 @@ exports.follow = function(req, res) {
 
 // # Unfollow user functionality
 exports.unfollow = function(req, res) {
-
 	var id = req.params.id;
 	var user = req.session.user;
+	var page = req.body.page; //get page from client side window.location object
 	userlib.unfollow(user, id, function(error) {
 		if (error){
 			console.log('Error: ' + error);
 			res.render('static/error', { title: 'Error', func: 'error', nav: false, error: error});
 		}
 		else{
-			res.redirect('/user/'+user.uname+'/following');
+			//regular expressions to search for in the page parameter to determine which page we're on
+			var followers = new RegExp("followers", "i");
+			var following = new RegExp("following", "i");
+
+			//unfollow button was clicked on "Followers" page
+			if (page.search(followers) !== -1){
+				var idx = page.lastIndexOf('/');
+				var userURL = page.substring(6, idx); //get username from URL
+				//if username from URL is the same as session user username, user is viewing own profile
+				if (user.uname === userURL){
+					res.json({status: 'OK', page: 'followers', self: true});
+				}
+				else{
+					res.json({status: 'OK', page: 'followers', self: false});
+				}
+			}
+			//unfollow button was clicked on "Following" page
+			else if (page.search(following) !== -1){
+				var idx = page.lastIndexOf('/');
+				var userURL = page.substring(6, idx); //get username from URL
+				//if username from URL is the same as session user username, user is viewing own profile
+				if (user.uname === userURL){
+					res.json({status: 'OK', page: 'following', self: true});
+				}
+				else{
+					res.json({status: 'OK', page: 'following', self: false});
+				}
+			}
+			//otherwise, simply send status of OK
+			else{
+				res.json({status: 'OK'});
+			}
 		}
 	});
 

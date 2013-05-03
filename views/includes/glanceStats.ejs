@@ -1,3 +1,3 @@
-<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/"><%- numTweets %><br /><span>Tweets</span></a></li>
-<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/following"><%- numFollowing %><br /><span>Following</span></a></li>
-<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/followers"><%- numFollowers %><br /><span>Followers</span></a></li>
+<li<% if (func === "profile") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/"><span id="numTweets"><%- numTweets %></span><br /><span class="msg">Tweets</span></a></li>
+<li<% if (func === "following") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/following"><span id="numFollowing"><%- numFollowing %></span><br /><span class="msg">Following</span></a></li>
+<li<% if (func === "followers") { %> class="active"<% } %>><a href="/user/<%= user.uname %>/followers"><span id="numFollowers"><%- numFollowers %></span><br /><span class="msg">Followers</span></a></li>

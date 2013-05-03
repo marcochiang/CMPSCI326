@@ -99,34 +99,143 @@ $('form#tweet').click(function(event)
 	=========================
 	*/
 
+//handler for cick event on "Follow" button
+function followHandler(event){
+	event.preventDefault(); //prevent normal form submission
 
-// Follow button clicked --> change action of form
-$('form#follow button').click(function(event)
-{
-	var followID = $(this).val();
-	$('form#follow').attr("action", "/follow/" + followID);
-	$(this).text("Following");
-});
+	var button = $(this); //follow button
+	var buttonID = button.attr("id"); //this ID determines where follow button was clicked
+	var followID = button.val();
+	var form = button.parents("form"); 
 
-// Unfollow button clicked --> change action of form
-$('form#unfollow button').click(function(event)
-{
-	var followID = $(this).val();
-	//alert(followID);
-	$('form#unfollow').attr("action", "/unfollow/" + followID);
-	//$(this).text("Following");
-});
+	//AJAX request to enter follows mapping in DB
+	var req = $.ajax({
+		type : 'POST',
+		url  : '/follow/'+followID,
+		data : {page: window.location.pathname},
+		dataType : 'json'
+	});
+	req.done(function(data){
+		//change form from follow to unfollow -- don't necessarily need to do this in order for everything to work
+		form.attr("name", "unfollow");
+		form.attr("id", "unfollow");
+
+		button.text("Following");
+		//button hover property
+		button.on("mouseenter", function(event){
+			button.text("Unfollow");
+		});
+
+		button.on("mouseleave", function(event){
+			button.text("Following");
+		});
+
+		//button now references unfollow form -- don't necessarily need to do this in order for everything to work
+		button.attr("form", "unfollow");
+		button.off("click"); //turn off original click event
+		button.click(unfollowHandler); //now, button click should unfollow instead of follow
+
+		//update profileSidebar by incrementing number of users following
+		var profFollowing = parseInt($('span#sideNumFollowing').html());
+		$('span#sideNumFollowing').html(profFollowing+1);
+
+		//follow button was clicked on user's profile page
+		if (buttonID == "profileFollow"){
+			button.attr("id", "profileUnfollow"); //switch ID
+			var old = parseInt($('span#numFollowers').html());
+			$('span#numFollowers').html(old+1);
+		}
+		else{
+			//follow button was clicked on user's who_to_follow page
+			if (data.page == 'who_to_follow'){
+				//remove username from the list
+				$('li#'+followID).remove();
+			}
+			//follow button was clicked on user's followers page
+			else if (data.page === 'followers'){
+				//if on your own profile page, update your profile stats by incrementing number following
+				if (data.self ==  true){
+					var old = parseInt($('span#numFollowing').html());
+					$('span#numFollowing').html(old+1);
+				}
+			}
+		}
+	});
+}
+
+$('form#follow button').on("click", followHandler);
+
+//handler for cick event on "Unfollow" button
+function unfollowHandler(event){
+	event.preventDefault(); //prevent normal form submission
+
+	var button = $(this); //unfollow button
+	var buttonID = button.attr("id");
+	var followID = button.val();
+	var form = button.parents("form"); 
+
+	//AJAX request to remove follows mapping in DB
+	var req = $.ajax({
+		type : 'POST',
+		url  : '/unfollow/'+followID,
+		data : {page: window.location.pathname},
+		dataType : 'json'
+	});
+	req.done(function(data){
+		//change form from unfollow to follow -- don't necessarily need to do this in order for everything to work
+		form.attr("name", "follow");
+		form.attr("id", "follow");
+
+		button.off("mouseenter");
+		button.off("mouseleave");
+		button.text("Follow");
+
+		//button now references follow form -- don't necessarily need to do this in order for everything to work
+		button.attr("form", "follow"); 
+		button.off("click"); //turn off original click event
+		button.click(followHandler); //now, button click should follow instead of unfollow
+
+		//update profileSidebar by decrementing total number of users following
+		var profFollowing = parseInt($('span#sideNumFollowing').html());
+		$('span#sideNumFollowing').html(profFollowing-1);
+
+		//unfollow button was clicked on user's profile page
+		if (buttonID == "profileUnfollow"){
+			button.attr("id", "profileFollow"); //switch ID
+			var old = parseInt($('span#numFollowers').html());
+			$('span#numFollowers').html(old-1);
+		}
+		else{
+			//unfollow button was clicked on user's followers page
+			if (data.page === 'followers'){
+				//if on your own profile page, update your profile stats by decrementing number following
+				if (data.self ==  true){
+					var old = parseInt($('span#numFollowing').html());
+					$('span#numFollowing').html(old-1);
+				}
+			}
+			else if (data.page === 'following'){
+				//if on your own profile page, update your profile stats by decrementing number following
+				if (data.self ==  true){
+					var old = parseInt($('span#numFollowing').html());
+					$('span#numFollowing').html(old-1);
+					$('li#'+followID).remove();
+				}
+			}
+		}
+	});
+}
+
+$('form#unfollow button').on("click", unfollowHandler);
 
 // Hover event on Unfollow button
-$('form#unfollow button').hover(
-	function(event)
-	{
-		$(this).text("Unfollow");
-	},
-	function(event)
-	{
-		$(this).text("Following");
-	});
+$('form#unfollow button').on("mouseenter", function(event){
+	$(this).text("Unfollow");
+});
+
+$('form#unfollow button').on("mouseleave", function(event){
+	$(this).text("Following");
+});
 
 /*
 
@@ -216,7 +325,7 @@ PostButton.prototype = {
 	}};
 
 //load data into profileSidebar
-function loadProfileSideBar(){
+function loadProfileSideStats(){
 	$.ajax({
 		type : 'POST',
 		url  : '/loadProfile',
@@ -229,15 +338,15 @@ function loadProfileSideBar(){
 		var username = data.username;
 
 		var tweetLI = $('<li>');
-		tweetLI.append('<a href="/user/' + username + '">' + numTweets + '<br /><span>Tweets</span></a>');
+		tweetLI.append('<a href="/user/' + username + '"><span id="sideNumTweets">' + numTweets + '</span><br /><span class="msg">Tweets</span></a>');
 		$('ul#profileSidebar').append(tweetLI);
 
 		var followingLI = $('<li>');
-		followingLI.append('<a href="/user/' + username + '/following">' + numFollowing + '<br /><span>Following</span></a>');
+		followingLI.append('<a href="/user/' + username + '/following"><span id="sideNumFollowing">' + numFollowing + '</span><br /><span class="msg">Following</span></a>');
 		$('ul#profileSidebar').append(followingLI);
 
 		var followersLI = $('<li>');
-		followersLI.append('<a href="/user/' + username + '/followers">' + numFollowers + '<br /><span>Followers</span></a>');
+		followersLI.append('<a href="/user/' + username + '/followers"><span id="sideNumFollowers">' + numFollowers + '</span><br /><span class="msg">Followers</span></a>');
 		$('ul#profileSidebar').append(followersLI);
 	});
 }
@@ -264,7 +373,7 @@ $(document).ready(function() {
 
 	//check for existence of <ul> in profileSidebar --> if so, load it with number of tweets, followers, following..
 	if ($('ul#profileSidebar').length > 0){
-		loadProfileSideBar();
+		loadProfileSideStats();
 	}
 
 	// Get the list view that the chat client
