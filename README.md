@@ -41,12 +41,13 @@ Here is a list of the files and additions we made:
 	- Created a new search view which allows users to search for tweets based on hashtags.
 * views/static/about.ejs
 	- Added information about the team and our goals.
-
+* js/main.js:
+	- Added new functions to update the following/followers count by ajax
 
 
 
 ## New Feature: Private Messaging using WebSockets
-Two separate users must be logged in to private message each other. A user must visit the desired users profle and click Send a Message. A popup window will display a private chat room between the two users. Messages will also show up in the users inbox.
+Two separate users must be logged in to private message each other. A user must visit the desired users profle and click Send a Message. A popup window will display a private chat room between the two users. Messages will also show up in the users inbox. We decided to go with this new feature instead of the text editing feature.
 
 Please note that some old/out-of-place code that will eventually be changed has been left in for this assignment.
 
