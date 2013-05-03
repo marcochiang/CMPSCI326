@@ -38,7 +38,10 @@ Here is a list of the files and additions we made:
 * views/users/active/sendMessage.ejs
 	- New view which is the chatroom type of popup that allows users to send direct and instant messages to one other user.
 * views/users/search.ejs
-	- Created a new search view which allows users to search for tweets based on username and hashtags.
+	- Created a new search view which allows users to search for tweets based on hashtags.
+* views/static/about.ejs
+	- Added information about the team and our goals.
+
 
 
 
