@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>jquery.tipsy.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "Users/jonathangodin/Desktop/CMPSCI326/public/js/jquerytipsy.js", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+          <h1>jquery.tipsy.js</h1>
+        </td>
+        <td class="code highlight"></td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-1" id="section-1">&#182;</a>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">tipsy</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="nx">options</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({},</span> <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">tipsy</span><span class="p">.</span><span class="nx">defaults</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+        
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            
+            <span class="kd">var</span> <span class="nx">opts</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">tipsy</span><span class="p">.</span><span class="nx">elementOptions</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+            
+            <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">hover</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+
+                <span class="nx">$</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;cancel.tipsy&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+
+                <span class="kd">var</span> <span class="nx">tip</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;active.tipsy&#39;</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">tip</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">tip</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;tipsy&quot;&gt;&lt;div class=&quot;tipsy-inner&quot;/&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+                    <span class="nx">tip</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;absolute&#39;</span><span class="p">,</span> <span class="nx">zIndex</span><span class="o">:</span> <span class="mi">100000</span><span class="p">});</span>
+                    <span class="nx">$</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;active.tipsy&#39;</span><span class="p">,</span> <span class="nx">tip</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;original-title&#39;</span><span class="p">))</span> <span class="o">!=</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;original-title&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">).</span><span class="nx">removeAttr</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="kd">var</span> <span class="nx">title</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">title</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">title</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">title</span> <span class="o">==</span> <span class="s1">&#39;title&#39;</span> <span class="o">?</span> <span class="s1">&#39;original-title&#39;</span> <span class="o">:</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">title</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">title</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">title</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">title</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="nx">tip</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;.tipsy-inner&#39;</span><span class="p">)[</span><span class="nx">opts</span><span class="p">.</span><span class="nx">html</span> <span class="o">?</span> <span class="s1">&#39;html&#39;</span> <span class="o">:</span> <span class="s1">&#39;text&#39;</span><span class="p">](</span><span class="nx">title</span> <span class="o">||</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">fallback</span><span class="p">);</span>
+
+                <span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({},</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">offset</span><span class="p">(),</span> <span class="p">{</span><span class="nx">width</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">});</span>
+                <span class="nx">tip</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;tipsy&#39;</span><span class="p">;</span> <span class="c1">// reset classname in case of dynamic gravity</span>
+                <span class="nx">tip</span><span class="p">.</span><span class="nx">remove</span><span class="p">().</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">left</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">visibility</span><span class="o">:</span> <span class="s1">&#39;hidden&#39;</span><span class="p">,</span> <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;block&#39;</span><span class="p">}).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">actualWidth</span> <span class="o">=</span> <span class="nx">tip</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">offsetWidth</span><span class="p">,</span> <span class="nx">actualHeight</span> <span class="o">=</span> <span class="nx">tip</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">offsetHeight</span><span class="p">;</span>
+                <span class="kd">var</span> <span class="nx">gravity</span> <span class="o">=</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">gravity</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">gravity</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="o">:</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">gravity</span><span class="p">;</span>
+
+                <span class="k">switch</span> <span class="p">(</span><span class="nx">gravity</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="k">case</span> <span class="s1">&#39;n&#39;</span><span class="o">:</span>
+                        <span class="nx">tip</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">top</span> <span class="o">+</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">left</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">left</span> <span class="o">+</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="nx">actualWidth</span> <span class="o">/</span> <span class="mi">2</span><span class="p">}).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;tipsy-north&#39;</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">case</span> <span class="s1">&#39;s&#39;</span><span class="o">:</span>
+                        <span class="nx">tip</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">top</span> <span class="o">-</span> <span class="nx">actualHeight</span><span class="p">,</span> <span class="nx">left</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">left</span> <span class="o">+</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="nx">actualWidth</span> <span class="o">/</span> <span class="mi">2</span><span class="p">}).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;tipsy-south&#39;</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">case</span> <span class="s1">&#39;e&#39;</span><span class="o">:</span>
+                        <span class="nx">tip</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">top</span> <span class="o">+</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="nx">actualHeight</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">left</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">left</span> <span class="o">-</span> <span class="nx">actualWidth</span><span class="p">}).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;tipsy-east&#39;</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">case</span> <span class="s1">&#39;w&#39;</span><span class="o">:</span>
+                        <span class="nx">tip</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">top</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">top</span> <span class="o">+</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="nx">actualHeight</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">left</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">left</span> <span class="o">+</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">width</span><span class="p">}).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;tipsy-west&#39;</span><span class="p">);</span>
+                        <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">fade</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">tip</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">opacity</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">display</span><span class="o">:</span> <span class="s1">&#39;block&#39;</span><span class="p">,</span> <span class="nx">visibility</span><span class="o">:</span> <span class="s1">&#39;visible&#39;</span><span class="p">}).</span><span class="nx">animate</span><span class="p">({</span><span class="nx">opacity</span><span class="o">:</span> <span class="mf">0.8</span><span class="p">});</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">tip</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span><span class="nx">visibility</span><span class="o">:</span> <span class="s1">&#39;visible&#39;</span><span class="p">});</span>
+                <span class="p">}</span>
+
+            <span class="p">},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">$</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;cancel.tipsy&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+                <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+                <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s1">&#39;cancel.tipsy&#39;</span><span class="p">))</span> <span class="k">return</span><span class="p">;</span>
+                    <span class="kd">var</span> <span class="nx">tip</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="s1">&#39;active.tipsy&#39;</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">fade</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">tip</span><span class="p">.</span><span class="nx">stop</span><span class="p">().</span><span class="nx">fadeOut</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span> <span class="p">});</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                        <span class="nx">tip</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+                    <span class="p">}</span>
+                <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+
+            <span class="p">});</span>
+            
+        <span class="p">});</span>
+        
+    <span class="p">};</span>
+    
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Overwrite this method to provide options on a per-element basis.
+For example, you could store the gravity in a 'tipsy-gravity' attribute:
+return $.extend({}, options, {gravity: $(ele).attr('tipsy-gravity') || 'n' });
+(remember - do not modify 'options' in place!)</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">tipsy</span><span class="p">.</span><span class="nx">elementOptions</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ele</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">$</span><span class="p">.</span><span class="nx">metadata</span> <span class="o">?</span> <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">({},</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="nx">ele</span><span class="p">).</span><span class="nx">metadata</span><span class="p">())</span> <span class="o">:</span> <span class="nx">options</span><span class="p">;</span>
+    <span class="p">};</span>
+    
+    <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">tipsy</span><span class="p">.</span><span class="nx">defaults</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">fade</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">fallback</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+        <span class="nx">gravity</span><span class="o">:</span> <span class="s1">&#39;n&#39;</span><span class="p">,</span>
+        <span class="nx">html</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;title&#39;</span>
+    <span class="p">};</span>
+    
+    <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">tipsy</span><span class="p">.</span><span class="nx">autoNS</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">offset</span><span class="p">().</span><span class="nx">top</span> <span class="o">&gt;</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">scrollTop</span><span class="p">()</span> <span class="o">+</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;s&#39;</span> <span class="o">:</span> <span class="s1">&#39;n&#39;</span><span class="p">;</span>
+    <span class="p">};</span>
+    
+    <span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">tipsy</span><span class="p">.</span><span class="nx">autoWE</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">offset</span><span class="p">().</span><span class="nx">left</span> <span class="o">&gt;</span> <span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">scrollLeft</span><span class="p">()</span> <span class="o">+</span> <span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39;e&#39;</span> <span class="o">:</span> <span class="s1">&#39;w&#39;</span><span class="p">;</span>
+    <span class="p">};</span>
+    
+<span class="p">})(</span><span class="nx">jQuery</span><span class="p">);</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

@@ -146,6 +146,7 @@ defined by the view:</p>
 <span class="kd">function</span> <span class="nx">chatTextArea</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">publisher</span><span class="p">());</span>
   <span class="nx">obj</span><span class="p">.</span><span class="nx">elm</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#chat-text-area&#39;</span><span class="p">);</span>
+  <span class="nx">obj</span><span class="p">.</span><span class="nx">user</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#username&#39;</span><span class="p">);</span>
 
 
 </pre></div>
@@ -162,6 +163,10 @@ defined by the view:</p>
   <span class="nx">obj</span><span class="p">.</span><span class="nx">getText</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">elm</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
   <span class="p">};</span>
+
+  <span class="nx">obj</span><span class="p">.</span><span class="nx">getUser</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+  <span class="p">}</span>
 
 
 </pre></div>
@@ -286,8 +291,8 @@ the view:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nx">obj</span><span class="p">.</span><span class="nx">addMessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;&#39;</span><span class="p">);</span>
-    <span class="nx">next</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">next</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;li class=&quot;message&quot;&gt;&#39;</span><span class="p">);</span>
+    <span class="nx">next</span><span class="p">.</span><span class="nx">html</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
     <span class="nx">obj</span><span class="p">.</span><span class="nx">elm</span><span class="p">.</span><span class="nx">prepend</span><span class="p">(</span><span class="nx">next</span><span class="p">);</span>
   <span class="p">};</span>
 
@@ -354,7 +359,8 @@ our callback when it is ready to do so:</p>
 <p>Grab the textarea's text and send to server:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">text</span><span class="p">.</span><span class="nx">getText</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">text</span><span class="p">.</span><span class="nx">getUser</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;&lt;a href=\&quot;/user/&quot;</span> <span class="o">+</span> <span class="nx">user</span> <span class="o">+</span> <span class="s2">&quot;/\&quot; javascript=\&quot;parent.window.location.href=\&quot;/user/&quot;</span> <span class="o">+</span> <span class="nx">user</span> <span class="o">+</span> <span class="s2">&quot;\&quot;\&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">user</span> <span class="o">+</span> <span class="s2">&quot;&lt;/a&gt;&quot;</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">text</span><span class="p">.</span><span class="nx">getText</span><span class="p">();</span>
     <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">post</span> <span class="o">:</span> <span class="nx">message</span> <span class="p">});</span>
 
 </pre></div>

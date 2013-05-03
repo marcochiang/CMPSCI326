@@ -264,7 +264,6 @@ Redirect to main.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">register</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-
   <span class="kd">var</span> <span class="nx">user</span>  <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
 
   <span class="k">if</span> <span class="p">(</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//redirect to home if there is a current session</span>
@@ -307,7 +306,7 @@ Redirect to main.</p>
   <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">password</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">pass</span><span class="p">;</span>
   <span class="nx">userlib</span><span class="p">.</span><span class="nx">createUser</span><span class="p">(</span><span class="nx">email1</span><span class="p">,</span> <span class="nx">email2</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
 
 </pre></div>
         </td>
@@ -335,9 +334,7 @@ redirected route <code>/user/login</code>.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
-<p>Store the user in our in memory database.
-online[user.uid] = user;
-Redirect to main.</p>
+<p>redirect to main</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
