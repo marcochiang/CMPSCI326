@@ -11,7 +11,8 @@
     "sqlite3": ">= 2.1.7",
     "ejs-locals": ">= 1.x",
     "async": ">= 0.2.x",
-    "socket.io": "~0.9.14"
+    "socket.io": "~0.9.14",
+    "connect-flash": ">=0.1.x"
   },
   "engines": {
     "node": "0.10.x",
