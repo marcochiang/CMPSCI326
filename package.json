@@ -10,6 +10,7 @@
     "ejs": "~0.7.2",
     "sqlite3": ">= 2.1.7",
     "ejs-locals": ">= 1.x",
+    "async": ">= 1.x",
     "socket.io": "~0.9.14"
   },
   "engines": {
