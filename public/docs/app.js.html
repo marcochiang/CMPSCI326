@@ -196,6 +196,7 @@ res.redirect('/login?redir='+req.url);</p>
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="nx">tweet</span><span class="p">.</span><span class="nx">tweet</span><span class="p">);</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/post&#39;</span><span class="p">,</span> <span class="nx">tweet</span><span class="p">.</span><span class="nx">post</span><span class="p">);</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/check&#39;</span><span class="p">,</span> <span class="nx">tweet</span><span class="p">.</span><span class="nx">check</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/tweet/:tweetid&#39;</span><span class="p">,</span> <span class="nx">tweet</span><span class="p">.</span><span class="nx">displayTweet</span><span class="p">);</span>
 
 
 </pre></div>
@@ -205,6 +206,20 @@ res.redirect('/login?redir='+req.url);</p>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>Load profileSidebar with number of tweets, following, followers..</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/loadProfile&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">loadProfile</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
 <p>Logged Out User Routes</p>
         </td>
@@ -222,11 +237,16 @@ res.redirect('/login?redir='+req.url);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>Logged In User Routes</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/following&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">following</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/followers&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">followers</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/favorites&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">favorites</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/lists&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">lists</span><span class="p">);</span> <span class="c1">//needed??</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/message&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">sendMessage</span><span class="p">);</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/follower_requests&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">follower_requests</span><span class="p">);</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/connect&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">connect</span><span class="p">);</span>
@@ -239,7 +259,11 @@ res.redirect('/login?redir='+req.url);</p>
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/discover/browse_categories&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">browse_categories</span><span class="p">);</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/messages&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">messages</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/settings&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">settings</span><span class="p">);</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/settings&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">settings</span><span class="p">);</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/search&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">search</span><span class="p">);</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/search/process&#39;</span><span class="p">,</span> <span class="nx">requiresLogin</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">searchProcess</span><span class="p">)</span>
 
 
 </pre></div>
@@ -248,7 +272,7 @@ res.redirect('/login?redir='+req.url);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 <p>follow user</p>
         </td>
@@ -261,7 +285,7 @@ res.redirect('/login?redir='+req.url);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>unfollow user</p>
         </td>
@@ -275,17 +299,13 @@ res.redirect('/login?redir='+req.url);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>Universal User Routes</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">profile</span><span class="p">);</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/following&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">following</span><span class="p">);</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/followers&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">followers</span><span class="p">);</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/favorites&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">favorites</span><span class="p">);</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/lists&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">lists</span><span class="p">);</span> <span class="c1">//needed??</span>
-<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:user/message&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">sendMessage</span><span class="p">);</span>
+
 
 <span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
 
@@ -296,7 +316,7 @@ res.redirect('/login?redir='+req.url);</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>WebSockets/Socket.IO</p>
         </td>

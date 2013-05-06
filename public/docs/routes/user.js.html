@@ -78,6 +78,10 @@ and elements of the app.</p>
 <span class="kd">var</span> <span class="nx">actions</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../lib/users/actions.js&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">renders</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../lib/users/renders.js&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">userlib</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../lib/users/user.js&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">tweetlib</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../lib/users/tweets.js&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">async</span>   <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">searchParameter</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
 
 
 </pre></div>
@@ -87,24 +91,6 @@ and elements of the app.</p>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
-</div>
-<p>Displays list of users:</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">userlib</span><span class="p">.</span><span class="nx">list</span><span class="p">();</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/usersList&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;User List&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
-<span class="p">};</span>
-
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 <p>Profile Render helper function</p>
         </td>
@@ -119,7 +105,24 @@ and elements of the app.</p>
   <span class="kd">var</span> <span class="nx">func</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">nav</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">numFollowing</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">numFollowers</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">numTweets</span><span class="p">;</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>need to use async.series here because of problems with asynchronous JavaScript &amp; nested callbacks
+functions need to run in a serial order</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nx">async</span><span class="p">.</span><span class="nx">series</span><span class="p">([</span>
 
 </pre></div>
         </td>
@@ -129,13 +132,15 @@ and elements of the app.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
-<p>Lookup User</p>
+<p>first series function: lookup user in DB</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-    <span class="p">}</span>
+      <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+        <span class="nx">userlib</span><span class="p">.</span><span class="nx">lookup</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+          <span class="p">}</span>
+          <span class="k">else</span><span class="p">{</span>
 
 </pre></div>
         </td>
@@ -145,11 +150,16 @@ and elements of the app.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
-<p>User exists</p>
+<p>set requestedUser variable, scoped for profileRender function above
+need to do this for second series function</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">else</span> <span class="p">{</span>
-      <span class="nx">requestedUser</span> <span class="o">=</span> <span class="nx">user</span><span class="p">;</span>
+            <span class="nx">requestedUser</span> <span class="o">=</span> <span class="nx">user</span><span class="p">;</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+      <span class="p">},</span>
+
 
 </pre></div>
         </td>
@@ -159,10 +169,11 @@ and elements of the app.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
-<p>User is logged in</p>
+<p>second series function: check if session exists, and get follow/unfollow button if so</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
 
 </pre></div>
         </td>
@@ -175,11 +186,11 @@ and elements of the app.</p>
 <p>User is viewing their own profile</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">username</span> <span class="o">==</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;displaying your own profile&#39;</span><span class="p">);</span>
-          <span class="nx">self</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-          <span class="nx">nav</span> <span class="o">=</span> <span class="s1">&#39;me&#39;</span><span class="p">;</span>
-        <span class="p">}</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">requestedUser</span><span class="p">.</span><span class="nx">uname</span> <span class="o">===</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">uname</span><span class="p">){</span>
+            <span class="nx">self</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="nx">nav</span> <span class="o">=</span> <span class="s1">&#39;me&#39;</span><span class="p">;</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+          <span class="p">}</span>
 
 </pre></div>
         </td>
@@ -189,10 +200,10 @@ and elements of the app.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
-<p>User is viewing other profile</p>
+<p>User is viewing other user's profile</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">else</span> <span class="p">{</span>
+          <span class="k">else</span><span class="p">{</span>
 
 </pre></div>
         </td>
@@ -205,50 +216,236 @@ and elements of the app.</p>
 <p>Get follow/unfollow button</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-          <span class="nx">userlib</span><span class="p">.</span><span class="nx">profileButton</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">button</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+            <span class="nx">userlib</span><span class="p">.</span><span class="nx">followButton</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">requestedUser</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">button</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+              <span class="p">}</span>
+              <span class="k">else</span> <span class="p">{</span>
+                <span class="nx">followButton</span> <span class="o">=</span> <span class="nx">button</span><span class="p">;</span>
+                <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+              <span class="p">}</span>
+            <span class="p">});</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
+<p>User is not logged in</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">else</span><span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>still need to a call to the callback
+if this isn't wrapped in an else, this line might get executed while waiting for userlib.followButton to return</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+</div>
+<p>third series function: get the total number of users that the requested user is following</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+        <span class="nx">userlib</span><span class="p">.</span><span class="nx">getNumFollowing</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">num</span><span class="p">){</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+          <span class="p">}</span>
+          <span class="k">else</span><span class="p">{</span>
+            <span class="nx">numFollowing</span> <span class="o">=</span> <span class="nx">num</span><span class="p">;</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+      <span class="p">},</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>fourth series function: get the total number of users that are following the requested user</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">userlib</span><span class="p">.</span><span class="nx">getNumFollowers</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">num</span><span class="p">){</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+          <span class="p">}</span>
+          <span class="k">else</span><span class="p">{</span>
+            <span class="nx">numFollowers</span> <span class="o">=</span> <span class="nx">num</span><span class="p">;</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+      <span class="p">},</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>fifth series function: get the number of tweets of the requested user</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+        <span class="nx">tweetlib</span><span class="p">.</span><span class="nx">getNumTweets</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">num</span><span class="p">){</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+          <span class="p">}</span>
+          <span class="k">else</span><span class="p">{</span>
+            <span class="nx">numTweets</span> <span class="o">=</span> <span class="nx">num</span><span class="p">;</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+      <span class="p">},</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>sixth series function: get appropriate data and render profile page</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+
+        <span class="k">switch</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+          <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;profile&#39;</span><span class="p">;</span>
+          <span class="nx">tweetlib</span><span class="p">.</span><span class="nx">getMyTweets</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">tweets</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
             <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-              <span class="nx">followButton</span> <span class="o">=</span> <span class="nx">button</span><span class="p">;</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">tweets</span><span class="p">;</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
+          <span class="k">break</span><span class="p">;</span>
+          <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+          <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;following&#39;</span><span class="p">;</span>
+          <span class="nx">userlib</span><span class="p">.</span><span class="nx">getFollowing</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="nx">self</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">following</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">following</span><span class="p">;</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
+          <span class="k">break</span><span class="p">;</span>
+          <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
+          <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;followers&#39;</span><span class="p">;</span>
+          <span class="nx">userlib</span><span class="p">.</span><span class="nx">getFollowers</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">followers</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">followers</span><span class="p">;</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
+          <span class="k">break</span><span class="p">;</span>
+          <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
+          <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;favorites&#39;</span><span class="p">;</span>
+          <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFavorites</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">);</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+          <span class="k">break</span><span class="p">;</span>
+          <span class="k">case</span> <span class="mi">5</span><span class="o">:</span>
+          <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;requests&#39;</span><span class="p">;</span>
+          <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowerRequests</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">);</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+          <span class="k">break</span><span class="p">;</span>
+          <span class="k">case</span> <span class="mi">6</span><span class="o">:</span>
+          <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;lists&#39;</span><span class="p">;</span>
+          <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getLists</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">);</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+          <span class="k">break</span><span class="p">;</span>
+          <span class="k">default</span><span class="o">:</span>
+          <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;profile&#39;</span><span class="p">;</span>
+          <span class="nx">tweetlib</span><span class="p">.</span><span class="nx">getMyTweets</span><span class="p">(</span><span class="nx">requestedUser</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">tweets</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">display</span> <span class="o">=</span> <span class="nx">tweets</span><span class="p">;</span>
+              <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
             <span class="p">}</span>
           <span class="p">});</span>
         <span class="p">}</span>
       <span class="p">}</span>
-      <span class="k">switch</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
-        <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;profile&#39;</span><span class="p">;</span>
-        <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getTweets</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
-        <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;following&#39;</span><span class="p">;</span>
-        <span class="nx">display</span> <span class="o">=</span> <span class="nx">userlib</span><span class="p">.</span><span class="nx">getFollowing</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
-        <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;followers&#39;</span><span class="p">;</span>
-        <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowers</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
-        <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;favorites&#39;</span><span class="p">;</span>
-        <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFavorites</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="mi">5</span><span class="o">:</span>
-        <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;requests&#39;</span><span class="p">;</span>
-        <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getFollowerRequests</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-        <span class="k">case</span> <span class="mi">6</span><span class="o">:</span>
-        <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;lists&#39;</span><span class="p">;</span>
-        <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getLists</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-        <span class="k">break</span><span class="p">;</span>
-        <span class="k">default</span><span class="o">:</span>
-        <span class="nx">func</span> <span class="o">=</span> <span class="s1">&#39;profile&#39;</span><span class="p">;</span>
-        <span class="nx">display</span> <span class="o">=</span> <span class="nx">actions</span><span class="p">.</span><span class="nx">getTweets</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+    <span class="p">],</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>callback function: called after all above functions complete</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">results</span><span class="p">){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>render error page</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;static/error&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">error</span><span class="o">:</span> <span class="nx">error</span><span class="p">});</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">results</span><span class="p">[</span><span class="mi">5</span><span class="p">]){</span> <span class="c1">//populated after third function completes</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span>
+        <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="nx">func</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="nx">nav</span><span class="p">,</span> <span class="nx">numFollowing</span><span class="o">:</span> <span class="nx">numFollowing</span><span class="p">,</span> <span class="nx">numFollowers</span><span class="o">:</span> <span class="nx">numFollowers</span><span class="p">,</span> <span class="nx">numTweets</span><span class="o">:</span> <span class="nx">numTweets</span><span class="p">,</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">requestedUser</span><span class="p">,</span> <span class="nx">buttons</span><span class="o">:</span> <span class="nx">followButton</span><span class="o">+</span><span class="nx">messageButton</span><span class="p">});</span>
       <span class="p">}</span>
     <span class="p">}</span>
-  <span class="p">});</span>
-
-  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/profile&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="nx">func</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="nx">nav</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">requestedUser</span><span class="p">,</span> <span class="nx">buttons</span><span class="o">:</span> <span class="nx">followButton</span><span class="o">+</span><span class="nx">messageButton</span><span class="p">});</span>
-
+  <span class="p">);</span>
 <span class="p">};</span>
 
 
@@ -283,7 +480,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>Renders the users that the current user is following:</p>
         </td>
@@ -302,7 +499,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>Renders the followers of the current user:</p>
         </td>
@@ -320,7 +517,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>Renders the current user's favorited tweets:</p>
         </td>
@@ -338,7 +535,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>Renders the current user's follower requests:</p>
         </td>
@@ -352,13 +549,13 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Ensures that only you can view your own follower requests</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">==</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span> <span class="o">==</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">uname</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">profileRender</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">else</span> <span class="p">{</span>
@@ -378,7 +575,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>Renders the current user's lists:</p>
         </td>
@@ -387,6 +584,133 @@ and elements of the app.</p>
 
   <span class="nx">profileRender</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
 
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>Loads data into the profileSidebar:</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">loadProfile</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">numFollowing</span><span class="p">,</span> <span class="nx">numFollowers</span><span class="p">,</span> <span class="nx">numTweets</span><span class="p">;</span>
+
+  <span class="nx">async</span><span class="p">.</span><span class="nx">series</span><span class="p">([</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>first series function: get the total number of users that the requested user is following</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+      <span class="nx">userlib</span><span class="p">.</span><span class="nx">getNumFollowing</span><span class="p">(</span><span class="nx">u</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">num</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">numFollowing</span> <span class="o">=</span> <span class="nx">num</span><span class="p">;</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">},</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+</div>
+<p>second series function: get the total number of users that are following the requested user</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">userlib</span><span class="p">.</span><span class="nx">getNumFollowers</span><span class="p">(</span><span class="nx">u</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">num</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">numFollowers</span> <span class="o">=</span> <span class="nx">num</span><span class="p">;</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">},</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+</div>
+<p>third series function: get the number of tweets of the requested user</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+      <span class="nx">tweetlib</span><span class="p">.</span><span class="nx">getNumTweets</span><span class="p">(</span><span class="nx">u</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">num</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span> <span class="c1">//pass error to callback, stop series</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">numTweets</span> <span class="o">=</span> <span class="nx">num</span><span class="p">;</span>
+          <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+
+  <span class="p">],</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+</div>
+<p>callback function: called after all above functions complete</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">results</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+</div>
+<p>render error page</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;static/error&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">error</span><span class="o">:</span> <span class="nx">error</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">results</span><span class="p">[</span><span class="mi">2</span><span class="p">]){</span> <span class="c1">//populated after third function completes</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">numFollowing</span><span class="o">:</span> <span class="nx">numFollowing</span><span class="p">,</span> <span class="nx">numFollowers</span><span class="o">:</span> <span class="nx">numFollowers</span><span class="p">,</span> <span class="nx">numTweets</span><span class="o">:</span> <span class="nx">numTweets</span><span class="p">,</span> <span class="nx">username</span><span class="o">:</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uname</span><span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="p">);</span>
 <span class="p">};</span>
 
 
@@ -413,7 +737,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>Renders the connect view:</p>
         </td>
@@ -432,7 +756,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>Renders tweets that the current user has been mentioned in:</p>
         </td>
@@ -467,7 +791,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>Renders the discover view:</p>
         </td>
@@ -486,7 +810,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <p>Renders the current user's activity:</p>
         </td>
@@ -514,16 +838,94 @@ and elements of the app.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">follow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-
   <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">page</span><span class="p">;</span> <span class="c1">//get page from client side window.location object</span>
   <span class="nx">userlib</span><span class="p">.</span><span class="nx">follow</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;static/error&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">error</span><span class="o">:</span> <span class="nx">error</span><span class="p">});</span>
     <span class="p">}</span>
     <span class="k">else</span> <span class="p">{</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/discover/who_to_follow&#39;</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+</div>
+<p>regular expressions to search for in the page parameter to determine which page we're on</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="kd">var</span> <span class="nx">who_to_follow</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">&quot;who_to_follow&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">followers</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">&quot;followers&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+</div>
+<p>follow button was clicked on "Who to follow" page</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">page</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">who_to_follow</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span> <span class="nx">page</span><span class="o">:</span> <span class="s1">&#39;who_to_follow&#39;</span><span class="p">});</span>
+      <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+</div>
+<p>follow button was clicked on "Followers" page</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">page</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">followers</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">idx</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">userURL</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="nx">idx</span><span class="p">);</span> <span class="c1">//get username from URL</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+</div>
+<p>if username from URL is the same as session user username, user is viewing own profile</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">uname</span> <span class="o">===</span> <span class="nx">userURL</span><span class="p">){</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span> <span class="nx">page</span><span class="o">:</span> <span class="s1">&#39;followers&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span> <span class="nx">page</span><span class="o">:</span> <span class="s1">&#39;followers&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+</div>
+<p>otherwise, simply send status of OK</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">});</span>
+      <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">});</span>
 
@@ -545,16 +947,113 @@ and elements of the app.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">unfollow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-
   <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">page</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">page</span><span class="p">;</span> <span class="c1">//get page from client side window.location object</span>
   <span class="nx">userlib</span><span class="p">.</span><span class="nx">unfollow</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;static/error&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">error</span><span class="o">:</span> <span class="nx">error</span><span class="p">});</span>
     <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/user/&#39;</span><span class="o">+</span><span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="o">+</span><span class="s1">&#39;/following&#39;</span><span class="p">);</span>
+    <span class="k">else</span><span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+</div>
+<p>regular expressions to search for in the page parameter to determine which page we're on</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="kd">var</span> <span class="nx">followers</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">&quot;followers&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">following</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">&quot;following&quot;</span><span class="p">,</span> <span class="s2">&quot;i&quot;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+</div>
+<p>unfollow button was clicked on "Followers" page</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">page</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">followers</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">idx</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">userURL</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="nx">idx</span><span class="p">);</span> <span class="c1">//get username from URL</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
+</div>
+<p>if username from URL is the same as session user username, user is viewing own profile</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">uname</span> <span class="o">===</span> <span class="nx">userURL</span><span class="p">){</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span> <span class="nx">page</span><span class="o">:</span> <span class="s1">&#39;followers&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span> <span class="nx">page</span><span class="o">:</span> <span class="s1">&#39;followers&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
+</div>
+<p>unfollow button was clicked on "Following" page</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">page</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">following</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">idx</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">userURL</span> <span class="o">=</span> <span class="nx">page</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="nx">idx</span><span class="p">);</span> <span class="c1">//get username from URL</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
+</div>
+<p>if username from URL is the same as session user username, user is viewing own profile</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">uname</span> <span class="o">===</span> <span class="nx">userURL</span><span class="p">){</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span> <span class="nx">page</span><span class="o">:</span> <span class="s1">&#39;following&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span> <span class="nx">page</span><span class="o">:</span> <span class="s1">&#39;following&#39;</span><span class="p">,</span> <span class="nx">self</span><span class="o">:</span> <span class="kc">false</span><span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-50" id="section-50">&#182;</a>
+</div>
+<p>otherwise, simply send status of OK</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">});</span>
+      <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">});</span>
 
@@ -567,7 +1066,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-51" id="section-51">&#182;</a>
 </div>
 <p>Renders who to follow suggestions for the current user:</p>
         </td>
@@ -575,9 +1074,15 @@ and elements of the app.</p>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">who_to_follow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
 
   <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">display</span> <span class="o">=</span> <span class="nx">userlib</span><span class="p">.</span><span class="nx">who_to_follow</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/active/discover&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Who to Follow&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;who_to_follow&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;discover&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
-
+  <span class="nx">userlib</span><span class="p">.</span><span class="nx">who_to_follow</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">display</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;static/error&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">error</span><span class="o">:</span> <span class="nx">error</span><span class="p">});</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/active/discover&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Who to Follow&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;who_to_follow&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;discover&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">display</span><span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
 <span class="p">};</span>
 
 
@@ -587,7 +1092,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-52" id="section-52">&#182;</a>
 </div>
 <p>Renders the find friends functionality for the current user:</p>
         </td>
@@ -606,7 +1111,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-53" id="section-53">&#182;</a>
 </div>
 <p>Renders the browse categories functionality for the current user:</p>
         </td>
@@ -625,14 +1130,19 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-54" id="section-54">&#182;</a>
 </div>
 <p>Renders the settings page functionality for the current user:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">settings</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
 
-  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/active/settings&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Settings&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;settings&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;settings&#39;</span><span class="p">});</span>
+  <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">message</span><span class="p">;</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">q</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;&lt;p&gt;Seriously this doesn&#39;t work......&lt;/p&gt;&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/active/settings&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Settings&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;settings&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;settings&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="nx">message</span><span class="p">});</span>
 
 <span class="p">};</span>
 
@@ -662,7 +1172,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-56" id="section-56">&#182;</a>
 </div>
 <p>Ensures that only you can view your own follower requests</p>
         </td>
@@ -672,7 +1182,8 @@ and elements of the app.</p>
       <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/user/&#39;</span><span class="o">+</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">else</span> <span class="p">{</span>
-      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/active/sendMessage&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Message&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;sendMessage&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;messages&#39;</span><span class="p">});</span>
+      <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/active/sendMessage&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Message&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;sendMessage&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;messages&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span> <span class="nx">user</span><span class="p">});</span>
     <span class="p">}</span>
   <span class="p">}</span>
   <span class="k">else</span> <span class="p">{</span>
@@ -688,7 +1199,7 @@ and elements of the app.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-57" id="section-57">&#182;</a>
 </div>
 <p>Renders the messages page functionality for the current user:</p>
         </td>
@@ -696,6 +1207,85 @@ and elements of the app.</p>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">messages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
 
   <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/active/messages&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Messages&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;messages&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;messages&#39;</span><span class="p">});</span>
+
+<span class="p">};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">search</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">user</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">){</span><span class="c1">//session defined</span>
+    <span class="nx">tweetlib</span><span class="p">.</span><span class="nx">getSearchTweets</span><span class="p">(</span><span class="nx">u</span><span class="p">,</span> <span class="nx">searchParameter</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">tweets</span><span class="p">){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-58" id="section-58">&#182;</a>
+</div>
+<p>render error page</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;static/error&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Error&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">error</span><span class="o">:</span> <span class="nx">error</span><span class="p">});</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;users/search&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Search&#39;</span><span class="p">,</span> <span class="nx">func</span><span class="o">:</span> <span class="s1">&#39;search&#39;</span><span class="p">,</span> <span class="nx">nav</span><span class="o">:</span> <span class="s1">&#39;search&#39;</span><span class="p">,</span> <span class="nx">param</span><span class="o">:</span> <span class="nx">searchParameter</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">tweets</span><span class="p">});</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+<span class="p">};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">searchProcess</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-59" id="section-59">&#182;</a>
+</div>
+<p>Pull the values from the form.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="kd">var</span> <span class="nx">myText</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">search</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-60" id="section-60">&#182;</a>
+</div>
+<p>console.log('myText: ' + myText);</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="nx">searchParameter</span> <span class="o">=</span> <span class="nx">myText</span><span class="p">;</span>
+<span class="nx">res</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s1">&#39;/search&#39;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-61" id="section-61">&#182;</a>
+</div>
+<p>res.render('users/search', {title: 'Search', func: 'search', nav: 'search', data: myText});</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 
 <span class="p">};</span>
 </pre></div>

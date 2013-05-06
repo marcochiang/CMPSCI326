@@ -21,11 +21,14 @@
       <div class="heading h1">
         <a href="#user-library">User Library</a>
       </div>
-      <div class="heading h2">
-        <a href="#user-objects">User Objects</a>
+      <div class="heading h3">
+        <a href="#who-to-follow">Who To Follow</a>
       </div>
       <div class="heading h3">
-        <a href="#following-list">Following List</a>
+        <a href="#following">Following</a>
+      </div>
+      <div class="heading h3">
+        <a href="#followers">Followers</a>
       </div>
     </div>
   </div>
@@ -42,25 +45,9 @@
   </h1>
 </div>
 
-
-<p>var LinkedList = require('linkedlist');</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre></pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
-</div>
-<p>Array Remove - By John Resig (MIT Licensed)</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">removeElement</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">rest</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">slice</span><span class="p">((</span><span class="nx">to</span> <span class="o">||</span> <span class="nx">from</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="nx">from</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="nx">from</span> <span class="o">:</span> <span class="nx">from</span><span class="p">;</span>
-  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">push</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">rest</span><span class="p">);</span>
-<span class="p">};</span>
+        <td class="code highlight"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">sqlite3</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;sqlite3&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">async</span>   <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">);</span>
 
 
 </pre></div>
@@ -68,21 +55,40 @@
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="user-objects">
-  <h2>
-    <a href="#user-objects" class="pilcrow">&#182;</a>
-    User Objects
-  </h2>
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
 </div>
-
+<p>Connect to the database:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="kd">function</span> <span class="nx">User</span><span class="p">(</span><span class="nx">email</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">role</span><span class="p">,</span> <span class="nx">uid</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">email</span> <span class="o">=</span> <span class="nx">email</span><span class="p">;</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">username</span> <span class="o">=</span> <span class="nx">username</span><span class="p">;</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">password</span><span class="p">;</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">role</span> <span class="o">=</span> <span class="nx">role</span><span class="p">;</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">uid</span> <span class="o">=</span> <span class="nx">uid</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">sqlite3</span><span class="p">.</span><span class="nx">Database</span><span class="p">(</span><span class="s1">&#39;./data/twitter.db&#39;</span><span class="p">);</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>Creates a user and adds it to the user db</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">createUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">email1</span><span class="p">,</span> <span class="nx">email2</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">email1</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that email was entered</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;Please enter an email address.&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">email1</span> <span class="o">!==</span> <span class="nx">email2</span><span class="p">){</span> <span class="c1">//check that emails match</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;Emails do not match.&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">username</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that username was entered</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;Please enter a username.&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">password</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that password was entered</span>
+    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;Please enter a password.&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span><span class="p">{</span>
 
 </pre></div>
         </td>
@@ -92,12 +98,19 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
-<p>this.followList = new LinkedList();</p>
+<p>check if requested username already exists in the DB</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">this</span><span class="p">.</span><span class="nx">followList</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
-<span class="p">}</span>
-
+    <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;select * from users where uname = ?&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">username</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">row</span><span class="p">){</span> <span class="c1">//username already exists</span>
+          <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">row</span><span class="p">.</span><span class="nx">uname</span><span class="p">;</span>
+          <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;The username &#39;</span> <span class="o">+</span> <span class="nx">u</span> <span class="o">+</span> <span class="s1">&#39; is already in use. Please try again.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span> <span class="c1">//username available, create new user</span>
 
 
 </pre></div>
@@ -108,17 +121,10 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
-<p>This is our stub database until we look at a real database!</p>
+<p>enter series of functions to create user and return to create session</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="kd">var</span> <span class="nx">userdb</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="s1">&#39;test@test.com&#39;</span><span class="p">,</span> <span class="s1">&#39;jeff&#39;</span><span class="p">,</span>   <span class="s1">&#39;jeff&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-  <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="s1">&#39;test@test.com&#39;</span><span class="p">,</span> <span class="s1">&#39;marco&#39;</span><span class="p">,</span> <span class="s1">&#39;marco&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-  <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="s1">&#39;test@test.com&#39;</span><span class="p">,</span> <span class="s1">&#39;matt&#39;</span><span class="p">,</span> <span class="s1">&#39;matt&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-  <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="s1">&#39;test@test.com&#39;</span><span class="p">,</span> <span class="s1">&#39;jon&#39;</span><span class="p">,</span> <span class="s1">&#39;jon&#39;</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="p">];</span>
-
-
+          <span class="nx">async</span><span class="p">.</span><span class="nx">series</span><span class="p">([</span>
 
 </pre></div>
         </td>
@@ -128,10 +134,17 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
 </div>
-<p>Export the <code>users</code> list.</p>
+<p>insert user into DB</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">users</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">;</span>
+            <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+              <span class="nx">db</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s2">&quot;insert into users values (NULL, ?, ?, ?, ?)&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">email1</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">],</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+                  <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+              <span class="p">});</span>
+            <span class="p">},</span>
 
 
 </pre></div>
@@ -142,35 +155,18 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
-<p>Creates a user and adds it to the user db</p>
+<p>get recently added user to return to route handler</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">createUser</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">email1</span><span class="p">,</span> <span class="nx">email2</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">uid</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">uid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">//increment uid</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">email1</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that email was entered</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;please enter an email address&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">email2</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that email was verified</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;please verify your email address&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">username</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that username was entered</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;please enter a username&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">password</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//check that password was entered</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;please enter a password&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">email1</span> <span class="o">!==</span> <span class="nx">email2</span><span class="p">){</span> <span class="c1">//check that emails match</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;emails do not match&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span><span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//loop through userdb, make sure username not taken already</span>
-      <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">===</span> <span class="nx">username</span><span class="p">){</span>
-        <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;username &#39;</span> <span class="o">+</span> <span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39; is already in use&#39;</span><span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
+            <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+              <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;select * from users where uid=(select MAX(uid) from users)&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+                  <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
+              <span class="p">});</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
 
 
 </pre></div>
@@ -181,14 +177,27 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
-<p>create new user, add to user db</p>
+<p>callback function: called after all above functions complete</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="kd">var</span> <span class="nx">newUser</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="nx">email1</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="nx">uid</span><span class="p">);</span>
-    <span class="nx">userdb</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">newUser</span><span class="p">);</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">newUser</span><span class="p">);</span>
+          <span class="kd">function</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">results</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">results</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="c1">//user is object passed from 2nd series function</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+              <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">user</span><span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+          <span class="p">);</span>
+
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
   <span class="p">}</span>
 <span class="p">};</span>
+
+
 
 
 </pre></div>
@@ -199,26 +208,10 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
-<p>Authorize user -- check if credentials are in the user db</p>
+<p>Authorize user -- check if credentials are in the user DB</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">auth</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">===</span> <span class="nx">username</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">password</span> <span class="o">===</span> <span class="nx">password</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">u</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;password is not correct&#39;</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">return</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;user not found&#39;</span><span class="p">);</span>
-<span class="p">};</span>
-
 
 </pre></div>
         </td>
@@ -228,20 +221,22 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
-<p>Looks up user in user db by username</p>
+<p>check if username/password combination exists in the user DB</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">lookup</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">username</span> <span class="o">===</span> <span class="nx">username</span><span class="p">){</span> <span class="c1">//found user</span>
-      <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-      <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">u</span><span class="p">);</span>
-      <span class="k">return</span><span class="p">;</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;select * from users where uname = ? AND password = ?&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">username</span><span class="p">,</span> <span class="nx">password</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
     <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;user not found&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">row</span><span class="p">){</span> <span class="c1">//authentication successful</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span> <span class="c1">//authentication failed</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;Incorrect username/password combination. Please try again.&#39;</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
 <span class="p">};</span>
 
 
@@ -253,22 +248,10 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
-<p>Returns a list of all the users in the userdb</p>
+<p>Looks up user in user db by username</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">list</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3&gt;Users&lt;/h3&gt;&#39;</span><span class="p">;</span>
-  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;ul style=&quot;list-style-type: none; padding:0px; margin:0px;&quot;&gt;&#39;</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-    <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li&gt;&lt;b&gt;Username:&lt;/b&gt; &#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39;, &lt;b&gt;Password:&lt;/b&gt; &#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">password</span> <span class="o">+</span>
-    <span class="s1">&#39;, &lt;b&gt;Email:&lt;/b&gt;&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">email</span> <span class="o">+</span> <span class="s1">&#39;, &lt;b&gt;id: &lt;/b&gt;&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uid</span> <span class="o">+</span><span class="s1">&#39;&lt;/li&gt;&#39;</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&#39;</span><span class="p">;</span>
-  <span class="k">return</span> <span class="nx">content</span><span class="p">;</span>
-<span class="p">};</span>
-
+<span class="nx">exports</span><span class="p">.</span><span class="nx">lookup</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
 
 </pre></div>
         </td>
@@ -278,33 +261,23 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
-<p>Adds the followUID User to your following list -- Jon's old code</p>
-
-<div class="dox">
-  <div class="summary"><p>exports.follow = function(myUID, followUID, cb){
-if(userdb[myUID] === userdb[followUID]) {
-return "You cannot follow yourself";
-}
-var me = userdb[myUID-1];
-var following = userdb[followUID-1];</p>
-  </div>
-  <div class="body"><p>while (me.followList.next()) {
-var id = me.followList.current;
-var u = userdb[id-1];
-if(id.toString() === followUID.toString()) {
-return "Already following " + u.username;
-}
-}
-me.followList.resetCursor();</p>
-
-<p>me.followList.push(following.uid.toString());</p>
-
-<p>return 'Successfully following: ' + following.username;
-}  </p>
-  </div>
-</div>
+<p>check if username exists in the user DB</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;select * from users where uname = ?&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">username</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">row</span><span class="p">){</span> <span class="c1">//user found</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">row</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span> <span class="c1">//user not found</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;User &#39;</span> <span class="o">+</span> <span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39; was not found.&#39;</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
 
 
 </pre></div>
@@ -319,10 +292,14 @@ me.followList.resetCursor();</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">follow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">followID</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-  <span class="kd">var</span> <span class="nx">follow</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">followID</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-  <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">follow</span><span class="p">.</span><span class="nx">uid</span><span class="p">);</span><span class="c1">//add to my followList</span>
-  <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span><span class="c1">//possible errors?</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s2">&quot;insert into follows values (?, ?, ?)&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="p">,</span> <span class="nx">followID</span><span class="p">,</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
 <span class="p">};</span>
 
 
@@ -338,24 +315,6 @@ me.followList.resetCursor();</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">unfollow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">followID</span> <span class="p">,</span><span class="nx">cb</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-  <span class="kd">var</span> <span class="nx">follow</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">followID</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-  <span class="kd">var</span> <span class="nx">remove</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span> <span class="c1">//loop through followList</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">==</span> <span class="nx">followID</span><span class="p">){</span> <span class="c1">//found user</span>
-      <span class="nx">remove</span> <span class="o">=</span> <span class="nx">i</span><span class="p">;</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">remove</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;cannot find user&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span><span class="p">{</span>
-    <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">removeElement</span><span class="p">(</span><span class="nx">remove</span><span class="p">);</span> <span class="c1">//remove userID from followList</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-
 
 </pre></div>
         </td>
@@ -365,34 +324,20 @@ me.followList.resetCursor();</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
-<p>Lists suggestions of users to follow
-For now, just returns all users in userdb that the user is currently not following</p>
+<p>delete connection in follows table</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">who_to_follow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-  <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">followSuggestions</span> <span class="o">=</span> <span class="p">[];</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span> <span class="c1">//loop through all users in the user db</span>
-    <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-    <span class="kd">var</span> <span class="nx">alreadyFollowed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">!==</span> <span class="nx">me</span><span class="p">.</span><span class="nx">username</span><span class="p">){</span> <span class="c1">//can&#39;t follow yourself</span>
-      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">){</span> <span class="c1">//loop through current user&#39;s follow list</span>
-        <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span> <span class="o">===</span> <span class="nx">id</span><span class="p">){</span> <span class="c1">//don&#39;t add to follow list if user is already being followed</span>
-          <span class="nx">alreadyFollowed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-          <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">alreadyFollowed</span><span class="p">){</span>
-        <span class="nx">followSuggestions</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">id</span><span class="o">:</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="p">,</span> <span class="nx">username</span><span class="o">:</span> <span class="nx">u</span><span class="p">.</span><span class="nx">username</span><span class="p">});</span>
-      <span class="p">}</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="s2">&quot;delete from follows where uid = ? AND followid = ?&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="p">,</span> <span class="nx">followID</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;DB Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
     <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;follow&quot; id=&quot;follow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
-  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt;Who To Follow&lt;/h3&gt;&lt;ul style=&quot;list-style-type: none; margin: 0px;&quot;&gt;&#39;</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">k</span> <span class="o">&lt;</span> <span class="nx">followSuggestions</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">k</span><span class="o">++</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">followSuggestions</span><span class="p">[</span><span class="nx">k</span><span class="p">];</span>
+    <span class="k">else</span><span class="p">{</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
 
 </pre></div>
         </td>
@@ -402,16 +347,11 @@ For now, just returns all users in userdb that the user is currently not followi
 <div class="pilwrap">
   <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
-<p>content += '<li><a href="/follow_user/' + f.id + '"> ' + f.username + ' </a></li>';</p>
+<p>Lists suggestions of users to follow
+For now, just returns all users in userdb that the user is currently not following</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">f</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt; &#39;</span> <span class="o">+</span> <span class="nx">f</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39; &lt;/a&gt;&#39;</span><span class="p">;</span>
-    <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;follow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">f</span><span class="p">.</span><span class="nx">id</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Follow&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
-  <span class="k">return</span> <span class="nx">content</span><span class="p">;</span>
-<span class="p">};</span>
-
+<span class="nx">exports</span><span class="p">.</span><span class="nx">who_to_follow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
 
 </pre></div>
         </td>
@@ -421,59 +361,61 @@ For now, just returns all users in userdb that the user is currently not followi
 <div class="pilwrap">
   <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
-<p>Lists all of the users that the current user is following</p>
+<p>get all users from user DB that the user passed in (session user) is not already following</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">getFollowing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">button</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;unfollow&quot; id=&quot;unfollow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
-  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;h3&gt;Following&lt;/h3&gt;&lt;ul style=&quot;list-style-type: none; margin: 0px;&quot;&gt;&#39;</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-    <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">id</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-    <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt; &#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">username</span> <span class="o">+</span> <span class="s1">&#39; &lt;/a&gt;&#39;</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">button</span><span class="p">){</span> <span class="c1">//only display button if viewing your own profile</span>
-      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
-    <span class="p">}</span>
-
-  <span class="p">}</span>
-  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;ul&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
-  <span class="k">return</span> <span class="nx">content</span><span class="p">;</span>
-<span class="p">};</span>
-
+  <span class="nx">db</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="s2">&quot;select * from users where uname != ? AND uid NOT IN (select followid from follows where uid = ?)&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uname</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="p">],</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">rows</span><span class="p">){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3&gt;Who To Follow&lt;/h3&gt;&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span><span class="c1">//there are users to follow: loop through query results and display</span>
+          <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;ul id=&quot;who_to_follow&quot; style=&quot;list-style-type: none; margin: 0px;&quot;&gt;&#39;</span><span class="p">;</span>
+          <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+            <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;form name=&quot;follow&quot; id=&quot;follow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+            <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uid</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;img src=&quot;/img/user_pics/&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;.jpeg&quot; onerror=&quot;this.src=&#39;</span> <span class="o">+</span> <span class="s2">&quot;&#39;/img/user_pics/default.jpeg&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;;&quot; width=&quot;32&quot; height=&quot;32&quot; class=&quot;left&quot;/&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt;&amp;nbsp;&#39;</span> <span class="o">+</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
-        <td class="docs"><p>Lists all of the people you are following -- Jon's old code</p>
-
-<div class="dox">
-  <div class="summary"><p>exports.listFollowing = function(myUID, cb){
-var me = userdb[myUID-1];
-var content = '
-<div class="pilwrap" id="following-list">
-  <h3>
-    <a href="#following-list" class="pilcrow">&#182;</a>
-    Following List
-  </h3>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
-';
-content += '<ul style="list-style-type: none; padding:0px; margin:0px;">';
-while (me.followList.next()) {
-var u = userdb[me.followList.current-1];
-content += '<li><b>Username:</b> ' + u.username + ', <b>id: </b>' + u.uid +'</li>';
-}
-content += '</ul>';
-me.followList.resetCursor();
-return content;
-}  </p>
-  </div>
-  <div class="body">
-  </div>
-</div>
+<p>display with follow button that submits form</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+            <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;follow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Follow&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
+            <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/form&gt;&#39;</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&#39;</span><span class="p">;</span>
+          <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><p>content is simply 
+<div class="pilwrap" id="who-to-follow">
+  <h3>
+    <a href="#who-to-follow" class="pilcrow">&#182;</a>
+    Who To Follow
+  </h3>
+</div>
+</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">};</span>
 
 
 </pre></div>
@@ -482,42 +424,441 @@ return content;
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+</div>
+<p>Lists all of the users that the current user is following</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">getFollowing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">sessionUser</span><span class="p">,</span> <span class="nx">self</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>get all users from the user DB that the user passed in is currently following</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="s2">&quot;select uname, uid from users where uid IN (select followid from follows where uid = ?)&quot;</span><span class="p">,</span>
+    <span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="p">],</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">rows</span><span class="p">){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3&gt;Following&lt;/h3&gt;&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span> <span class="c1">//this user is following other users: loop through query results and display</span>
+          <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;ul id=&quot;following&quot; style=&quot;list-style-type: none; margin: 0px;&quot;&gt;&#39;</span><span class="p">;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+</div>
+<p>need two counters because of closure/DB transaction issue below</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="kd">var</span> <span class="nx">ctr1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">ctr2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+          <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+
+            <span class="nx">ctr1</span> <span class="o">+=</span> <span class="mi">1</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+</div>
+<p>display unfollow button if user is viewing own profile</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">self</span> <span class="o">===</span> <span class="kc">true</span><span class="p">){</span> 
+              <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;form name=&quot;unfollow&quot; id=&quot;unfollow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+              <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span>  <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;img src=&quot;/img/user_pics/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;.jpeg&quot; onerror=&quot;this.src=&#39;</span> <span class="o">+</span> <span class="s2">&quot;&#39;/img/user_pics/default.jpeg&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;;&quot; width=&quot;32&quot; height=&quot;32&quot; class=&quot;left&quot;/&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt;&amp;nbsp;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+              <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
+              <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/form&gt;&#39;</span><span class="p">;</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">ctr1</span> <span class="o">===</span> <span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+                <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&#39;</span><span class="p">;</span>
+                <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+              <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+</div>
+<p>enter closure 
+this allows us to execute the DB transaction "synchronously" below before increasing the for loop counter</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+              <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">){</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+</div>
+<p>user returned is the same as the session user --> do not display follow/unfollow button</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span> <span class="o">===</span> <span class="nx">sessionUser</span><span class="p">.</span><span class="nx">uid</span><span class="p">){</span>
+                  <span class="nx">ctr2</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;img src=&quot;/img/user_pics/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;.jpeg&quot; onerror=&quot;this.src=&#39;</span> <span class="o">+</span> <span class="s2">&quot;&#39;/img/user_pics/default.jpeg&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;;&quot; width=&quot;32&quot; height=&quot;32&quot; class=&quot;left&quot;/&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt;&amp;nbsp;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="nx">ctr2</span> <span class="o">===</span> <span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+                    <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&#39;</span><span class="p">;</span>
+                    <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+                  <span class="p">}</span>
+                <span class="p">}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>otherwise, check if session user is following the current user (rows[i])</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="k">else</span><span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>check whether or not the session user passed in follows the current user</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;select uid from follows where uid = ? and followid = ?&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">sessionUser</span><span class="p">.</span><span class="nx">uid</span><span class="p">,</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+                      <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span><span class="p">{</span>
+                      <span class="k">if</span> <span class="p">(</span><span class="nx">row</span><span class="p">){</span> <span class="c1">//the user passed in is following the current user: display unfollow button</span>
+                        <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;form name=&quot;unfollow&quot; id=&quot;unfollow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+                        <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;img src=&quot;/img/user_pics/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;.jpeg&quot; onerror=&quot;this.src=&#39;</span> <span class="o">+</span> <span class="s2">&quot;&#39;/img/user_pics/default.jpeg&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;;&quot; width=&quot;32&quot; height=&quot;32&quot; class=&quot;left&quot;/&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt;&amp;nbsp;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+                        <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
+                        <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/form&gt;&#39;</span><span class="p">;</span>
+                      <span class="p">}</span>
+                      <span class="k">else</span><span class="p">{</span> <span class="c1">//the user passed in is not following the current user: display follow button</span>
+                        <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;form name=&quot;follow&quot; id=&quot;follow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+                        <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;img src=&quot;/img/user_pics/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;.jpeg&quot; onerror=&quot;this.src=&#39;</span> <span class="o">+</span> <span class="s2">&quot;&#39;/img/user_pics/default.jpeg&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;;&quot; width=&quot;32&quot; height=&quot;32&quot; class=&quot;left&quot;/&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt;&amp;nbsp;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+                        <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;follow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Follow&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
+                        <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/form&gt;&#39;</span><span class="p">;</span>
+                      <span class="p">}</span>
+                      <span class="nx">ctr2</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                      <span class="k">if</span> <span class="p">(</span><span class="nx">ctr2</span> <span class="o">===</span> <span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+                        <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&#39;</span><span class="p">;</span>
+                        <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+                      <span class="p">}</span>
+                    <span class="p">}</span>
+                  <span class="p">});</span>
+                <span class="p">}</span>
+      
+                <span class="p">}(</span><span class="nx">i</span><span class="p">));</span>
+            <span class="p">}</span>
+            
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><p>content is simply 
+<div class="pilwrap" id="following">
+  <h3>
+    <a href="#following" class="pilcrow">&#182;</a>
+    Following
+  </h3>
+</div>
+</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+</div>
+<p>Lists all of the users that follow the user passed in</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">getFollowers</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">sessionUser</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+</div>
+<p>get all users from the user DB that follow the user passed in</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="s2">&quot;select uname, uid from users where uid IN (select uid from follows where followid = ?)&quot;</span><span class="p">,</span>
+    <span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="p">],</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">rows</span><span class="p">){</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="s1">&#39;&lt;h3&gt;Followers&lt;/h3&gt;&#39;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
+          <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;ul id=&quot;followers&quot; style=&quot;list-style-type: none; margin: 0px;&quot;&gt;&#39;</span><span class="p">;</span>
+          <span class="kd">var</span> <span class="nx">numRuns</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+          <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+</div>
+<p>enter closure 
+this allows us to execute the DB transaction "synchronously" before increasing the for loop counter</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">){</span> <span class="c1">//localizing i by using it in the inner function</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+</div>
+<p>user returned is the same as the session user --> do not display follow/unfollow button</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span> <span class="o">===</span> <span class="nx">sessionUser</span><span class="p">.</span><span class="nx">uid</span><span class="p">){</span>
+                <span class="nx">numRuns</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;img src=&quot;/img/user_pics/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;.jpeg&quot; onerror=&quot;this.src=&#39;</span> <span class="o">+</span> <span class="s2">&quot;&#39;/img/user_pics/default.jpeg&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;;&quot; width=&quot;32&quot; height=&quot;32&quot; class=&quot;left&quot;/&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt;&amp;nbsp;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">numRuns</span> <span class="o">===</span> <span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+                  <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&#39;</span><span class="p">;</span>
+                  <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+                <span class="p">}</span>
+              <span class="p">}</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+</div>
+<p>otherwise, check if session user is following the current user (rows[i])</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+              <span class="k">else</span><span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+</div>
+<p>check whether or not the session user passed in follows the current user</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+                <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;select uid from follows where uid = ? and followid = ?&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">sessionUser</span><span class="p">.</span><span class="nx">uid</span><span class="p">,</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+                    <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+                  <span class="p">}</span>
+                  <span class="k">else</span><span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">row</span><span class="p">){</span> <span class="c1">//the user passed in is following the current user: display unfollow button</span>
+                      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;form name=&quot;unfollow&quot; id=&quot;unfollow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+                      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;img src=&quot;/img/user_pics/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;.jpeg&quot; onerror=&quot;this.src=&#39;</span> <span class="o">+</span> <span class="s2">&quot;&#39;/img/user_pics/default.jpeg&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;;&quot; width=&quot;32&quot; height=&quot;32&quot; class=&quot;left&quot;/&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt;&amp;nbsp;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+                      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
+                      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/form&gt;&#39;</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span><span class="p">{</span> <span class="c1">//the user passed in is not following the current user: display follow button</span>
+                      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;form name=&quot;follow&quot; id=&quot;follow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+                      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;li id=&quot;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;img src=&quot;/img/user_pics/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;.jpeg&quot; onerror=&quot;this.src=&#39;</span> <span class="o">+</span> <span class="s2">&quot;&#39;/img/user_pics/default.jpeg&#39;&quot;</span> <span class="o">+</span> <span class="s1">&#39;;&quot; width=&quot;32&quot; height=&quot;32&quot; class=&quot;left&quot;/&gt;&lt;a href=&quot;/user/&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&quot; style=&quot;text-decoration:none;&quot;&gt;&amp;nbsp;&#39;</span> <span class="o">+</span> <span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uname</span> <span class="o">+</span> <span class="s1">&#39;&lt;/a&gt;&#39;</span><span class="p">;</span>
+                      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&amp;nbsp;&lt;button type=&quot;submit&quot; form=&quot;follow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">rows</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Follow&lt;/button&gt; &lt;/li&gt;&#39;</span><span class="p">;</span>
+                      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/form&gt;&#39;</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="nx">numRuns</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">numRuns</span> <span class="o">===</span> <span class="nx">rows</span><span class="p">.</span><span class="nx">length</span><span class="p">){</span>
+                      <span class="nx">content</span> <span class="o">+=</span> <span class="s1">&#39;&lt;/ul&gt;&#39;</span><span class="p">;</span>
+                      <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+                    <span class="p">}</span>
+                  <span class="p">}</span>
+                <span class="p">});</span>
+              <span class="p">}</span>
+
+            <span class="p">}(</span><span class="nx">i</span><span class="p">));</span>
+
+          <span class="p">}</span>
+        <span class="p">}</span>
+        
+        <span class="k">else</span><span class="p">{</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs"><p>content is simply 
+<div class="pilwrap" id="followers">
+  <h3>
+    <a href="#followers" class="pilcrow">&#182;</a>
+    Followers
+  </h3>
+</div>
+</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">content</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+</div>
+<p>Get the number of users that the user passed in is following</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">getNumFollowing</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;select COUNT(*) AS count from follows where uid = ?&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">row</span><span class="p">){</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">row</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+</div>
+<p>Get the number of users that are following the user passed in</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">getNumFollowers</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;select COUNT(*) AS count from follows where followid = ?&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">row</span><span class="p">){</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">row</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>get follow/unfollow button to be displayed on a user's profile page</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nx">exports</span><span class="p">.</span><span class="nx">profileButton</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">followUser</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-  <span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">userdb</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">username</span> <span class="o">===</span> <span class="nx">followUser</span><span class="p">){</span> <span class="c1">//found user in user db</span>
-      <span class="nx">u</span> <span class="o">=</span> <span class="nx">userdb</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-      <span class="k">break</span><span class="p">;</span>
+<span class="nx">exports</span><span class="p">.</span><span class="nx">followButton</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">followUser</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">me</span> <span class="o">=</span> <span class="nx">user</span><span class="p">.</span><span class="nx">uid</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">follow</span> <span class="o">=</span> <span class="nx">followUser</span><span class="p">.</span><span class="nx">uid</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">button</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+</div>
+<p>check DB to see if session user follows the user in question</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;select * from follows where uid = ? AND followid = ?&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">me</span><span class="p">,</span> <span class="nx">follow</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">row</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
     <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">u</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">following</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">){</span> <span class="c1">//loop through my followList</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">me</span><span class="p">.</span><span class="nx">followList</span><span class="p">[</span><span class="nx">j</span><span class="p">]</span> <span class="o">===</span> <span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="p">){</span> <span class="c1">//already following this user</span>
-        <span class="nx">following</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="k">break</span><span class="p">;</span>
+    <span class="k">else</span><span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">row</span><span class="p">){</span> <span class="c1">//already following this user --&gt; display &quot;Unfollow&quot; button</span>
+        <span class="nx">button</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;unfollow&quot; id=&quot;unfollow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">button</span> <span class="o">+=</span> <span class="s1">&#39;&lt;button type=&quot;submit&quot; id=&quot;profileUnfollow&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">follow</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
       <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span> <span class="c1">//not following this user, display &quot;Follow&quot; button</span>
+        <span class="nx">button</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;follow&quot; id=&quot;follow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">button</span> <span class="o">+=</span> <span class="s1">&#39;&lt;button type=&quot;submit&quot; id=&quot;profileFollow&quot; form=&quot;follow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">follow</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Follow&lt;/button&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">button</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="kd">var</span> <span class="nx">button</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">following</span><span class="p">){</span> <span class="c1">//if already following, display &quot;Unfollow&quot; button</span>
-      <span class="nx">button</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;unfollow&quot; id=&quot;unfollow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
-      <span class="nx">button</span> <span class="o">+=</span> <span class="s1">&#39;&lt;button type=&quot;submit&quot; class=&quot;hover&quot; form=&quot;unfollow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Following&lt;/button&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span><span class="p">{</span> <span class="c1">//if not following, display &quot;Follow&quot; button</span>
-      <span class="nx">button</span> <span class="o">=</span> <span class="s1">&#39;&lt;form name=&quot;follow&quot; id=&quot;follow&quot; method=&quot;post&quot; action=&quot;/&quot;&gt;&#39;</span><span class="p">;</span>
-      <span class="nx">button</span> <span class="o">+=</span> <span class="s1">&#39;&lt;button type=&quot;submit&quot; class=&quot;hover&quot; form=&quot;follow&quot; value=&quot;&#39;</span><span class="o">+</span><span class="nx">u</span><span class="p">.</span><span class="nx">uid</span><span class="o">+</span><span class="s1">&#39;&quot;&gt;Follow&lt;/button&gt;&lt;/form&gt;&#39;</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="kc">undefined</span><span class="p">,</span> <span class="nx">button</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span><span class="p">{</span> <span class="c1">//didn&#39;t find user --&gt; error</span>
-    <span class="nx">cb</span><span class="p">(</span><span class="s1">&#39;user not found&#39;</span><span class="p">);</span>
-  <span class="p">}</span>
+  <span class="p">});</span>
 <span class="p">};</span>
 </pre></div>
         </td>

@@ -27,6 +27,12 @@
       <div class="heading h2">
         <a href="#project-assignment-03">Project Assignment 03</a>
       </div>
+      <div class="heading h2">
+        <a href="#new-feature--private-messaging-using-websockets">New Feature: Private Messaging using WebSockets</a>
+      </div>
+      <div class="heading h2">
+        <a href="#other-notes-">Other notes:</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -90,9 +96,39 @@
     - Route logic also changed with new URL mappings, as well as the following/unfollowing functionality.
 * lib/users/user.js
     - Lots of functions added in the user lib directory to support creating new users, looking them up in the fake user db, authorizing them, etc.
-    - New functions were also added to support the following/unfollowing functionality.</p>
+    - New functions were also added to support the following/unfollowing functionality.
+* views/users/active/messages.ejs
+    - New view to view messages sent from the new messaging feature.
+* views/users/active/sendMessage.ejs
+    - New view which is the chatroom type of popup that allows users to send direct and instant messages to one other user.
+* views/users/search.ejs
+    - Created a new search view which allows users to search for tweets based on hashtags.
+* views/static/about.ejs
+    - Added information about the team and our goals.</p>
 
-<p>Please note that some old/out-of-place code that will eventually be changed has been left in for this assignment.</p></div>
+
+<div class="pilwrap" id="new-feature--private-messaging-using-websockets">
+  <h2>
+    <a href="#new-feature--private-messaging-using-websockets" class="pilcrow">&#182;</a>
+    New Feature: Private Messaging using WebSockets
+  </h2>
+</div>
+
+
+<p>Two separate users must be logged in to private message each other. A user must visit the desired users profle and click Send a Message. A popup window will display a private chat room between the two users. Messages will also show up in the users inbox.</p>
+
+<p>Please note that some old/out-of-place code that will eventually be changed has been left in for this assignment.</p>
+
+
+<div class="pilwrap" id="other-notes-">
+  <h2>
+    <a href="#other-notes-" class="pilcrow">&#182;</a>
+    Other notes:
+  </h2>
+</div>
+
+
+<p>- We've decided not to implement mentions, reply notifications, and trends.</p></div>
   </div>
 </body>
 </html>
