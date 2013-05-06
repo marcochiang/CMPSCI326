@@ -20,8 +20,10 @@ var app = express();
 // use ejs-locals for all ejs templates:
 app.engine('ejs', engine);
 
+var port = process.env.PORT || 3000;
+
 app.configure(function(){
-	app.set('port', process.env.PORT || 3000);
+	app.set('port', port);
 	app.set('views',__dirname + '/views');
 	app.set('view engine', 'ejs');
 	app.use(express.favicon());
@@ -125,7 +127,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 
-server.listen(3000, function(){
+server.listen(port, function(){
   console.log("Express server listening on port %d in %s mode",
               server.address().port, app.settings.env);
 });
